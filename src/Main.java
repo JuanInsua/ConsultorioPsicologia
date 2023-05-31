@@ -1,5 +1,4 @@
-import Vista.RegistroForm;
-import Vista.SistemaPrincipal;
+import Logica.Principal.SistemaPrincipal;
 
 public class Main {
     public static void main(String[] args) {

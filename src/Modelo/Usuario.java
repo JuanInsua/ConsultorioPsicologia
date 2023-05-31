@@ -42,6 +42,7 @@ public class Usuario {
         this.estado = estado;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -57,7 +58,7 @@ public class Usuario {
 
     @Override
     public String toString() {
-        return "Usuario{" +
+        return super.toString()+"Usuario{" +
                 "paciente=" + paciente +
                 ", password='" + password + '\'' +
                 ", palabraRecuperacion='" + palabraRecuperacion + '\'' +

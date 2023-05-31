@@ -4,7 +4,9 @@ import java.util.Objects;
 
 public class Paciente extends Persona{
     private String obraSocial;
+    public Paciente(){
 
+    }
     public Paciente(String obraSocial) {
         this.obraSocial = obraSocial;
     }
@@ -37,7 +39,7 @@ public class Paciente extends Persona{
 
     @Override
     public String toString() {
-        return "Paciente{" +
+        return super.toString()+"Paciente{" +
                 "obraSocial='" + obraSocial + '\'' +
                 '}';
     }
