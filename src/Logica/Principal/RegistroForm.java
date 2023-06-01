@@ -8,6 +8,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+
+ Class that represents a user registration window.
+
+ Extends the JDialog class to create a modal dialog window.
+ */
 public class RegistroForm extends JDialog {
     private JButton REGISTRARButton;
     private JButton SALIRButton;
@@ -19,34 +25,46 @@ public class RegistroForm extends JDialog {
     private JTextField textField6;
     private JTextField textField7;
     private JTextField textField5;
-    UsuarioSQL usuarioSQL=new UsuarioSQL();
-    public RegistroForm (JFrame parent){
-     super(parent);
-     setTitle("Crear nuevo usuario");
-     setContentPane(registroForm);
-     setMinimumSize(new Dimension(680,620));
-     setModal(true);
-     setLocationRelativeTo(parent);
-        //Boton Salir
+    UsuarioSQL usuarioSQL = new UsuarioSQL();
+
+    /**
+
+     Constructor of the RegistroForm class.
+
+     @param parent Parent JFrame that calls this dialog window.
+     */
+    public RegistroForm(JFrame parent) {
+        super(parent);
+        setTitle("Create new user");
+        setContentPane(registroForm);
+        setMinimumSize(new Dimension(680, 620));
+        setModal(true);
+        setLocationRelativeTo(parent);
+
+// Exit Button
         SALIRButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
             }
         });
-        //Boton Registrar
+
+// Register Button
         REGISTRARButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 registroConValidacionCampos();
             }
         });
+
         setVisible(true);
     }
 
-    //Registro con validacion de campos del formulario.
+    /**
+
+     Method that performs user registration with field validation.
+     */
     private void registroConValidacionCampos() {
-        //Extraemos todos los campos del formulario a variables locales
         String nombre = textField1.getText();
         String apellido = textField2.getText();
         String email = textField3.getText();
@@ -54,44 +72,62 @@ public class RegistroForm extends JDialog {
         String password = String.valueOf(passwordField1.getPassword());
         String palabraRecuperacion = textField6.getText();
         String obraSocial = textField7.getText();
-        //Validamos que todos los campos esten completos y devolvemos true si estan completos y flase con una exception si faltan campos por completar.
+
         if (validacionCampos(nombre, apellido, email, dni, password, palabraRecuperacion, obraSocial)) {
-            //Una vez completos todos los campos, generamos un objeto usuario con los datos del formulario.
             Usuario usuario = new Usuario(nombre, apellido, email, dni, obraSocial, password, palabraRecuperacion, true);
             if (validacionUsuarioEnBD(usuario)) {
                 usuarioSQL.registrarUsuario(usuario);
                 dispose();
             }
-        }else {
+        } else {
             JOptionPane.showMessageDialog(this,
-                    "Error al registrar nuevo usuario",
-                    "Intentalo otra vez",
+                    "Error registering new user",
+                    "Try again",
                     JOptionPane.ERROR_MESSAGE);
         }
     }
-    //Validacion campos del Fromulario RegistroForm
-    private boolean validacionCampos(String nombre,String apellido,String email,String fechaNacimiento,String password,String palabraRecuperacion,String obraSocial){
-        boolean rta=true;
-        if(nombre.isEmpty()||apellido.isEmpty()||email.isEmpty()||fechaNacimiento.isEmpty()||password.isEmpty()||palabraRecuperacion.isEmpty()||obraSocial.isEmpty() ){
+
+    /**
+
+     Method that validates the registration fields.
+     @param nombre User's name.
+     @param apellido User's last name.
+     @param email User's email.
+     @param fechaNacimiento User's date of birth.
+     @param password User's password.
+     @param palabraRecuperacion User's recovery word.
+     @param obraSocial User's health insurance.
+     @return true if all fields are filled, false otherwise.
+     */
+    private boolean validacionCampos(String nombre, String apellido, String email, String fechaNacimiento,
+                                     String password, String palabraRecuperacion, String obraSocial) {
+        boolean rta = true;
+        if (nombre.isEmpty() || apellido.isEmpty() || email.isEmpty() || fechaNacimiento.isEmpty() ||
+                password.isEmpty() || palabraRecuperacion.isEmpty() || obraSocial.isEmpty()) {
             JOptionPane.showMessageDialog(this,
-                    "Por favor completar, todos los campos",
-                    "Intentelo otra vez",
+                    "Please fill in all fields",
+                    "Try again",
                     JOptionPane.ERROR_MESSAGE);
-            rta=false;
+            rta = false;
         }
         return rta;
     }
-    //Validacion Usuario a ingresar, no se encuentre registrado previamente
-    private boolean validacionUsuarioEnBD(Usuario usuarioIngreso){
-        boolean rta=true;
-        UsuarioSQL usuarioBuscar=new UsuarioSQL();
-        Usuario comparar=usuarioBuscar.buscarUsuario(usuarioIngreso.getPaciente().getDni());
-        if (comparar!=null && comparar.getPaciente().getDni().equalsIgnoreCase(usuarioIngreso.getPaciente().getDni())){
+    /**
+
+     Method that validates if a user already exists in the database.
+     @param usuarioIngreso User to validate.
+     @return true if the user does not exist in the database, false otherwise.
+     */
+    private boolean validacionUsuarioEnBD(Usuario usuarioIngreso) {
+        boolean rta = true;
+        UsuarioSQL usuarioBuscar = new UsuarioSQL();
+        Usuario comparar = usuarioBuscar.buscarUsuario(usuarioIngreso.getPaciente().getDni());
+        if (comparar != null && comparar.getPaciente().getDni().equalsIgnoreCase(usuarioIngreso.getPaciente().getDni())) {
             JOptionPane.showMessageDialog(this,
-                    "El usuario ya fue registrado",
-                    "Intentelo otra vez",
+                    "The user has already been registered",
+                    "Try again",
                     JOptionPane.ERROR_MESSAGE);
-            rta=false;
+            rta = false;
         }
         return rta;
     }

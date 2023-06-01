@@ -11,12 +11,20 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Clase que representa una ventana de diálogo para interactuar con la base de datos de usuarios.
+ */
 public class UsuarioSQL extends JDialog {
     private ConexionBBDD conexionBBDD=new ConexionBBDD();
     private Connection con;
     private PreparedStatement pst;
     private ResultSet rs;
+
+    /**
+     * Registra un nuevo usuario en la base de datos.
+     *
+     * @param usuario El objeto Usuario a registrar.
+     */
     public void registrarUsuario(Usuario usuario) {
         String sql="INSERT INTO usuario (nombre,apellido,obraSocial,dni,email,contrasenia,palabreRec,estado)"+"VALUES(?,?,?,?,?,?,?,?)";
         try {
@@ -44,6 +52,12 @@ public class UsuarioSQL extends JDialog {
             }
         }
     }
+    /**
+     * Busca y devuelve un usuario en la base de datos según el número de documento.
+     *
+     * @param dni El número de documento del usuario a buscar.
+     * @return El objeto Usuario correspondiente al número de documento especificado, o null si no se encuentra.
+     */
     public Usuario buscarUsuario (String dni) {
         Usuario usuario=null;
         String SQL = "SELECT * FROM usuario where dni = ?";
@@ -75,6 +89,13 @@ public class UsuarioSQL extends JDialog {
         }
         return usuario;
     }
+    /**
+     * Busca y devuelve un usuario en la base de datos según el email y la contraseña especificados.
+     *
+     * @param email    El email del usuario a buscar.
+     * @param password La contraseña del usuario a buscar.
+     * @return El objeto Usuario correspondiente al email y contraseña especificados, o null si no se encuentra.
+     */
     public Usuario buscarUsuarioPasswordEmail (String email,String password) {
         Usuario usuario=null;
         List <Usuario>usuarios=listarUsuarios();
@@ -91,6 +112,13 @@ public class UsuarioSQL extends JDialog {
         }
         return usuario;
     }
+    /**
+     * Busca y devuelve la contraseña de un usuario en la base de datos según la palabra de recuperación y el email especificados.
+     *
+     * @param palabraRec La palabra de recuperación del usuario.
+     * @param email      El email del usuario.
+     * @return La contraseña del usuario correspondiente a la palabra de recuperación y email especificados, o null si no se encuentra.
+     */
     public String buscarRetornarPw(String palabraRec,String email){
         String passwordBuscada=null;
         List <Usuario>usuarios=listarUsuarios();
@@ -109,6 +137,11 @@ public class UsuarioSQL extends JDialog {
         }
         return passwordBuscada;
     }
+    /**
+     * Devuelve una lista de todos los usuarios registrados en la base de datos.
+     *
+     * @return Una lista de objetos Usuario que representa todos los usuarios registrados.
+     */
     public List listarUsuarios () {
         List<Usuario> listaUsuarios = new ArrayList<>();
         String SQL = "SELECT * FROM usuario";
@@ -131,6 +164,13 @@ public class UsuarioSQL extends JDialog {
         }
         return listaUsuarios;
     }
+    /**
+     * Genera un objeto Usuario a partir de un ResultSet.
+     *
+     * @param rs El ResultSet que contiene los datos del usuario.
+     * @return El objeto Usuario generado a partir de los datos del ResultSet.
+     * @throws SQLException Si ocurre algún error al acceder a los datos del ResultSet.
+     */
     private Usuario generarUsuario(ResultSet rs) throws SQLException {
         Usuario usuario=new Usuario(rs.getString("nombre"),
                 rs.getString("apellido"),
@@ -143,6 +183,13 @@ public class UsuarioSQL extends JDialog {
         );
         return usuario;
     }
+    /**
+     * Modifica los datos de un usuario en la base de datos.
+     *
+     * @param usuario      El objeto Usuario con los nuevos datos.
+     * @param dniBusqueda  El número de documento del usuario a modificar.
+     * @return true si la modificación se realiza correctamente, false en caso contrario.
+     */
     public  boolean modificarClientes (Usuario usuario,String dniBusqueda) {
 
         String SQL = "UPDATE usuario SET nombre = ?, apellido = ?, obraSocial = ?, dni = ?, email = ?, contrasenia = ?,palabreRec = ?,estado =? where dni = ?";
@@ -174,6 +221,11 @@ public class UsuarioSQL extends JDialog {
         }
         return false;
     }
+    /**
+     * Devuelve un TableModel con los datos de todos los usuarios registrados en la base de datos, para ser utilizado en una tabla.
+     *
+     * @return Un TableModel con los datos de los usuarios.
+     */
     public TableModel listarEnTabla(){
         List <Usuario>usuarios=listarUsuarios();
         DefaultTableModel model=new DefaultTableModel(0,0);
@@ -194,5 +246,4 @@ public class UsuarioSQL extends JDialog {
         }
         return model;
     }
-
 }

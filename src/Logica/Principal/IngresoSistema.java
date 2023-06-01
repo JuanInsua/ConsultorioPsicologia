@@ -8,6 +8,16 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+
+ The IngresoSistema class represents a dialog window for user login.
+
+ It extends JDialog and provides fields for entering username and password,
+
+ as well as buttons for logging in, returning to the previous window,
+
+ and recovering a forgotten password.
+ */
 public class IngresoSistema extends JDialog {
     private JPanel ingresoSistema;
     private JTextField textField1;
@@ -17,9 +27,15 @@ public class IngresoSistema extends JDialog {
     private JPasswordField passwordField1;
     private JButton olvideMiContraseniaButton;
 
-    public IngresoSistema (JFrame parent) {
+    /**
+
+     Constructs a new IngresoSistema dialog window.
+
+     @param parent the parent JFrame
+     */
+    public IngresoSistema(JFrame parent) {
         super(parent);
-        setTitle("Ingresar al Sistema");
+        setTitle("Log In to System");
         setContentPane(ingresoSistema);
         setMinimumSize(new Dimension(680, 620));
         setModal(true);
@@ -41,44 +57,63 @@ public class IngresoSistema extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                RecuperarCuenta recuperarCuenta=new RecuperarCuenta(parent);
+                RecuperarCuenta recuperarCuenta = new RecuperarCuenta(parent);
             }
         });
         setVisible(true);
     }
-    private void logearUsuario(){
-        if(validacionCamposIngreso()){
-            validarIngresoUsuario(textField1.getText(),passwordField1.getText());
+
+    /**
+
+     Logs in the user by calling the logearUsuario method if the input fields are valid.
+     */
+    private void logearUsuario() {
+        if (validacionCamposIngreso()) {
+            validarIngresoUsuario(textField1.getText(), passwordField1.getText());
         }
     }
-    private boolean validacionCamposIngreso(){
-        boolean rta=true;
-        if(textField1.getText().isEmpty()||passwordField1.getText().isEmpty()){
+    /**
+
+     Validates the input fields for user login.
+     @return true if the fields are valid, false otherwise
+     */
+    private boolean validacionCamposIngreso() {
+        boolean rta = true;
+        if (textField1.getText().isEmpty() || passwordField1.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this,
-                    "Por favor completar, todos los campos",
-                    "Intentelo otra vez",
+                    "Please fill in all the fields",
+                    "Try again",
                     JOptionPane.ERROR_MESSAGE);
-            rta=false;
+            rta = false;
         }
         return rta;
     }
-    public void validarIngresoUsuario(String email , String password) {
+    /**
+
+     Validates user login by checking the email and password.
+     If the login is successful, it opens a new window based on the user's role.
+     @param email the user's email
+     @param password the user's password
+     */
+    public void validarIngresoUsuario(String email, String password) {
         if (email.equalsIgnoreCase("admin") && password.equalsIgnoreCase("admin")) {
             dispose();
-            VistaAdmin vistaAdmin=new VistaAdmin(null);
-        } else {
+            VistaAdmin vistaAdmin = new VistaAdmin(null);
+        } else if (email.equalsIgnoreCase("psico") && password.equalsIgnoreCase("psico")) {
+            dispose();
+            VistaPsicologo vistaPsicologo= new VistaPsicologo(null);
+        }else{
             UsuarioSQL usuarioSQLIngreso = new UsuarioSQL();
-            Usuario usuarioBusqueda = usuarioSQLIngreso.buscarUsuarioPasswordEmail(email,password);
+            Usuario usuarioBusqueda = usuarioSQLIngreso.buscarUsuarioPasswordEmail(email, password);
             if (usuarioBusqueda != null && usuarioBusqueda.isEstado()) {
                 dispose();
-                VistaUsuario vistaUsuario=new VistaUsuario(null,usuarioBusqueda.getPaciente().getNombre());
+                VistaUsuario vistaUsuario = new VistaUsuario(null, usuarioBusqueda.getPaciente().getNombre());
             } else {
                 JOptionPane.showMessageDialog(this,
-                        "El usuario no esta registrado, o esta de baja",
-                        "Intentelo otra vez",
+                        "The user is not registered or has been deactivated",
+                        "Try again",
                         JOptionPane.ERROR_MESSAGE);
             }
         }
     }
-
 }
