@@ -116,21 +116,27 @@ public class UsuarioSQL extends JDialog {
      * Busca y devuelve la contraseña de un usuario en la base de datos según la palabra de recuperación y el email especificados.
      *
      * @param palabraRec La palabra de recuperación del usuario.
-     * @param email      El email del usuario.
+     * @param input      El email del usuario.
      * @return La contraseña del usuario correspondiente a la palabra de recuperación y email especificados, o null si no se encuentra.
      */
-    public String buscarRetornarPw(String palabraRec,String email){
+    public String buscarRetornarPw(String palabraRec,String input){
         String passwordBuscada=null;
         List <Usuario>usuarios=listarUsuarios();
         int flag=0;
         int i=0;
         if(usuarios!=null){
             while (!usuarios.isEmpty() && flag==0 && i<usuarios.size()){
-                if(usuarios.get(i).getPaciente().getEmail().equalsIgnoreCase(email) && usuarios.get(i).getPalabraRecuperacion().equalsIgnoreCase(palabraRec) && usuarios.get(i).isEstado()==true){
-                    passwordBuscada=usuarios.get(i).getPassword();
-                    flag=1;
-                }else{
-                    passwordBuscada="Usuario no existe, o esta de baja";
+                if((usuarios.get(i).getPaciente().getEmail().equalsIgnoreCase(input) || (usuarios.get(i).getPaciente().getDni().equalsIgnoreCase(input))) && usuarios.get(i).getPalabraRecuperacion().equalsIgnoreCase(palabraRec)){
+                    if(usuarios.get(i).isEstado()) {
+                        passwordBuscada = "password:" + usuarios.get(i).getPassword();
+                    }
+                    else {
+                        passwordBuscada="El usuario esta dado de baja";
+                    }
+                    flag = 1;
+                }else
+                {
+                    passwordBuscada="Usuario no existe";
                 }
                 i++;
             }
