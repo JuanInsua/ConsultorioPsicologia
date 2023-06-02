@@ -1,5 +1,0 @@
-package Modelo;
-
-public enum OrientacionTeorica {
-    PSICOANALITICA,COGNITIVOCONDUCTUAL,SISTEMICABREVE,NEUROPSICOLOGIA;
-}

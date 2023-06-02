@@ -105,15 +105,21 @@ public class IngresoSistema extends JDialog {
         }else{
             UsuarioSQL usuarioSQLIngreso = new UsuarioSQL();
             Usuario usuarioBusqueda = usuarioSQLIngreso.buscarUsuarioPasswordEmail(email, password);
-            if (usuarioBusqueda != null && usuarioBusqueda.isEstado()) {
-                dispose();
-                VistaUsuario vistaUsuario = new VistaUsuario(null, usuarioBusqueda.getPaciente().getNombre());
-            } else {
+            if (usuarioBusqueda == null) {
                 JOptionPane.showMessageDialog(this,
-                        "The user is not registered or has been deactivated",
+                        "The user is not registered",
                         "Try again",
                         JOptionPane.ERROR_MESSAGE);
+            } else if (usuarioBusqueda.isEstado()) {
+                dispose();
+                VistaUsuario vistaUsuario = new VistaUsuario(null, usuarioBusqueda.getPaciente().getNombre());
+            }
+                else {
+                    JOptionPane.showMessageDialog(this,
+                            "The user has been deactivated",
+                            "Try again",
+                            JOptionPane.ERROR_MESSAGE);
+                }
             }
         }
     }
-}

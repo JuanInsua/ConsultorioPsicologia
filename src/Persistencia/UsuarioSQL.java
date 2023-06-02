@@ -92,18 +92,18 @@ public class UsuarioSQL extends JDialog {
     /**
      * Busca y devuelve un usuario en la base de datos según el email y la contraseña especificados.
      *
-     * @param email    El email del usuario a buscar.
+     * @param input    El email del usuario a buscar.
      * @param password La contraseña del usuario a buscar.
      * @return El objeto Usuario correspondiente al email y contraseña especificados, o null si no se encuentra.
      */
-    public Usuario buscarUsuarioPasswordEmail (String email,String password) {
+    public Usuario buscarUsuarioPasswordEmail (String input,String password) {
         Usuario usuario=null;
         List <Usuario>usuarios=listarUsuarios();
         int flag=0;
         int i=0;
         if(usuarios!=null){
             while (!usuarios.isEmpty() && flag==0 && i<usuarios.size()){
-                if(usuarios.get(i).getPaciente().getEmail().equalsIgnoreCase(email) && usuarios.get(i).getPassword().equalsIgnoreCase(password)){
+                if((usuarios.get(i).getPaciente().getEmail().equalsIgnoreCase(input) || usuarios.get(i).getPaciente().getDni().equalsIgnoreCase(input))  && usuarios.get(i).getPassword().equalsIgnoreCase(password)){
                     usuario=usuarios.get(i);
                     flag=1;
                 }
