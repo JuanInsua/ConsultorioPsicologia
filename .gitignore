@@ -1,5 +1,4 @@
-.idea
-javadoc
-out
-ConsultorioPsicologia.iml
 README.md
+/javadoc/
+/.idea/
+/out/
