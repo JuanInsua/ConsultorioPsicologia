@@ -93,19 +93,26 @@ public class RegistroForm extends JDialog {
      @param nombre User's name.
      @param apellido User's last name.
      @param email User's email.
-     @param fechaNacimiento User's date of birth.
+     @param dni User's date of birth.
      @param password User's password.
      @param palabraRecuperacion User's recovery word.
      @param obraSocial User's health insurance.
      @return true if all fields are filled, false otherwise.
      */
-    private boolean validacionCampos(String nombre, String apellido, String email, String fechaNacimiento,
+    private boolean validacionCampos(String nombre, String apellido, String email, String dni,
                                      String password, String palabraRecuperacion, String obraSocial) {
         boolean rta = true;
-        if (nombre.isEmpty() || apellido.isEmpty() || email.isEmpty() || fechaNacimiento.isEmpty() ||
+        if (nombre.isEmpty() || apellido.isEmpty() || email.isEmpty() || dni.isEmpty() ||
                 password.isEmpty() || palabraRecuperacion.isEmpty() || obraSocial.isEmpty()) {
             JOptionPane.showMessageDialog(this,
                     "Please fill in all fields",
+                    "Try again",
+                    JOptionPane.ERROR_MESSAGE);
+            rta = false;
+        }else if ((dni.getBytes().length < 7 || dni.getBytes().length > 9))
+        {
+            JOptionPane.showMessageDialog(this,
+                    "DNI is out of length (7 or 8 numbers)",
                     "Try again",
                     JOptionPane.ERROR_MESSAGE);
             rta = false;

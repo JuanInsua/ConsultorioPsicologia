@@ -93,15 +93,6 @@
           <text value="Password:"/>
         </properties>
       </component>
-      <component id="7231c" class="javax.swing.JLabel">
-        <constraints>
-          <grid row="0" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <font name="Courier New" size="26" style="1"/>
-          <text value="Gestion Usuario:"/>
-        </properties>
-      </component>
       <component id="a3284" class="javax.swing.JTextField" binding="textField4">
         <constraints>
           <grid row="5" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
@@ -208,26 +199,6 @@
           <text value=""/>
         </properties>
       </component>
-      <component id="18a4c" class="javax.swing.JButton" binding="limpiarButton" default-binding="true">
-        <constraints>
-          <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <background color="-4475209"/>
-          <foreground color="-15526891"/>
-          <text value="Limpiar"/>
-        </properties>
-      </component>
-      <component id="e40c8" class="javax.swing.JButton" binding="eliminarButton" default-binding="true">
-        <constraints>
-          <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <background color="-4475209"/>
-          <foreground color="-15526891"/>
-          <text value="Eliminar"/>
-        </properties>
-      </component>
       <component id="2eef2" class="javax.swing.JButton" binding="modificarButton" default-binding="true">
         <constraints>
           <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
@@ -253,6 +224,25 @@
           </grid>
         </constraints>
         <properties/>
+      </component>
+      <component id="18a4c" class="javax.swing.JButton" binding="limpiarButton" default-binding="true">
+        <constraints>
+          <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <background color="-4475209"/>
+          <foreground color="-15526891"/>
+          <text value="Limpiar"/>
+        </properties>
+      </component>
+      <component id="7231c" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <font name="Courier New" size="26" style="1"/>
+          <text value="Gestion Usuario:"/>
+        </properties>
       </component>
     </children>
   </grid>

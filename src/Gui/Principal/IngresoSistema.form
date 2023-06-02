@@ -36,7 +36,7 @@
         <properties>
           <font name="Courier New" size="16" style="1"/>
           <foreground color="-15526891"/>
-          <text value="Email:"/>
+          <text value="Email / DNI:"/>
         </properties>
       </component>
       <component id="df061" class="javax.swing.JLabel">

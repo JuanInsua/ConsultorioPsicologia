@@ -20,7 +20,6 @@ public class CrudUsuario extends JDialog {
     private JButton listarUsuariosButton;
     private JButton VOLVERButton;
     private JButton modificarButton;
-    private JButton eliminarButton;
     private JButton limpiarButton;
     private JPasswordField passwordField1;
     private JTextField textField1;

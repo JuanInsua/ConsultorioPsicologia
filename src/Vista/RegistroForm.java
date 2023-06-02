@@ -1,13 +1,12 @@
 package Vista;
 
 import Modelo.Usuario;
-import Modelo.UsuarioSQL;
+import Persistencia.UsuarioSQL;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Date;
 
 public class RegistroForm extends JDialog {
     private JButton REGISTRARButton;
