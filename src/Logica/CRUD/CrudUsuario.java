@@ -4,8 +4,12 @@ import Modelo.Usuario;
 import Persistencia.UsuarioSQL;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.List;
+
 /**
 
  This class represents a user administration window.
@@ -59,7 +63,7 @@ public class CrudUsuario extends JDialog {
         listarUsuariosButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                table1.setModel(usuarioSQL.listarEnTabla());
+                table1.setModel(listarEnTabla());
             }
         });
 
@@ -101,6 +105,31 @@ public class CrudUsuario extends JDialog {
         textField7.setText("");
         textField8.setText("");
         textField9.setText("");
+    }
+    /**
+     * Devuelve un TableModel con los datos de todos los usuarios registrados en la base de datos, para ser utilizado en una tabla.
+     *
+     * @return Un TableModel con los datos de los usuarios.
+     */
+    public TableModel listarEnTabla(){
+        List<Usuario> usuarios=usuarioSQL.listarUsuarios();
+        DefaultTableModel model=new DefaultTableModel(0,0);
+        String[] columnName={"Nombre","Apellido","Dni","Email","Password","PalabraRec","Obra Social","Estado"};
+        model.setColumnIdentifiers(columnName);
+        model.addRow(columnName);
+        Object[] objects=new Object[8];
+        for (int i=0;i<usuarios.size();i++){
+            objects[0]=usuarios.get(i).getPaciente().getNombre();
+            objects[1]=usuarios.get(i).getPaciente().getApellido();
+            objects[2]=usuarios.get(i).getPaciente().getDni();
+            objects[3]=usuarios.get(i).getPaciente().getEmail();
+            objects[4]=usuarios.get(i).getPassword();
+            objects[5]=usuarios.get(i).getPalabraRecuperacion();
+            objects[6]=usuarios.get(i).getPaciente().getObraSocial();
+            objects[7]=usuarios.get(i).isEstado();
+            model.addRow(objects);
+        }
+        return model;
     }
     /**
 

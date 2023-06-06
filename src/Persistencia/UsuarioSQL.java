@@ -113,11 +113,13 @@ public class UsuarioSQL extends JDialog {
         return usuario;
     }
     /**
-     * Busca y devuelve la contraseña de un usuario en la base de datos según la palabra de recuperación y el email especificados.
+     * Busca y devuelve la contraseña de un usuario en la base de datos según la palabra de recuperación
+     * y el email especificados.
      *
      * @param palabraRec La palabra de recuperación del usuario.
      * @param input      El email del usuario.
-     * @return La contraseña del usuario correspondiente a la palabra de recuperación y email especificados, o null si no se encuentra.
+     * @return La contraseña del usuario correspondiente a la palabra de recuperación y email especificados,
+     * o null si no se encuentra.
      */
     public String buscarRetornarPw(String palabraRec,String input){
         String passwordBuscada=null;
@@ -126,16 +128,15 @@ public class UsuarioSQL extends JDialog {
         int i=0;
         if(usuarios!=null){
             while (!usuarios.isEmpty() && flag==0 && i<usuarios.size()){
-                if((usuarios.get(i).getPaciente().getEmail().equalsIgnoreCase(input) || (usuarios.get(i).getPaciente().getDni().equalsIgnoreCase(input))) && usuarios.get(i).getPalabraRecuperacion().equalsIgnoreCase(palabraRec)){
-                    if(usuarios.get(i).isEstado()) {
-                        passwordBuscada = "password:" + usuarios.get(i).getPassword();
+                if( (usuarios.get(i).getPaciente().getEmail().equalsIgnoreCase(input) || usuarios.get(i).getPaciente().getDni().equalsIgnoreCase(input)) && usuarios.get(i).getPalabraRecuperacion().equalsIgnoreCase(palabraRec) ){
+                    if (usuarios.get(i).isEstado()){
+                        passwordBuscada=usuarios.get(i).getPassword();
+
+                    }else {
+                        passwordBuscada="Usuario esta de baja";
                     }
-                    else {
-                        passwordBuscada="El usuario esta dado de baja";
-                    }
-                    flag = 1;
-                }else
-                {
+                    flag=1;
+                }else{
                     passwordBuscada="Usuario no existe";
                 }
                 i++;
@@ -148,8 +149,8 @@ public class UsuarioSQL extends JDialog {
      *
      * @return Una lista de objetos Usuario que representa todos los usuarios registrados.
      */
-    public List listarUsuarios () {
-        List<Usuario> listaUsuarios = new ArrayList<>();
+    public List listarUsuarios (){
+        ArrayList<Usuario>listaUsuarios=new ArrayList<>();
         String SQL = "SELECT * FROM usuario";
         try {
             con = conexionBBDD.getConexion();
@@ -227,29 +228,5 @@ public class UsuarioSQL extends JDialog {
         }
         return false;
     }
-    /**
-     * Devuelve un TableModel con los datos de todos los usuarios registrados en la base de datos, para ser utilizado en una tabla.
-     *
-     * @return Un TableModel con los datos de los usuarios.
-     */
-    public TableModel listarEnTabla(){
-        List <Usuario>usuarios=listarUsuarios();
-        DefaultTableModel model=new DefaultTableModel(0,0);
-        String[] columnName={"Nombre","Apellido","Dni","Email","Password","PalabraRec","Obra Social","Estado"};
-        model.setColumnIdentifiers(columnName);
-        model.addRow(columnName);
-        Object[] objects=new Object[8];
-        for (int i=0;i<usuarios.size();i++){
-            objects[0]=usuarios.get(i).getPaciente().getNombre();
-            objects[1]=usuarios.get(i).getPaciente().getApellido();
-            objects[2]=usuarios.get(i).getPaciente().getDni();
-            objects[3]=usuarios.get(i).getPaciente().getEmail();
-            objects[4]=usuarios.get(i).getPassword();
-            objects[5]=usuarios.get(i).getPalabraRecuperacion();
-            objects[6]=usuarios.get(i).getPaciente().getObraSocial();
-            objects[7]=usuarios.get(i).isEstado();
-            model.addRow(objects);
-        }
-        return model;
-    }
+
 }

@@ -112,7 +112,7 @@ public class IngresoSistema extends JDialog {
                         JOptionPane.ERROR_MESSAGE);
             } else if (usuarioBusqueda.isEstado()) {
                 dispose();
-                VistaUsuario vistaUsuario = new VistaUsuario(null, usuarioBusqueda.getPaciente().getNombre());
+                VistaUsuario vistaUsuario = new VistaUsuario(null, usuarioBusqueda.getPaciente().getNombre(),usuarioBusqueda.getPaciente().getDni());
             }
                 else {
                     JOptionPane.showMessageDialog(this,

@@ -52,6 +52,7 @@ public class SistemaPrincipal extends JDialog {
             }
         });
 
+        setVisible(true);
     }
     /**
      * Deploys the login menu by creating a new IngresoSistema object.
