@@ -11,6 +11,10 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Locale;
 
+/**
+ * The VistaUsuario class represents a user view dialog in the application.
+ * It extends JDialog and provides functionality for managing user appointments.
+ */
 public class VistaUsuario extends JDialog {
     private JPanel vistaUsuario;
     private JLabel nombreUsuario;
@@ -32,17 +36,24 @@ public class VistaUsuario extends JDialog {
     private JTextField textField1;
     private String fecha;
     private String horario;
-    TurnoSQL turnoSQL=new TurnoSQL();
-    Consultorio consultorio=new Consultorio();
+    TurnoSQL turnoSQL = new TurnoSQL();
+    Consultorio consultorio = new Consultorio();
 
-    public VistaUsuario(Frame parent,String nombreUsuarioActivo,String dniUsuario) {
+    /**
+     * Constructs a new VistaUsuario dialog.
+     *
+     * @param parent            the parent frame
+     * @param nombreUsuarioActivo the active user's name
+     * @param dniUsuario        the user's ID
+     */
+    public VistaUsuario(Frame parent, String nombreUsuarioActivo, String dniUsuario) {
         super(parent);
         setTitle("Usuario");
         setContentPane(vistaUsuario);
         setMinimumSize(new Dimension(980, 920));
         setModal(true);
         setLocationRelativeTo(parent);
-        nombreUsuario.setText("Bienvenido "+ nombreUsuarioActivo.toUpperCase(Locale.ROOT)+"!");
+        nombreUsuario.setText("Bienvenido " + nombreUsuarioActivo.toUpperCase(Locale.ROOT) + "!");
 
         SALIRButton.addActionListener(new ActionListener() {
             @Override
@@ -51,6 +62,13 @@ public class VistaUsuario extends JDialog {
             }
         });
 
+        button1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setFechaInput(0);
+                turnosDisponibles(0);
+            }
+        });
         button1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -86,7 +104,6 @@ public class VistaUsuario extends JDialog {
                 turnosDisponibles(4);
             }
         });
-
         button6.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -118,6 +135,8 @@ public class VistaUsuario extends JDialog {
             }
         });
 
+        // Add action listeners to the remaining buttons
+
         agregarTurnoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -127,33 +146,48 @@ public class VistaUsuario extends JDialog {
         setVisible(true);
     }
 
+    /**
+     * Sets the selected date.
+     *
+     * @param fecha the selected date
+     */
     public void setFecha(String fecha) {
         this.fecha = fecha;
     }
 
-    private void turnosDisponibles(int indexDia){
-        ArrayList<Turno>turnos=consultorio.buscarDia(indexDia);
-        if (turnos.isEmpty()){
+    /**
+     * Displays the available appointments for a given day.
+     *
+     * @param indexDia the index of the selected day
+     */
+    private void turnosDisponibles(int indexDia) {
+        ArrayList<Turno> turnos = consultorio.buscarDia(indexDia);
+        if (turnos.isEmpty()) {
             button6.setVisible(true);
             button7.setVisible(true);
             button8.setVisible(true);
             button9.setVisible(true);
             button10.setVisible(true);
-        }else {
-            int i=0;
-            while (!turnos.isEmpty() && i<turnos.size()){
-                if (turnos.get(i)!=null){
-                    int indexHorario=consultorio.horarioTurno(turnos.get(i).getHorarioConsulta());
-                    switch (indexHorario){
-                        case 0: button6.setVisible(false);
-                        break;
-                        case 1: button7.setVisible(false);
-                        break;
-                        case 2: button8.setVisible(false);
+        } else {
+            int i = 0;
+            while (!turnos.isEmpty() && i < turnos.size()) {
+                if (turnos.get(i) != null) {
+                    int indexHorario = consultorio.horarioTurno(turnos.get(i).getHorarioConsulta());
+                    switch (indexHorario) {
+                        case 0:
+                            button6.setVisible(false);
                             break;
-                        case 3: button9.setVisible(false);
+                        case 1:
+                            button7.setVisible(false);
                             break;
-                        case 4: button10.setVisible(false);
+                        case 2:
+                            button8.setVisible(false);
+                            break;
+                        case 3:
+                            button9.setVisible(false);
+                            break;
+                        case 4:
+                            button10.setVisible(false);
                             break;
                     }
                 }
@@ -161,32 +195,42 @@ public class VistaUsuario extends JDialog {
             }
         }
     }
-    private String setFechaInput(int indexDia){
-        if (indexDia==0){
+
+    /**
+     * Sets the selected date based on the given index.
+     *
+     * @param indexDia the index of the selected day
+     * @return the selected date
+     */
+    private String setFechaInput(int indexDia) {
+        if (indexDia == 0) {
             setFecha("lunes");
         }
-        if (indexDia==1){
+        if (indexDia == 1) {
             setFecha("martes");
         }
-        if (indexDia==2){
+        if (indexDia == 2) {
             setFecha("miercoles");
         }
-        if (indexDia==3){
+        if (indexDia == 3) {
             setFecha("jueves");
         }
-        if (indexDia==4){
+        if (indexDia == 4) {
             setFecha("viernes");
         }
         return fecha;
     }
+
+    /**
+     * Generates a new appointment for the user.
+     *
+     * @param dniUsuario the user's ID
+     */
     private void generarTurno(String dniUsuario) {
-        if (!textField1.getText().isEmpty()&& !fecha.isEmpty() && !horario.isEmpty()){
-            Turno turnoAgregar=new Turno(dniUsuario,textField1.getText(),fecha,horario,true);
-            Consultorio consultorio=new Consultorio();
-            int fechaTurno=consultorio.diaTurno(fecha);
-            int horarioTurno=consultorio.horarioTurno(horario);
+        if (!textField1.getText().isEmpty() && !fecha.isEmpty() && !horario.isEmpty()) {
+            Turno turnoAgregar = new Turno(dniUsuario, textField1.getText(), fecha, horario, true);
             turnoSQL.registrarTurno(turnoAgregar);
-        }else {
+        } else {
             JOptionPane.showMessageDialog(this,
                     "Please fill in all fields",
                     "Try again",
