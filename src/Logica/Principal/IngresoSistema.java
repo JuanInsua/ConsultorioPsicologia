@@ -35,7 +35,7 @@ public class IngresoSistema extends JDialog {
      */
     public IngresoSistema(JFrame parent) {
         super(parent);
-        setTitle("Log In to System");
+        setTitle("Ingreso Usuario");
         setContentPane(ingresoSistema);
         setMinimumSize(new Dimension(680, 620));
         setModal(true);
@@ -81,8 +81,8 @@ public class IngresoSistema extends JDialog {
         boolean rta = true;
         if (textField1.getText().isEmpty() || passwordField1.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this,
-                    "Please fill in all the fields",
-                    "Try again",
+                    "Por favor completar todos los campos",
+                    "Intentar otra vez",
                     JOptionPane.ERROR_MESSAGE);
             rta = false;
         }
@@ -107,8 +107,8 @@ public class IngresoSistema extends JDialog {
             Usuario usuarioBusqueda = usuarioSQLIngreso.buscarUsuarioPasswordEmail(email, password);
             if (usuarioBusqueda == null) {
                 JOptionPane.showMessageDialog(this,
-                        "The user is not registered",
-                        "Try again",
+                        "El usuario no esta registrado",
+                        "Intentar otra vez",
                         JOptionPane.ERROR_MESSAGE);
             } else if (usuarioBusqueda.isEstado()) {
                 dispose();
@@ -116,8 +116,8 @@ public class IngresoSistema extends JDialog {
             }
                 else {
                     JOptionPane.showMessageDialog(this,
-                            "The user has been deactivated",
-                            "Try again",
+                            "El usuario esta de baja",
+                            "Intentar otra vez",
                             JOptionPane.ERROR_MESSAGE);
                 }
             }

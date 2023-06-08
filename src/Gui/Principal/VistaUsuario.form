@@ -10,14 +10,14 @@
     <children>
       <component id="42bd5" class="javax.swing.JLabel" binding="nombreUsuario">
         <constraints>
-          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <font name="Courier New" size="20" style="1"/>
           <text value=""/>
         </properties>
       </component>
-      <grid id="c0c97" binding="Turnos" layout-manager="GridLayoutManager" row-count="7" column-count="6" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="c0c97" binding="Turnos" layout-manager="GridLayoutManager" row-count="6" column-count="6" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
           <grid row="1" column="0" row-span="2" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -25,14 +25,6 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="a63a8" class="javax.swing.JTable" binding="table1" default-binding="true">
-            <constraints>
-              <grid row="6" column="0" row-span="1" col-span="6" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                <preferred-size width="150" height="50"/>
-              </grid>
-            </constraints>
-            <properties/>
-          </component>
           <component id="6ced0" class="javax.swing.JButton" binding="button2" default-binding="true">
             <constraints>
               <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
@@ -65,54 +57,6 @@
               <text value="viernes"/>
             </properties>
           </component>
-          <component id="9f595" class="javax.swing.JButton" binding="button7" default-binding="true">
-            <constraints>
-              <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text value="9 a 10"/>
-            </properties>
-          </component>
-          <component id="e4fc8" class="javax.swing.JButton" binding="button8" default-binding="true">
-            <constraints>
-              <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text value="10 a 11"/>
-            </properties>
-          </component>
-          <component id="89217" class="javax.swing.JButton" binding="button9" default-binding="true">
-            <constraints>
-              <grid row="2" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text value="11 a 12"/>
-            </properties>
-          </component>
-          <component id="18616" class="javax.swing.JButton" binding="button10" default-binding="true">
-            <constraints>
-              <grid row="2" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text value="12 a 13"/>
-            </properties>
-          </component>
-          <component id="4b051" class="javax.swing.JTextField" binding="textField1" default-binding="true">
-            <constraints>
-              <grid row="3" column="2" row-span="1" col-span="4" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                <preferred-size width="150" height="-1"/>
-              </grid>
-            </constraints>
-            <properties/>
-          </component>
-          <component id="e5495" class="javax.swing.JButton" binding="agregarTurnoButton" default-binding="true">
-            <constraints>
-              <grid row="4" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text value="Agregar turno"/>
-            </properties>
-          </component>
           <component id="f6388" class="javax.swing.JButton" binding="button1" default-binding="true">
             <constraints>
               <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
@@ -121,9 +65,59 @@
               <text value="lunes"/>
             </properties>
           </component>
+          <component id="e4a66" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="0" column="1" row-span="1" col-span="4" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font name="Courier New" size="16" style="1"/>
+              <text value="1er paso: Seleccionar Dia  Turno"/>
+            </properties>
+          </component>
+          <component id="d8a63" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="2" column="1" row-span="1" col-span="4" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font name="Courier New" size="16" style="1"/>
+              <text value="2do paso: Seleccionar  Horario"/>
+            </properties>
+          </component>
+          <component id="e4fc8" class="javax.swing.JButton" binding="button8" default-binding="true">
+            <constraints>
+              <grid row="3" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="10 a 11"/>
+            </properties>
+          </component>
+          <component id="89217" class="javax.swing.JButton" binding="button9" default-binding="true">
+            <constraints>
+              <grid row="3" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="11 a 12"/>
+            </properties>
+          </component>
+          <component id="18616" class="javax.swing.JButton" binding="button10" default-binding="true">
+            <constraints>
+              <grid row="3" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="12 a 13"/>
+            </properties>
+          </component>
+          <component id="9f595" class="javax.swing.JButton" binding="button7" default-binding="true">
+            <constraints>
+              <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="9 a 10"/>
+            </properties>
+          </component>
           <component id="beca" class="javax.swing.JButton" binding="button6" default-binding="true">
             <constraints>
-              <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <text value="8 a 9"/>
@@ -131,16 +125,32 @@
           </component>
           <component id="b2ef5" class="javax.swing.JLabel">
             <constraints>
-              <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="4" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <font name="Courier New" size="14" style="1"/>
-              <text value="Motivo consulta:"/>
+              <font name="Courier New" size="16" style="1"/>
+              <text value="3er paso: Motivo consulta"/>
+            </properties>
+          </component>
+          <component id="4b051" class="javax.swing.JTextField" binding="textField1" default-binding="true">
+            <constraints>
+              <grid row="4" column="3" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="-1"/>
+              </grid>
+            </constraints>
+            <properties/>
+          </component>
+          <component id="e5495" class="javax.swing.JButton" binding="agregarTurnoButton" default-binding="true">
+            <constraints>
+              <grid row="5" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Agregar turno"/>
             </properties>
           </component>
           <component id="5f9b0" class="javax.swing.JButton" binding="misTurnosButton" default-binding="true">
             <constraints>
-              <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
                 <preferred-size width="364" height="30"/>
               </grid>
             </constraints>
@@ -148,13 +158,14 @@
               <text value="Mis Turnos"/>
             </properties>
           </component>
-          <component id="e4a66" class="javax.swing.JLabel">
+          <component id="a63a8" class="javax.swing.JTable" binding="table1" default-binding="true">
             <constraints>
-              <grid row="0" column="1" row-span="1" col-span="4" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="2" column="0" row-span="4" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="50"/>
+              </grid>
             </constraints>
             <properties>
-              <font name="Courier New" size="16" style="1"/>
-              <text value="Seleccionar dia y Horario Turno:"/>
+              <enabled value="false"/>
             </properties>
           </component>
         </children>

@@ -2,13 +2,17 @@ package Logica.Principal;
 
 import Modelo.Consultorio;
 import Modelo.Turno;
+import Modelo.Usuario;
 import Persistencia.TurnoSQL;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -50,7 +54,7 @@ public class VistaUsuario extends JDialog {
         super(parent);
         setTitle("Usuario");
         setContentPane(vistaUsuario);
-        setMinimumSize(new Dimension(980, 920));
+        setMinimumSize(new Dimension(980, 620));
         setModal(true);
         setLocationRelativeTo(parent);
         nombreUsuario.setText("Bienvenido " + nombreUsuarioActivo.toUpperCase(Locale.ROOT) + "!");
@@ -66,6 +70,7 @@ public class VistaUsuario extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setFechaInput(0);
+                setHorario("");
                 turnosDisponibles(0);
             }
         });
@@ -73,6 +78,8 @@ public class VistaUsuario extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setFechaInput(0);
+                resetbuttonFecha();
+                setHorario("");
                 turnosDisponibles(0);
             }
         });
@@ -80,6 +87,8 @@ public class VistaUsuario extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setFechaInput(1);
+                resetbuttonFecha();
+                setHorario("");
                 turnosDisponibles(1);
             }
         });
@@ -87,6 +96,8 @@ public class VistaUsuario extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setFechaInput(2);
+                resetbuttonFecha();
+                setHorario("");
                 turnosDisponibles(2);
             }
         });
@@ -94,6 +105,8 @@ public class VistaUsuario extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setFechaInput(3);
+                resetbuttonFecha();
+                setHorario("");
                 turnosDisponibles(3);
             }
         });
@@ -101,37 +114,39 @@ public class VistaUsuario extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setFechaInput(4);
+                resetbuttonFecha();
+                setHorario("");
                 turnosDisponibles(4);
             }
         });
         button6.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                horario="8a9";
+                setHorario("8a9");
             }
         });
         button7.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                horario="9a10";
+                setHorario("9a10");
             }
         });
         button8.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                horario="10a11";
+                setHorario("10a11");
             }
         });
         button9.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                horario="11a12";
+                setHorario("11a12");
             }
         });
         button10.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                horario="12a13";
+                setHorario("12a13");
             }
         });
 
@@ -141,6 +156,13 @@ public class VistaUsuario extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 generarTurno(dniUsuario);
+            }
+        });
+
+        misTurnosButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                table1.setModel(setModelTabla(dniUsuario));
             }
         });
         setVisible(true);
@@ -163,35 +185,41 @@ public class VistaUsuario extends JDialog {
     private void turnosDisponibles(int indexDia) {
         ArrayList<Turno> turnos = consultorio.buscarDia(indexDia);
         if (turnos.isEmpty()) {
-            button6.setVisible(true);
-            button7.setVisible(true);
-            button8.setVisible(true);
-            button9.setVisible(true);
-            button10.setVisible(true);
+            resetbuttonFecha();
         } else {
             int i = 0;
-            while (!turnos.isEmpty() && i < turnos.size()) {
-                if (turnos.get(i) != null) {
-                    int indexHorario = consultorio.horarioTurno(turnos.get(i).getHorarioConsulta());
-                    switch (indexHorario) {
-                        case 0:
-                            button6.setVisible(false);
-                            break;
-                        case 1:
-                            button7.setVisible(false);
-                            break;
-                        case 2:
-                            button8.setVisible(false);
-                            break;
-                        case 3:
-                            button9.setVisible(false);
-                            break;
-                        case 4:
-                            button10.setVisible(false);
-                            break;
-                    }
-                }
+            while ( i < turnos.size()) {
+                setbuttonHorario(turnos.get(i));
                 i++;
+            }
+        }
+    }
+    public void resetbuttonFecha(){
+        button6.setVisible(true);
+        button7.setVisible(true);
+        button8.setVisible(true);
+        button9.setVisible(true);
+        button10.setVisible(true);
+    }
+    public void setbuttonHorario(Turno turno){
+        if (turno!=null) {
+            int indexHorario = consultorio.horarioTurno(turno.getHorarioConsulta());
+            switch (indexHorario) {
+                case 0:
+                    button6.setVisible(false);
+                    break;
+                case 1:
+                    button7.setVisible(false);
+                    break;
+                case 2:
+                    button8.setVisible(false);
+                    break;
+                case 3:
+                    button9.setVisible(false);
+                    break;
+                case 4:
+                    button10.setVisible(false);
+                    break;
             }
         }
     }
@@ -221,6 +249,10 @@ public class VistaUsuario extends JDialog {
         return fecha;
     }
 
+    public void setHorario(String horario) {
+        this.horario = horario;
+    }
+
     /**
      * Generates a new appointment for the user.
      *
@@ -232,9 +264,30 @@ public class VistaUsuario extends JDialog {
             turnoSQL.registrarTurno(turnoAgregar);
         } else {
             JOptionPane.showMessageDialog(this,
-                    "Please fill in all fields",
-                    "Try again",
+                    "Por favor completar todos los campos para agregar su turno",
+                    "Intente otra vez",
                     JOptionPane.ERROR_MESSAGE);
         }
+    }
+    public TableModel setModelTabla(String dniUsuario){
+        List<Turno> turnosUsuario=consultorio.listarTurnosUsuario(dniUsuario);
+        DefaultTableModel model=new DefaultTableModel(0,0);
+        String[] columnName={"Fecha","Horario","Motivo","Dni","Estado"};
+        model.setColumnIdentifiers(columnName);
+        model.addRow(columnName);
+        Object[] objects=new Object[8];
+        for (int i=0;i<turnosUsuario.size();i++){
+            objects[0]=turnosUsuario.get(i).getFechaConsulta();
+            objects[1]=turnosUsuario.get(i).getHorarioConsulta();
+            objects[2]="Privado";
+            objects[3]=turnosUsuario.get(i).getDniUsuario();
+            if (turnosUsuario.get(i).isEstado()){
+                objects[4]="activo";
+            }else {
+                objects[4]="cancelado";
+            }
+            model.addRow(objects);
+        }
+        return model;
     }
 }

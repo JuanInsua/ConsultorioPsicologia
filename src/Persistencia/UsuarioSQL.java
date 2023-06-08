@@ -130,7 +130,7 @@ public class UsuarioSQL extends JDialog {
             while (!usuarios.isEmpty() && flag==0 && i<usuarios.size()){
                 if( (usuarios.get(i).getPaciente().getEmail().equalsIgnoreCase(input) || usuarios.get(i).getPaciente().getDni().equalsIgnoreCase(input)) && usuarios.get(i).getPalabraRecuperacion().equalsIgnoreCase(palabraRec) ){
                     if (usuarios.get(i).isEstado()){
-                        passwordBuscada=usuarios.get(i).getPassword();
+                        passwordBuscada="PASSWORD: "+usuarios.get(i).getPassword();
 
                     }else {
                         passwordBuscada="Usuario esta de baja";

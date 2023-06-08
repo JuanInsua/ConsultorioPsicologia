@@ -35,7 +35,7 @@ public class RegistroForm extends JDialog {
      */
     public RegistroForm(JFrame parent) {
         super(parent);
-        setTitle("Create new user");
+        setTitle("Crear nuevo usuario");
         setContentPane(registroForm);
         setMinimumSize(new Dimension(680, 620));
         setModal(true);
@@ -81,8 +81,8 @@ public class RegistroForm extends JDialog {
             }
         } else {
             JOptionPane.showMessageDialog(this,
-                    "Error registering new user",
-                    "Try again",
+                    "Error al registrar el usuario",
+                    "Intentar otra vez",
                     JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -112,8 +112,8 @@ public class RegistroForm extends JDialog {
         }else if ((dni.getBytes().length < 7 || dni.getBytes().length > 9))
         {
             JOptionPane.showMessageDialog(this,
-                    "DNI is out of length (7 or 8 numbers)",
-                    "Try again",
+                    "DNI formato invalido (ingresar dni con 7 o 8 numeros)",
+                    "Intentar otra vez",
                     JOptionPane.ERROR_MESSAGE);
             rta = false;
         }
@@ -131,8 +131,8 @@ public class RegistroForm extends JDialog {
         Usuario comparar = usuarioBuscar.buscarUsuario(usuarioIngreso.getPaciente().getDni());
         if (comparar != null && comparar.getPaciente().getDni().equalsIgnoreCase(usuarioIngreso.getPaciente().getDni())) {
             JOptionPane.showMessageDialog(this,
-                    "The user has already been registered",
-                    "Try again",
+                    "El usuario ya esta registrado",
+                    "Intentar otra vez",
                     JOptionPane.ERROR_MESSAGE);
             rta = false;
         }

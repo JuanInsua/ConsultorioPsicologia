@@ -60,11 +60,11 @@ public class RecuperarCuenta extends JDialog {
         if (!textField1.getText().isEmpty() && !textField2.getText().isEmpty()) {
             UsuarioSQL usuarioSQL = new UsuarioSQL();
             String passwordRecuperada = usuarioSQL.buscarRetornarPw(textField1.getText(), textField2.getText());
-            JOptionPane.showMessageDialog(this, "PASSWORD: " + passwordRecuperada);
+            JOptionPane.showMessageDialog(this, passwordRecuperada);
         } else {
             JOptionPane.showMessageDialog(this,
-                    "Please fill in all the fields",
-                    "Try again",
+                    "Por favor completar todos los campos",
+                    "Intentar otra vez",
                     JOptionPane.ERROR_MESSAGE);
         }
     }

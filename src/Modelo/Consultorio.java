@@ -3,7 +3,11 @@ package Modelo;
 import Persistencia.TurnoSQL;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The Consultorio class represents a medical clinic.
  * It manages the calendar and scheduling of appointments.
@@ -44,6 +48,7 @@ public class Consultorio {
 
     /**
      * Maps a day string to its corresponding index in the calendar.
+     *
      * @param diaInput the name of the day
      * @return the index of the day in the calendar (0-4 for Monday-Friday)
      */
@@ -71,6 +76,7 @@ public class Consultorio {
 
     /**
      * Maps a time slot string to its corresponding index in the calendar.
+     *
      * @param horarioInput the time slot string
      * @return the index of the time slot in the calendar (0-4 for 8a9-12a13)
      */
@@ -98,11 +104,22 @@ public class Consultorio {
 
     /**
      * Retrieves the list of appointments for a given day.
+     *
      * @param indexDia the index of the day in the calendar (0-4 for Monday-Friday)
      * @return the list of appointments for the specified day
      */
     public ArrayList<Turno> buscarDia(int indexDia) {
         cargarCalendario();
         return calendario.get(indexDia).turnos;
+    }
+    public ArrayList<Turno> listarTurnosUsuario(String dniUsuario){
+        ArrayList<Turno>turnos=turnoSQL.listarTurnos();
+        ArrayList<Turno>turnosUsuario=new ArrayList<>();
+        for (int i=0;i<turnos.size();i++){
+            if (turnos.get(i).getDniUsuario().equalsIgnoreCase(dniUsuario)){
+                turnosUsuario.add(turnos.get(i));
+            }
+        }
+        return turnosUsuario;
     }
 }

@@ -1,13 +1,17 @@
 package Persistencia;
 
 import Modelo.Turno;
+import Modelo.Usuario;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The TurnoSQL class represents a database handler for managing Turno objects.
@@ -58,7 +62,7 @@ public class TurnoSQL extends JDialog {
         ArrayList<Turno> listaTurnos = new ArrayList<>();
         String SQL = "SELECT * FROM turno";
         try {
-            Connection con = conexionBBDD.getConexion();
+            con = conexionBBDD.getConexion();
             pst = con.prepareStatement(SQL);
             rs = pst.executeQuery();
             while (rs.next()) {
@@ -66,12 +70,12 @@ public class TurnoSQL extends JDialog {
                 listaTurnos.add(turno);
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println(e.toString());
         } finally {
             try {
                 con.close();
             } catch (Exception e) {
-                //System.out.println(e.toString());
+                System.out.println(e.toString());
             }
         }
         return listaTurnos;
@@ -92,4 +96,6 @@ public class TurnoSQL extends JDialog {
                 rs.getBoolean("estado"));
         return turno;
     }
+
+
 }
