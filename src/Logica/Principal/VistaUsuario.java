@@ -14,10 +14,8 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
 /**
- * The VistaUsuario class represents a user view dialog in the application.
- * It extends JDialog and provides functionality for managing user appointments.
+ * Represents a user interface dialog for the user view.
  */
 public class VistaUsuario extends JDialog {
     private JPanel vistaUsuario;
@@ -38,26 +36,27 @@ public class VistaUsuario extends JDialog {
     private JButton button10;
     private JButton agregarTurnoButton;
     private JTextField textField1;
+    private JLabel emailLabel;
     private String fecha;
     private String horario;
     TurnoSQL turnoSQL = new TurnoSQL();
     Consultorio consultorio = new Consultorio();
-
     /**
      * Constructs a new VistaUsuario dialog.
      *
-     * @param parent            the parent frame
-     * @param nombreUsuarioActivo the active user's name
-     * @param dniUsuario        the user's ID
+     * @param parent             the parent frame
+     * @param usuario the active user's name &  the user's identification number
      */
-    public VistaUsuario(Frame parent, String nombreUsuarioActivo, String dniUsuario) {
+    public VistaUsuario(Frame parent, Usuario usuario) {
         super(parent);
         setTitle("Usuario");
         setContentPane(vistaUsuario);
         setMinimumSize(new Dimension(980, 620));
         setModal(true);
         setLocationRelativeTo(parent);
-        nombreUsuario.setText("Bienvenido " + nombreUsuarioActivo.toUpperCase(Locale.ROOT) + "!");
+        nombreUsuario.setText("Bienvenido " + usuario.getPaciente().getNombre().toUpperCase(Locale.ROOT) + "!");
+        emailLabel.setText("Email: "+ usuario.getPaciente().getEmail());
+        resetbuttonVisibleHorario(false);
 
         SALIRButton.addActionListener(new ActionListener() {
             @Override
@@ -65,109 +64,124 @@ public class VistaUsuario extends JDialog {
                 dispose();
             }
         });
-
         button1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setFechaInput(0);
+                resetbuttonHorario();
+                resetbuttonDia();
+                resetbuttonVisibleHorario(true);
                 setHorario("");
                 turnosDisponibles(0);
-            }
-        });
-        button1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setFechaInput(0);
-                resetbuttonFecha();
-                setHorario("");
-                turnosDisponibles(0);
+                button1.setBackground(Color.green);
             }
         });
         button2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setFechaInput(1);
-                resetbuttonFecha();
+                resetbuttonHorario();
+                resetbuttonDia();
+                resetbuttonVisibleHorario(true);
                 setHorario("");
                 turnosDisponibles(1);
+                button2.setBackground(Color.green);
             }
         });
         button3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setFechaInput(2);
-                resetbuttonFecha();
+                resetbuttonHorario();
+                resetbuttonDia();
+                resetbuttonVisibleHorario(true);
                 setHorario("");
                 turnosDisponibles(2);
+                button3.setBackground(Color.green);
             }
         });
         button4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setFechaInput(3);
-                resetbuttonFecha();
+                resetbuttonHorario();
+                resetbuttonDia();
+                resetbuttonVisibleHorario(true);
                 setHorario("");
                 turnosDisponibles(3);
+                button4.setBackground(Color.green);
             }
         });
         button5.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setFechaInput(4);
-                resetbuttonFecha();
+                resetbuttonHorario();
+                resetbuttonDia();
+                resetbuttonVisibleHorario(true);
                 setHorario("");
                 turnosDisponibles(4);
+                button5.setBackground(Color.green);
             }
         });
         button6.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setHorario("8a9");
+                resetForegroundHorario();
+                button6.setForeground(Color.green);
             }
         });
         button7.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setHorario("9a10");
+                resetForegroundHorario();
+                button7.setForeground(Color.green);
             }
         });
         button8.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setHorario("10a11");
+                resetForegroundHorario();
+                button8.setForeground(Color.green);
             }
         });
+
         button9.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setHorario("11a12");
+                resetForegroundHorario();
+                button9.setForeground(Color.green);
             }
         });
+
         button10.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setHorario("12a13");
+                resetForegroundHorario();
+                button10.setForeground(Color.green);
             }
         });
-
-        // Add action listeners to the remaining buttons
 
         agregarTurnoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                generarTurno(dniUsuario);
+                generarTurno(usuario.getPaciente().getDni());
             }
         });
 
         misTurnosButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                table1.setModel(setModelTabla(dniUsuario));
+                table1.setModel(setModelTabla(usuario.getPaciente().getDni()));
             }
         });
         setVisible(true);
     }
-
     /**
      * Sets the selected date.
      *
@@ -177,15 +191,11 @@ public class VistaUsuario extends JDialog {
         this.fecha = fecha;
     }
 
-    /**
-     * Displays the available appointments for a given day.
-     *
-     * @param indexDia the index of the selected day
-     */
     private void turnosDisponibles(int indexDia) {
         ArrayList<Turno> turnos = consultorio.buscarDia(indexDia);
+        resetForegroundHorario();
         if (turnos.isEmpty()) {
-            resetbuttonFecha();
+            resetbuttonHorario();
         } else {
             int i = 0;
             while ( i < turnos.size()) {
@@ -194,40 +204,84 @@ public class VistaUsuario extends JDialog {
             }
         }
     }
-    public void resetbuttonFecha(){
-        button6.setVisible(true);
-        button7.setVisible(true);
-        button8.setVisible(true);
-        button9.setVisible(true);
-        button10.setVisible(true);
+    /**
+     * Resets the foreground color of the time slots.
+     */
+    public void resetForegroundHorario(){
+        button6.setForeground(Color.black);
+        button7.setForeground(Color.black);
+        button8.setForeground(Color.black);
+        button9.setForeground(Color.black);
+        button10.setForeground(Color.black);
     }
+    /**
+     * Resets the background color and enables all date buttons.
+     */
+    public void resetbuttonHorario(){
+        button6.setBackground(new Color(187,182,183));
+        button6.setEnabled(true);
+        button7.setBackground(new Color(187,182,183));
+        button7.setEnabled(true);
+        button8.setBackground(new Color(187,182,183));
+        button8.setEnabled(true);
+        button9.setBackground(new Color(187,182,183));
+        button9.setEnabled(true);
+        button10.setBackground(new Color(187,182,183));
+        button10.setEnabled(true);
+    }
+    /**
+     * Resets the background color of the day buttons.
+     */
+    public void resetbuttonDia(){
+        button1.setBackground(new Color(187,182,183));
+        button2.setBackground(new Color(187,182,183));
+        button3.setBackground(new Color(187,182,183));
+        button4.setBackground(new Color(187,182,183));
+        button5.setBackground(new Color(187,182,183));
+    }
+    public void resetbuttonVisibleHorario(boolean rta){
+        button6.setVisible(rta);
+        button7.setVisible(rta);
+        button8.setVisible(rta);
+        button9.setVisible(rta);
+        button10.setVisible(rta);
+    }
+    /**
+     * Sets the background color and disables the time slot button for the given Turno.
+     *
+     * @param turno the Turno object
+     */
     public void setbuttonHorario(Turno turno){
         if (turno!=null) {
             int indexHorario = consultorio.horarioTurno(turno.getHorarioConsulta());
             switch (indexHorario) {
                 case 0:
-                    button6.setVisible(false);
+                    button6.setBackground(Color.red);
+                    button6.setEnabled(false);
                     break;
                 case 1:
-                    button7.setVisible(false);
+                    button7.setBackground(Color.red);
+                    button7.setEnabled(false);
                     break;
                 case 2:
-                    button8.setVisible(false);
+                    button8.setBackground(Color.red);
+                    button8.setEnabled(false);
                     break;
                 case 3:
-                    button9.setVisible(false);
+                    button9.setBackground(Color.red);
+                    button9.setEnabled(false);
                     break;
                 case 4:
-                    button10.setVisible(false);
+                    button10.setBackground(Color.red);
+                    button10.setEnabled(false);
                     break;
             }
         }
     }
-
     /**
-     * Sets the selected date based on the given index.
+     * Sets the selected date based on the index of the day button clicked.
      *
-     * @param indexDia the index of the selected day
+     * @param indexDia the index of the day button
      * @return the selected date
      */
     private String setFechaInput(int indexDia) {
@@ -248,15 +302,18 @@ public class VistaUsuario extends JDialog {
         }
         return fecha;
     }
-
+    /**
+     * Sets the selected time slot.
+     *
+     * @param horario the selected time slot
+     */
     public void setHorario(String horario) {
         this.horario = horario;
     }
-
     /**
-     * Generates a new appointment for the user.
+     * Generates a new Turno with the provided information and registers it.
      *
-     * @param dniUsuario the user's ID
+     * @param dniUsuario the user's identification number
      */
     private void generarTurno(String dniUsuario) {
         if (!textField1.getText().isEmpty() && !fecha.isEmpty() && !horario.isEmpty()) {
@@ -269,6 +326,12 @@ public class VistaUsuario extends JDialog {
                     JOptionPane.ERROR_MESSAGE);
         }
     }
+    /**
+     * Creates and returns a TableModel for displaying the user's turnos.
+     *
+     * @param dniUsuario the user's identification number
+     * @return the TableModel for the turnos
+     */
     public TableModel setModelTabla(String dniUsuario){
         List<Turno> turnosUsuario=consultorio.listarTurnosUsuario(dniUsuario);
         DefaultTableModel model=new DefaultTableModel(0,0);

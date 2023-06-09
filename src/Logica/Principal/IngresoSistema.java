@@ -26,6 +26,7 @@ public class IngresoSistema extends JDialog {
     private JButton ingresarButton;
     private JPasswordField passwordField1;
     private JButton olvideMiContraseniaButton;
+    private JButton verButton;
 
     /**
 
@@ -60,6 +61,13 @@ public class IngresoSistema extends JDialog {
                 RecuperarCuenta recuperarCuenta = new RecuperarCuenta(parent);
             }
         });
+
+        verButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                textField2.setText(passwordField1.getText());
+            }
+        });
         setVisible(true);
     }
 
@@ -89,7 +97,6 @@ public class IngresoSistema extends JDialog {
         return rta;
     }
     /**
-
      Validates user login by checking the email and password.
      If the login is successful, it opens a new window based on the user's role.
      @param email the user's email
@@ -112,7 +119,7 @@ public class IngresoSistema extends JDialog {
                         JOptionPane.ERROR_MESSAGE);
             } else if (usuarioBusqueda.isEstado()) {
                 dispose();
-                VistaUsuario vistaUsuario = new VistaUsuario(null, usuarioBusqueda.getPaciente().getNombre(),usuarioBusqueda.getPaciente().getDni());
+                VistaUsuario vistaUsuario = new VistaUsuario(null, usuarioBusqueda);
             }
                 else {
                     JOptionPane.showMessageDialog(this,
