@@ -139,6 +139,7 @@
         <properties>
           <background color="-4475209"/>
           <font name="Courier New" size="16" style="1"/>
+          <foreground color="-15526891"/>
           <text value="VOLVER"/>
         </properties>
       </component>
@@ -149,6 +150,7 @@
         <properties>
           <background color="-4475209"/>
           <font name="Courier New" size="16" style="1"/>
+          <foreground color="-15526891"/>
           <text value="REGISTRAR"/>
         </properties>
       </component>

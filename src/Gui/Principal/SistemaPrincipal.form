@@ -5,7 +5,9 @@
     <constraints>
       <xy x="101" y="55" width="593" height="621"/>
     </constraints>
-    <properties/>
+    <properties>
+      <background color="-12967311"/>
+    </properties>
     <border type="none"/>
     <children>
       <component id="eb96a" class="javax.swing.JLabel">
@@ -33,7 +35,7 @@
         </constraints>
         <properties>
           <font name="Arial Black" size="24" style="1"/>
-          <foreground color="-15526891"/>
+          <foreground color="-4475209"/>
           <horizontalTextPosition value="11"/>
           <text value="CONSULTORIO PSICOLOGIA "/>
         </properties>

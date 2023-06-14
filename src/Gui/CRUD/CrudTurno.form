@@ -6,7 +6,7 @@
       <xy x="20" y="20" width="960" height="546"/>
     </constraints>
     <properties>
-      <background color="-10657651"/>
+      <background color="-12967311"/>
       <foreground color="-15526891"/>
     </properties>
     <border type="none"/>
@@ -27,7 +27,7 @@
         <properties>
           <background color="-10657651"/>
           <font name="Courier New" size="16" style="1"/>
-          <foreground color="-15526891"/>
+          <foreground color="-4475209"/>
           <text value="Dni Busqueda:"/>
         </properties>
       </component>
@@ -61,7 +61,7 @@
         <properties>
           <background color="-10657651"/>
           <font name="Courier New" size="16" style="1"/>
-          <foreground color="-15526891"/>
+          <foreground color="-4475209"/>
           <text value="Nombre:"/>
         </properties>
       </component>
@@ -72,7 +72,7 @@
         <properties>
           <background color="-10657651"/>
           <font name="Courier New" size="16" style="1"/>
-          <foreground color="-15526891"/>
+          <foreground color="-4475209"/>
           <text value="Apellido:"/>
         </properties>
       </component>
@@ -94,7 +94,7 @@
         <properties>
           <background color="-10657651"/>
           <font name="Courier New" size="16" style="1"/>
-          <foreground color="-15526891"/>
+          <foreground color="-4475209"/>
           <text value="Obra Social:"/>
         </properties>
       </component>
@@ -116,7 +116,7 @@
         <properties>
           <background color="-10657651"/>
           <font name="Courier New" size="16" style="1"/>
-          <foreground color="-15526891"/>
+          <foreground color="-4475209"/>
           <text value="Dni:"/>
         </properties>
       </component>
@@ -138,7 +138,7 @@
         <properties>
           <background color="-10657651"/>
           <font name="Courier New" size="16" style="1"/>
-          <foreground color="-15526891"/>
+          <foreground color="-4475209"/>
           <text value="Email:"/>
         </properties>
       </component>
@@ -160,7 +160,7 @@
         <properties>
           <background color="-10657651"/>
           <font name="Courier New" size="16" style="1"/>
-          <foreground color="-15526891"/>
+          <foreground color="-4475209"/>
           <text value="Password:"/>
         </properties>
       </component>
@@ -182,7 +182,7 @@
         <properties>
           <background color="-10657651"/>
           <font name="Courier New" size="16" style="1"/>
-          <foreground color="-15526891"/>
+          <foreground color="-4475209"/>
           <text value="Palabra Recuperacion:"/>
         </properties>
       </component>
@@ -204,7 +204,7 @@
         <properties>
           <background color="-10657651"/>
           <font name="Courier New" size="16" style="1"/>
-          <foreground color="-15526891"/>
+          <foreground color="-4475209"/>
           <text value="Estado:"/>
         </properties>
       </component>
@@ -225,7 +225,7 @@
         </constraints>
         <properties>
           <background color="-4475209"/>
-          <font name="Courier New" size="12" style="1"/>
+          <font name="Courier New" size="16" style="1"/>
           <foreground color="-15526891"/>
           <text value="VOLVER"/>
         </properties>
@@ -236,7 +236,7 @@
         </constraints>
         <properties>
           <background color="-4475209"/>
-          <font name="Courier New" size="12" style="1"/>
+          <font name="Courier New" size="16" style="1"/>
           <foreground color="-15526891"/>
           <text value="Listar Usuarios"/>
         </properties>
@@ -250,8 +250,9 @@
         <properties>
           <background color="-10657651"/>
           <enabled value="false"/>
-          <font name="Courier New" size="12" style="1"/>
+          <font name="Courier New" size="16" style="1"/>
           <foreground color="-15526891"/>
+          <gridColor color="-15526891"/>
         </properties>
       </component>
       <component id="8bef2" class="javax.swing.JButton" binding="buscarButton" default-binding="true">
@@ -260,7 +261,7 @@
         </constraints>
         <properties>
           <background color="-4475209"/>
-          <font name="Courier New" size="12" style="1"/>
+          <font name="Courier New" size="16" style="1"/>
           <foreground color="-15526891"/>
           <text value="Buscar:"/>
         </properties>
@@ -271,7 +272,7 @@
         </constraints>
         <properties>
           <background color="-4475209"/>
-          <font name="Courier New" size="12" style="1"/>
+          <font name="Courier New" size="16" style="1"/>
           <foreground color="-15526891"/>
           <text value="Modificar"/>
         </properties>
@@ -282,7 +283,7 @@
         </constraints>
         <properties>
           <background color="-4475209"/>
-          <font name="Courier New" size="12" style="1"/>
+          <font name="Courier New" size="16" style="1"/>
           <foreground color="-15526891"/>
           <text value="Limpiar"/>
         </properties>
@@ -293,7 +294,7 @@
         </constraints>
         <properties>
           <font name="Courier New" size="26" style="1"/>
-          <foreground color="-15526891"/>
+          <foreground color="-4475209"/>
           <text value="Gestion Turnos:"/>
         </properties>
       </component>

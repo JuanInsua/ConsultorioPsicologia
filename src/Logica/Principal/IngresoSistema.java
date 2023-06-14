@@ -26,6 +26,7 @@ public class IngresoSistema extends JDialog {
     private JButton ingresarButton;
     private JPasswordField passwordField1;
     private JButton olvideMiContraseniaButton;
+    private JLabel verpw;
     private JButton verButton;
 
     /**
@@ -65,7 +66,7 @@ public class IngresoSistema extends JDialog {
         verButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                textField2.setText(passwordField1.getText());
+                verpw.setText(passwordField1.getText());
             }
         });
         setVisible(true);

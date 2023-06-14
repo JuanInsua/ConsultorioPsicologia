@@ -6,6 +6,7 @@ import Modelo.Usuario;
 import Persistencia.TurnoSQL;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import java.awt.*;
@@ -37,10 +38,13 @@ public class VistaUsuario extends JDialog {
     private JButton agregarTurnoButton;
     private JTextField textField1;
     private JLabel emailLabel;
+    private JButton noDisponibleButton;
     private String fecha;
     private String horario;
     TurnoSQL turnoSQL = new TurnoSQL();
     Consultorio consultorio = new Consultorio();
+    Color colorBackGroundButton=new Color(154, 34, 209);
+    Color colorForeGroundButton=new Color(207, 34, 209);
     /**
      * Constructs a new VistaUsuario dialog.
      *
@@ -56,6 +60,7 @@ public class VistaUsuario extends JDialog {
         setLocationRelativeTo(parent);
         nombreUsuario.setText("Bienvenido " + usuario.getPaciente().getNombre().toUpperCase(Locale.ROOT) + "!");
         emailLabel.setText("Email: "+ usuario.getPaciente().getEmail());
+        table1.setBorder(new LineBorder(Color.black));
         resetbuttonVisibleHorario(false);
 
         SALIRButton.addActionListener(new ActionListener() {
@@ -73,7 +78,7 @@ public class VistaUsuario extends JDialog {
                 resetbuttonVisibleHorario(true);
                 setHorario("");
                 turnosDisponibles(0);
-                button1.setBackground(Color.green);
+                setBackgroundDia(button1);
             }
         });
         button2.addActionListener(new ActionListener() {
@@ -85,7 +90,7 @@ public class VistaUsuario extends JDialog {
                 resetbuttonVisibleHorario(true);
                 setHorario("");
                 turnosDisponibles(1);
-                button2.setBackground(Color.green);
+                setBackgroundDia(button2);
             }
         });
         button3.addActionListener(new ActionListener() {
@@ -97,7 +102,7 @@ public class VistaUsuario extends JDialog {
                 resetbuttonVisibleHorario(true);
                 setHorario("");
                 turnosDisponibles(2);
-                button3.setBackground(Color.green);
+                setBackgroundDia(button3);
             }
         });
         button4.addActionListener(new ActionListener() {
@@ -109,7 +114,7 @@ public class VistaUsuario extends JDialog {
                 resetbuttonVisibleHorario(true);
                 setHorario("");
                 turnosDisponibles(3);
-                button4.setBackground(Color.green);
+                setBackgroundDia(button4);
             }
         });
         button5.addActionListener(new ActionListener() {
@@ -121,7 +126,7 @@ public class VistaUsuario extends JDialog {
                 resetbuttonVisibleHorario(true);
                 setHorario("");
                 turnosDisponibles(4);
-                button5.setBackground(Color.green);
+                setBackgroundDia(button5);
             }
         });
         button6.addActionListener(new ActionListener() {
@@ -129,7 +134,7 @@ public class VistaUsuario extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 setHorario("8a9");
                 resetForegroundHorario();
-                button6.setForeground(Color.green);
+                setForegroundHorario(button6);
             }
         });
         button7.addActionListener(new ActionListener() {
@@ -137,7 +142,7 @@ public class VistaUsuario extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 setHorario("9a10");
                 resetForegroundHorario();
-                button7.setForeground(Color.green);
+                setForegroundHorario(button7);
             }
         });
         button8.addActionListener(new ActionListener() {
@@ -145,7 +150,7 @@ public class VistaUsuario extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 setHorario("10a11");
                 resetForegroundHorario();
-                button8.setForeground(Color.green);
+                setForegroundHorario(button8);
             }
         });
 
@@ -154,7 +159,7 @@ public class VistaUsuario extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 setHorario("11a12");
                 resetForegroundHorario();
-                button9.setForeground(Color.green);
+                setForegroundHorario(button9);
             }
         });
 
@@ -163,7 +168,7 @@ public class VistaUsuario extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 setHorario("12a13");
                 resetForegroundHorario();
-                button10.setForeground(Color.green);
+                setForegroundHorario(button10);
             }
         });
 
@@ -207,6 +212,12 @@ public class VistaUsuario extends JDialog {
     /**
      * Resets the foreground color of the time slots.
      */
+    public void setForegroundHorario(JButton button){
+        button.setForeground(colorForeGroundButton);
+    }
+    public void setBackgroundDia(JButton button){
+        button.setBackground(colorBackGroundButton);
+    }
     public void resetForegroundHorario(){
         button6.setForeground(Color.black);
         button7.setForeground(Color.black);
@@ -256,23 +267,23 @@ public class VistaUsuario extends JDialog {
             int indexHorario = consultorio.horarioTurno(turno.getHorarioConsulta());
             switch (indexHorario) {
                 case 0:
-                    button6.setBackground(Color.red);
+                    button6.setBackground(new Color(208, 33, 61));
                     button6.setEnabled(false);
                     break;
                 case 1:
-                    button7.setBackground(Color.red);
+                    button7.setBackground(new Color(208, 33, 61));
                     button7.setEnabled(false);
                     break;
                 case 2:
-                    button8.setBackground(Color.red);
+                    button8.setBackground(new Color(208, 33, 61));
                     button8.setEnabled(false);
                     break;
                 case 3:
-                    button9.setBackground(Color.red);
+                    button9.setBackground(new Color(208, 33, 61));
                     button9.setEnabled(false);
                     break;
                 case 4:
-                    button10.setBackground(Color.red);
+                    button10.setBackground(new Color(208, 33, 61));
                     button10.setEnabled(false);
                     break;
             }

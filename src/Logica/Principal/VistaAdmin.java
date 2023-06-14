@@ -18,7 +18,7 @@ public class VistaAdmin extends JDialog {
         super(parent);
         setTitle("Administracion");
         setContentPane(vistaAdmin);
-        setMinimumSize(new Dimension(1420, 820));
+        setMinimumSize(new Dimension(920, 820));
         setModal(true);
         setLocationRelativeTo(parent);
         SALIRButton.addActionListener(new ActionListener() {
