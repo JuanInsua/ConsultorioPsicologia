@@ -2,7 +2,8 @@ package Modelo;
 
 import java.util.Objects;
 /**
- * The Usuario class represents a user in the system.
+
+ La clase Usuario representa un usuario en el sistema.
  */
 public class Usuario {
     private Paciente paciente;
@@ -11,107 +12,95 @@ public class Usuario {
     private boolean estado;
 
     /**
-     * Constructs a new Usuario object with default values.
+
+     Construye un nuevo objeto Usuario con valores predeterminados.
      */
     public Usuario() {
     }
-
     /**
-     * Constructs a new Usuario object with the specified parameters.
-     *
-     * @param nombre              the nombre of the Paciente
-     * @param apellido            the apellido of the Paciente
-     * @param email               the email of the Paciente
-     * @param dni                 the dni of the Paciente
-     * @param obraSocial          the obra social of the Paciente
-     * @param password            the password of the Usuario
-     * @param palabraRecuperacion the recovery word of the Usuario
-     * @param estado              the state of the Usuario
+
+     Construye un nuevo objeto Usuario con los parámetros especificados.
+     @param nombreUsuario el nombre del Paciente
+     @param email el correo electrónico del Paciente
+     @param dni el DNI del Paciente
+     @param password la contraseña del Usuario
+     @param palabraRecuperacion la palabra de recuperación del Usuario
      */
-    public Usuario(String nombre, String apellido, String email, String dni, String obraSocial, String password, String palabraRecuperacion, boolean estado) {
-        this.paciente = new Paciente(nombre, apellido, email, dni, obraSocial);
+    public Usuario(String nombreUsuario, String email, String dni, String password, String palabraRecuperacion, boolean estado) {
+        this.paciente = new Paciente(nombreUsuario, email, dni);
         this.password = password;
         this.palabraRecuperacion = palabraRecuperacion;
         this.estado = estado;
     }
-
     /**
-     * Returns the Paciente object associated with this Usuario.
-     *
-     * @return the Paciente object
+
+     Devuelve el objeto Paciente asociado a este Usuario.
+     @return el objeto Paciente
      */
     public Paciente getPaciente() {
         return paciente;
     }
-
     /**
-     * Sets the Paciente object associated with this Usuario.
-     *
-     * @param paciente the Paciente object
+
+     Establece el objeto Paciente asociado a este Usuario.
+     @param paciente el objeto Paciente
      */
     public void setPaciente(Paciente paciente) {
         this.paciente = paciente;
     }
-
     /**
-     * Returns the password of this Usuario.
-     *
-     * @return the password
+
+     Devuelve la contraseña de este Usuario.
+     @return la contraseña
      */
     public String getPassword() {
         return password;
     }
-
     /**
-     * Sets the password of this Usuario.
-     *
-     * @param password the password
+
+     Establece la contraseña de este Usuario.
+     @param password la contraseña
      */
     public void setPassword(String password) {
         this.password = password;
     }
-
     /**
-     * Returns the recovery word of this Usuario.
-     *
-     * @return the recovery word
+
+     Devuelve la palabra de recuperación de este Usuario.
+     @return la palabra de recuperación
      */
     public String getPalabraRecuperacion() {
         return palabraRecuperacion;
     }
-
     /**
-     * Sets the recovery word of this Usuario.
-     *
-     * @param palabraRecuperacion the recovery word
+
+     Establece la palabra de recuperación de este Usuario.
+     @param palabraRecuperacion la palabra de recuperación
      */
     public void setPalabraRecuperacion(String palabraRecuperacion) {
         this.palabraRecuperacion = palabraRecuperacion;
     }
-
     /**
-     * Returns the state of this Usuario.
-     *
-     * @return the state
+
+     Devuelve el estado de este Usuario.
+     @return el estado
      */
     public boolean isEstado() {
         return estado;
     }
-
     /**
-     * Sets the state of this Usuario.
-     *
-     * @param estado the state
+
+     Establece el estado de este Usuario.
+     @param estado el estado
      */
-    public void setEstado(boolean estado) {
+    private void setEstado(boolean estado) {
         this.estado = estado;
     }
-
     /**
-     * Indicates whether some other object is "equal to" this one.
-     *
-     * @param o the reference object with which to compare
-     * @return {@code true} if this object is the same as the obj argument; {@code false} otherwise
+
+     Indica si algún otro objeto es "igual a" este.
+     @param o el objeto de referencia con el que se compara
+     @return {@code true} si este objeto es igual al argumento obj; {@code false} en caso contrario
      */
     @Override
     public boolean equals(Object o) {
@@ -120,28 +109,26 @@ public class Usuario {
         Usuario usuario = (Usuario) o;
         return estado == usuario.estado && Objects.equals(paciente, usuario.paciente) && Objects.equals(password, usuario.password) && Objects.equals(palabraRecuperacion, usuario.palabraRecuperacion);
     }
-
     /**
-     * Returns a hash code value for the object.
-     *
-     * @return a hash code value for this object
+
+     Devuelve un valor de código hash para el objeto.
+     @return un valor de código hash para este objeto
      */
     @Override
     public int hashCode() {
         return Objects.hash(paciente, password, palabraRecuperacion, estado);
     }
-
     /**
-     * Returns a string representation of the object.
-     *
-     * @return a string representation of the object
+
+     Devuelve una representación en cadena del objeto.
+     @return una representación en cadena del objeto
      */
     @Override
     public String toString() {
-        return super.toString()+"Usuario{" +
+        return super.toString() + "Usuario{" +
                 "paciente=" + paciente +
-                ", password='" + password + '\'' +
-                ", palabraRecuperacion='" + palabraRecuperacion + '\'' +
+                ", password='" + password + "" +
+                ", palabraRecuperacion='" + palabraRecuperacion + "" +
                 ", estado=" + estado +
                 '}';
     }

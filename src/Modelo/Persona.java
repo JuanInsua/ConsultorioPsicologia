@@ -38,13 +38,11 @@ public class Persona {
      * Constructs a new instance of the `Persona` class with the specified personal information.
      *
      * @param nombre   the name of the person
-     * @param apellido the last name of the person
      * @param email    the email address of the person
      * @param dni      the identification number of the person
      */
-    public Persona(String nombre, String apellido, String email, String dni) {
+    public Persona(String nombre, String email, String dni) {
         this.nombre = nombre;
-        this.apellido = apellido;
         this.email = email;
         this.dni = dni;
     }

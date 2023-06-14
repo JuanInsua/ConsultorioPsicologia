@@ -1,5 +1,6 @@
 package Modelo;
 
+import Persistencia.SesionSQL;
 import Persistencia.TurnoSQL;
 
 import javax.swing.*;
@@ -15,6 +16,8 @@ import java.util.List;
 public class Consultorio {
     ArrayList<Dia> calendario;
     TurnoSQL turnoSQL = new TurnoSQL();
+    SesionSQL sesionSQL=new SesionSQL();
+    ArrayList<Sesion>sesiones=sesionSQL.listar();
 
     /**
      * Constructs a Consultorio object with an empty calendar.
@@ -39,7 +42,7 @@ public class Consultorio {
      * Existing appointments are added to the corresponding day in the calendar.
      */
     public void cargarCalendario() {
-        ArrayList<Turno> turnos = turnoSQL.listarTurnos();
+        ArrayList<Turno> turnos = turnoSQL.listar();
         for (Turno turno : turnos) {
             int indexDia = diaTurno(turno.getFechaConsulta());
             calendario.get(indexDia).agregarTurno(turno);
@@ -101,7 +104,6 @@ public class Consultorio {
         }
         return indexTurno;
     }
-
     /**
      * Retrieves the list of appointments for a given day.
      *
@@ -113,7 +115,7 @@ public class Consultorio {
         return calendario.get(indexDia).turnos;
     }
     public ArrayList<Turno> listarTurnosUsuario(String dniUsuario){
-        ArrayList<Turno>turnos=turnoSQL.listarTurnos();
+        ArrayList<Turno>turnos=turnoSQL.listar();
         ArrayList<Turno>turnosUsuario=new ArrayList<>();
         for (int i=0;i<turnos.size();i++){
             if (turnos.get(i).getDniUsuario().equalsIgnoreCase(dniUsuario)){
@@ -121,5 +123,15 @@ public class Consultorio {
             }
         }
         return turnosUsuario;
+    }
+    public ArrayList<Sesion> listarSesionesPorDNI(String dni){
+        ArrayList<Sesion>sesionesDni=new ArrayList<>();
+
+        for (int i=0;i<sesiones.size();i++){
+            if (sesiones.get(i).getTurno().getDniUsuario().equalsIgnoreCase(dni)){
+                sesionesDni.add(sesiones.get(i));
+            }
+        }
+        return sesionesDni;
     }
 }

@@ -1,5 +1,8 @@
 package Logica.Principal;
 
+import Exeption.CampoVacioExeption;
+import Exeption.UsuarioBuscadoException;
+import Interfaz.I_ValidacionCampo;
 import Modelo.Usuario;
 import Persistencia.UsuarioSQL;
 
@@ -9,16 +12,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
-
- The IngresoSistema class represents a dialog window for user login.
-
- It extends JDialog and provides fields for entering username and password,
-
- as well as buttons for logging in, returning to the previous window,
-
- and recovering a forgotten password.
+ * La clase IngresoSistema representa una ventana de diálogo para el inicio de sesión de usuario. Extiende JDialog y
+ * proporciona campos para ingresar el nombre de usuario y la contraseña, así como botones para iniciar sesión,
+ * regresar a la ventana anterior y recuperar una contraseña olvidada.
  */
-public class IngresoSistema extends JDialog {
+public class IngresoSistema extends JDialog implements I_ValidacionCampo {
     private JPanel ingresoSistema;
     private JTextField textField1;
     private JTextField textField2;
@@ -30,10 +28,9 @@ public class IngresoSistema extends JDialog {
     private JButton verButton;
 
     /**
-
-     Constructs a new IngresoSistema dialog window.
-
-     @param parent the parent JFrame
+     * Construye una nueva ventana de diálogo IngresoSistema.
+     *
+     * @param parent el JFrame padre
      */
     public IngresoSistema(JFrame parent) {
         super(parent);
@@ -62,7 +59,6 @@ public class IngresoSistema extends JDialog {
                 RecuperarCuenta recuperarCuenta = new RecuperarCuenta(parent);
             }
         });
-
         verButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -73,61 +69,67 @@ public class IngresoSistema extends JDialog {
     }
 
     /**
-
-     Logs in the user by calling the logearUsuario method if the input fields are valid.
+     * Inicia sesión del usuario llamando al método logearUsuario si los campos de entrada son válidos.
      */
     private void logearUsuario() {
-        if (validacionCamposIngreso()) {
-            validarIngresoUsuario(textField1.getText(), passwordField1.getText());
-        }
-    }
-    /**
-
-     Validates the input fields for user login.
-     @return true if the fields are valid, false otherwise
-     */
-    private boolean validacionCamposIngreso() {
-        boolean rta = true;
-        if (textField1.getText().isEmpty() || passwordField1.getText().isEmpty()) {
+        try {
+            if (validacionCampo()) {
+                validarIngresoUsuario(textField1.getText(), passwordField1.getText());
+            }
+        } catch (CampoVacioExeption ce) {
             JOptionPane.showMessageDialog(this,
-                    "Por favor completar todos los campos",
+                    ce.getMessage(),
                     "Intentar otra vez",
                     JOptionPane.ERROR_MESSAGE);
-            rta = false;
         }
-        return rta;
     }
+
     /**
-     Validates user login by checking the email and password.
-     If the login is successful, it opens a new window based on the user's role.
-     @param email the user's email
-     @param password the user's password
+     * Valida los campos de entrada para el inicio de sesión del usuario.
+     *
+     * @return true si los campos son válidos, false en caso contrario
+     */
+    @Override
+    public boolean validacionCampo() throws CampoVacioExeption {
+        if (!textField1.getText().isEmpty() && !passwordField1.getText().isEmpty()) {
+            return true;
+        } else throw new CampoVacioExeption();
+    }
+
+    /**
+     * Valida el inicio de sesión del usuario verificando el correo electrónico y la contraseña.
+     * Si el inicio de sesión es exitoso, abre una nueva ventana según el rol del usuario.
+     *
+     * @param email    el correo electrónico del usuario
+     * @param password la contraseña del usuario
      */
     public void validarIngresoUsuario(String email, String password) {
+
         if (email.equalsIgnoreCase("admin") && password.equalsIgnoreCase("admin")) {
             dispose();
             VistaAdmin vistaAdmin = new VistaAdmin(null);
         } else if (email.equalsIgnoreCase("psico") && password.equalsIgnoreCase("psico")) {
             dispose();
-            VistaPsicologo vistaPsicologo= new VistaPsicologo(null);
-        }else{
-            UsuarioSQL usuarioSQLIngreso = new UsuarioSQL();
-            Usuario usuarioBusqueda = usuarioSQLIngreso.buscarUsuarioPasswordEmail(email, password);
-            if (usuarioBusqueda == null) {
-                JOptionPane.showMessageDialog(this,
-                        "El usuario no esta registrado",
-                        "Intentar otra vez",
-                        JOptionPane.ERROR_MESSAGE);
-            } else if (usuarioBusqueda.isEstado()) {
-                dispose();
-                VistaUsuario vistaUsuario = new VistaUsuario(null, usuarioBusqueda);
-            }
-                else {
+            VistaPsicologo vistaPsicologo = new VistaPsicologo(null);
+        } else {
+            try {
+                UsuarioSQL usuarioSQLIngreso = new UsuarioSQL();
+                Usuario usuarioBusqueda = usuarioSQLIngreso.buscarUsuarioPasswordEmail(email, password);
+                if (usuarioBusqueda.isEstado()) {
+                    dispose();
+                    VistaUsuario vistaUsuario = new VistaUsuario(null, usuarioBusqueda);
+                } else {
                     JOptionPane.showMessageDialog(this,
-                            "El usuario esta de baja",
+                            "El usuario está de baja",
                             "Intentar otra vez",
                             JOptionPane.ERROR_MESSAGE);
                 }
+            } catch (UsuarioBuscadoException ue) {
+                JOptionPane.showMessageDialog(this,
+                        ue.getMessage(),
+                        "Intentar otra vez",
+                        JOptionPane.ERROR_MESSAGE);
             }
         }
     }
+}

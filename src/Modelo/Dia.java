@@ -2,23 +2,56 @@ package Modelo;
 
 import java.util.ArrayList;
 
+/**
+ * La clase Dia representa un día de la semana en un calendario.
+ * Contiene una lista de turnos y un nombre para el día.
+ */
 public class Dia {
-    ArrayList<Turno>turnos;
+    ArrayList<Turno> turnos;
     private String nombreDia;
-    public Dia(String nombreDia){
-        turnos=new ArrayList<>();
-        this.nombreDia=nombreDia;
+
+    /**
+     * Crea un nuevo objeto Dia con el nombre especificado.
+     *
+     * @param nombreDia El nombre del día.
+     */
+    public Dia(String nombreDia) {
+        turnos = new ArrayList<>();
+        this.nombreDia = nombreDia;
     }
+
+    /**
+     * Obtiene el nombre del día.
+     *
+     * @return El nombre del día.
+     */
     public String getNombreDia() {
         return nombreDia;
     }
+
+    /**
+     * Establece el nombre del día.
+     *
+     * @param nombreDia El nuevo nombre del día.
+     */
     public void setNombreDia(String nombreDia) {
         this.nombreDia = nombreDia;
     }
-    public void agregarTurno(Turno turno){
+
+    /**
+     * Agrega un turno a la lista de turnos del día.
+     *
+     * @param turno El turno a agregar.
+     */
+    public void agregarTurno(Turno turno) {
         turnos.add(turno);
     }
 
+    /**
+     * Devuelve una representación en cadena del objeto Dia.
+     *
+     * @return Una representación en cadena de la clase Dia.
+     */
     @Override
     public String toString() {
         return "Dia{" +
@@ -26,3 +59,4 @@ public class Dia {
                 '}';
     }
 }
+

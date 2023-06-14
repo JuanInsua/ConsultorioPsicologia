@@ -1,5 +1,7 @@
 package Logica.Principal;
 
+import Exeption.CampoVacioExeption;
+import Interfaz.I_ValidacionCampo;
 import Persistencia.UsuarioSQL;
 
 import javax.swing.*;
@@ -9,11 +11,11 @@ import java.awt.event.ActionListener;
 
 /**
 
- The RecuperarCuenta class represents a dialog window for recovering an account in the system.
+ La clase RecuperarCuenta representa una ventana de diálogo para recuperar una cuenta en el sistema.
 
- It extends the JDialog class.
+ Esta clase extiende la clase JDialog.
  */
-public class RecuperarCuenta extends JDialog {
+public class RecuperarCuenta extends JDialog implements I_ValidacionCampo {
     private JPanel recuperarCuenta;
     private JPasswordField passwordField1;
     private JTextField textField1;
@@ -22,14 +24,13 @@ public class RecuperarCuenta extends JDialog {
     private JTextField textField2;
 
     /**
-
-     Creates a new instance of RecuperarCuenta.
-
-     @param parent The parent JFrame of the dialog window.
+     * Crea una nueva instancia de RecuperarCuenta.
+     *
+     * @param parent El JFrame padre de la ventana de diálogo.
      */
     public RecuperarCuenta(JFrame parent) {
         super(parent);
-        setTitle("Log In to the System");
+        setTitle("Iniciar sesión en el sistema");
         setContentPane(recuperarCuenta);
         setMinimumSize(new Dimension(980, 520));
         setModal(true);
@@ -44,28 +45,43 @@ public class RecuperarCuenta extends JDialog {
         recuperarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                buscarRetornoConValidacion();
+                buscarPWRetornoConValidacion();
             }
         });
         setVisible(true);
     }
 
     /**
-
-     Private method used to search and return the password with validation.
-     If the text fields are not empty, a search is performed in the database and the recovered password is displayed.
-     If the fields are empty, an error message is shown.
+     * Método privado utilizado para buscar y devolver la contraseña con validación.
+     * Si los campos de texto no están vacíos, se realiza una búsqueda en la base de datos y se muestra la contraseña recuperada.
+     * Si los campos están vacíos, se muestra un mensaje de error.
      */
-    private void buscarRetornoConValidacion() {
-        if (!textField1.getText().isEmpty() && !textField2.getText().isEmpty()) {
-            UsuarioSQL usuarioSQL = new UsuarioSQL();
-            String passwordRecuperada = usuarioSQL.buscarRetornarPw(textField1.getText(), textField2.getText());
-            JOptionPane.showMessageDialog(this, passwordRecuperada);
-        } else {
+    private void buscarPWRetornoConValidacion() {
+        try{
+            if (validacionCampo()) {
+                UsuarioSQL usuarioSQL = new UsuarioSQL();
+                String passwordRecuperada = usuarioSQL.buscarRetornarPw(textField1.getText(), textField2.getText());
+                JOptionPane.showMessageDialog(this, passwordRecuperada);
+            }
+        }catch (CampoVacioExeption ce) {
             JOptionPane.showMessageDialog(this,
-                    "Por favor completar todos los campos",
+                    ce.getMessage(),
                     "Intentar otra vez",
                     JOptionPane.ERROR_MESSAGE);
         }
     }
+
+    @Override
+    public boolean validacionCampo() throws CampoVacioExeption {
+        if (!textField1.getText().isEmpty() && !textField2.getText().isEmpty()) {
+            return true;
+        }else throw new CampoVacioExeption();
+    }
 }
+
+
+
+
+
+
+

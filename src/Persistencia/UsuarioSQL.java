@@ -1,5 +1,7 @@
 package Persistencia;
 
+import Exeption.UsuarioBuscadoException;
+import Interfaz.I_PersistenciaSQL;
 import Modelo.Usuario;
 
 import javax.swing.*;
@@ -14,41 +16,42 @@ import java.util.List;
 /**
  * Clase que representa una ventana de diálogo para interactuar con la base de datos de usuarios.
  */
-public class UsuarioSQL extends JDialog {
+public class UsuarioSQL extends JDialog implements I_PersistenciaSQL {
     private ConexionBBDD conexionBBDD=new ConexionBBDD();
     private Connection con;
     private PreparedStatement pst;
     private ResultSet rs;
 
+
     /**
      * Registra un nuevo usuario en la base de datos.
      *
-     * @param usuario El objeto Usuario a registrar.
+     * @param elemento El objeto Usuario a registrar.
      */
-    public void registrarUsuario(Usuario usuario) {
-        String sql="INSERT INTO usuario (nombre,apellido,obraSocial,dni,email,contrasenia,palabreRec,estado)"+"VALUES(?,?,?,?,?,?,?,?)";
+    @Override
+    public void registrar(Object elemento) {
+        String sql="INSERT INTO usuario (nombreUser,dni,email,contrasenia,palabreRec,estado)"+"VALUES(?,?,?,?,?,?)";
         try {
             con=conexionBBDD.getConexion();
             pst=con.prepareStatement(sql);
+            Usuario usuario=(Usuario)elemento;
             pst.setString(1,usuario.getPaciente().getNombre().toLowerCase());
-            pst.setString(2,usuario.getPaciente().getApellido().toLowerCase());
-            pst.setString(3,usuario.getPaciente().getObraSocial().toLowerCase());
-            pst.setString(4,usuario.getPaciente().getDni().toLowerCase());
-            pst.setString(5,usuario.getPaciente().getEmail().toLowerCase());
-            pst.setString(6,usuario.getPassword());
-            pst.setString(7,usuario.getPalabraRecuperacion().toLowerCase());
-            pst.setBoolean(8,true);
+            pst.setString(2,usuario.getPaciente().getDni().toLowerCase());
+            pst.setString(3,usuario.getPaciente().getEmail().toLowerCase());
+            pst.setString(4,usuario.getPassword());
+            pst.setString(5,usuario.getPalabraRecuperacion().toLowerCase());
+            pst.setBoolean(6,true);
             pst.execute();
             JOptionPane.showMessageDialog(this,
                     "Usuario Registrado con Exito"
             );
-        }catch (Exception e){
-            System.out.println(e.toString());
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
         }finally {
             try {
                 con.close();
-            }catch (Exception e){
-                System.out.println(e.toString());
+            }catch (SQLException e){
+                System.out.println(e.getMessage());
             }
         }
     }
@@ -58,7 +61,7 @@ public class UsuarioSQL extends JDialog {
      * @param dni El número de documento del usuario a buscar.
      * @return El objeto Usuario correspondiente al número de documento especificado, o null si no se encuentra.
      */
-    public Usuario buscarUsuario (String dni) {
+    public Usuario buscarUsuarioDni (String dni) {
         Usuario usuario=null;
         String SQL = "SELECT * FROM usuario where dni = ?";
         try {
@@ -68,23 +71,80 @@ public class UsuarioSQL extends JDialog {
             rs = pst.executeQuery();
 
             if (rs.next()) {
-                usuario=new Usuario(rs.getString("nombre"),
-                        rs.getString("apellido"),
+                usuario=new Usuario(rs.getString("nombreUser"),
                         rs.getString("email"),
                         rs.getString("dni"),
-                        rs.getString("obraSocial"),
                         rs.getString("contrasenia"),
                         rs.getString("palabreRec"),
                         rs.getBoolean("estado")
                         );
             }
-        } catch (Exception e) {
-            throw new RuntimeException(e.toString());
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }finally {
             try {
                 con.close();
-            }catch (Exception e){
-                System.out.println(e.toString());
+            }catch (SQLException e){
+                System.out.println(e.getMessage());
+            }
+        }
+        return usuario;
+    }
+
+    public Usuario buscarUsuarioNombreUser(String nombreUser) {
+        Usuario usuario=null;
+        String SQL = "SELECT * FROM usuario where nombreUser = ?";
+        try {
+            con = conexionBBDD.getConexion();
+            pst = con.prepareStatement(SQL);
+            pst.setString(1,nombreUser);
+            rs = pst.executeQuery();
+
+            if (rs.next()) {
+                usuario=new Usuario(rs.getString("nombreUser"),
+                        rs.getString("email"),
+                        rs.getString("dni"),
+                        rs.getString("contrasenia"),
+                        rs.getString("palabreRec"),
+                        rs.getBoolean("estado")
+                );
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }finally {
+            try {
+                con.close();
+            }catch (SQLException e){
+                System.out.println(e.getMessage());
+            }
+        }
+        return usuario;
+    }
+    public Usuario buscarUsuarioEmail(String email) {
+        Usuario usuario=null;
+        String SQL = "SELECT * FROM usuario where email = ?";
+        try {
+            con = conexionBBDD.getConexion();
+            pst = con.prepareStatement(SQL);
+            pst.setString(1,email);
+            rs = pst.executeQuery();
+
+            if (rs.next()) {
+                usuario=new Usuario(rs.getString("nombreUser"),
+                        rs.getString("email"),
+                        rs.getString("dni"),
+                        rs.getString("contrasenia"),
+                        rs.getString("palabreRec"),
+                        rs.getBoolean("estado")
+                );
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }finally {
+            try {
+                con.close();
+            }catch (SQLException e){
+                System.out.println(e.getMessage());
             }
         }
         return usuario;
@@ -96,20 +156,25 @@ public class UsuarioSQL extends JDialog {
      * @param password La contraseña del usuario a buscar.
      * @return El objeto Usuario correspondiente al email y contraseña especificados, o null si no se encuentra.
      */
-    public Usuario buscarUsuarioPasswordEmail (String input,String password) {
+    public Usuario buscarUsuarioPasswordEmail (String input,String password) throws UsuarioBuscadoException {
         Usuario usuario=null;
-        List <Usuario>usuarios=listarUsuarios();
+        ArrayList <Usuario>usuarios=listar();
         int flag=0;
         int i=0;
         if(usuarios!=null){
             while (!usuarios.isEmpty() && flag==0 && i<usuarios.size()){
-                if((usuarios.get(i).getPaciente().getEmail().equalsIgnoreCase(input) || usuarios.get(i).getPaciente().getDni().equalsIgnoreCase(input))  && usuarios.get(i).getPassword().equalsIgnoreCase(password)){
+                if((usuarios.get(i).getPaciente().getEmail().equalsIgnoreCase(input) || usuarios.get(i).getPaciente().getDni().equalsIgnoreCase(input))
+                        && usuarios.get(i).getPassword().equalsIgnoreCase(password)){
                     usuario=usuarios.get(i);
                     flag=1;
                 }
                 i++;
             }
+            if (flag==0){
+                throw new UsuarioBuscadoException("Usuario no registrado");
+            }
         }
+
         return usuario;
     }
     /**
@@ -123,7 +188,7 @@ public class UsuarioSQL extends JDialog {
      */
     public String buscarRetornarPw(String palabraRec,String input){
         String passwordBuscada=null;
-        List <Usuario>usuarios=listarUsuarios();
+        ArrayList <Usuario>usuarios=listar();
         int flag=0;
         int i=0;
         if(usuarios!=null){
@@ -144,12 +209,14 @@ public class UsuarioSQL extends JDialog {
         }
         return passwordBuscada;
     }
+
     /**
      * Devuelve una lista de todos los usuarios registrados en la base de datos.
      *
      * @return Una lista de objetos Usuario que representa todos los usuarios registrados.
      */
-    public List listarUsuarios (){
+    @Override
+    public ArrayList listar() {
         ArrayList<Usuario>listaUsuarios=new ArrayList<>();
         String SQL = "SELECT * FROM usuario";
         try {
@@ -161,12 +228,12 @@ public class UsuarioSQL extends JDialog {
                 listaUsuarios.add(usuario);
             }
         } catch (Exception e) {
-            System.out.println(e.toString());
+            System.out.println(e.getMessage());
         }finally {
             try {
                 con.close();
             }catch (Exception e){
-                System.out.println(e.toString());
+                System.out.println(e.getMessage());
             }
         }
         return listaUsuarios;
@@ -179,54 +246,50 @@ public class UsuarioSQL extends JDialog {
      * @throws SQLException Si ocurre algún error al acceder a los datos del ResultSet.
      */
     private Usuario generarUsuario(ResultSet rs) throws SQLException {
-        Usuario usuario=new Usuario(rs.getString("nombre"),
-                rs.getString("apellido"),
+        Usuario usuario=new Usuario(rs.getString("nombreUser"),
                 rs.getString("email"),
                 rs.getString("dni"),
-                rs.getString("obraSocial"),
                 rs.getString("contrasenia"),
                 rs.getString("palabreRec"),
                 rs.getBoolean("estado")
         );
         return usuario;
     }
+
     /**
      * Modifica los datos de un usuario en la base de datos.
      *
-     * @param usuario      El objeto Usuario con los nuevos datos.
-     * @param dniBusqueda  El número de documento del usuario a modificar.
+     * @param elemento      El objeto Usuario con los nuevos datos.
      * @return true si la modificación se realiza correctamente, false en caso contrario.
      */
-    public  boolean modificarClientes (Usuario usuario,String dniBusqueda) {
-
-        String SQL = "UPDATE usuario SET nombre = ?, apellido = ?, obraSocial = ?, dni = ?, email = ?, contrasenia = ?,palabreRec = ?,estado =? where dni = ?";
-
-        try {
-            con = conexionBBDD.getConexion();
-            pst = con.prepareStatement(SQL);
-            pst.setString(1, usuario.getPaciente().getNombre());
-            pst.setString(2, usuario.getPaciente().getApellido());
-            pst.setString(3, usuario.getPaciente().getObraSocial());
-            pst.setString(4, usuario.getPaciente().getDni());
-            pst.setString(5, usuario.getPaciente().getEmail());
-            pst.setString(6, usuario.getPassword());
-            pst.setString(7, usuario.getPalabraRecuperacion());
-            pst.setBoolean(8, usuario.isEstado());
-            pst.setString(9, dniBusqueda);
-            pst.execute();
-            JOptionPane.showMessageDialog(this,
-                    "Usuario modificado con Exito"
-            );
-        } catch (Exception e) {
-            System.out.println(e.toString());
-        } finally {
+    @Override
+    public boolean modificar(Object elemento) {
+        String SQL = "UPDATE usuario SET nombreUser = ?, email = ?, contrasenia = ?,palabreRec = ?,estado =? where dni = ?";
+        if (elemento!=null){
             try {
-                con.close();
+                con = conexionBBDD.getConexion();
+                pst = con.prepareStatement(SQL);
+                Usuario usuario=(Usuario)elemento;
+                pst.setString(1, usuario.getPaciente().getNombre());
+                pst.setString(2, usuario.getPaciente().getEmail());
+                pst.setString(3, usuario.getPassword());
+                pst.setString(4, usuario.getPalabraRecuperacion());
+                pst.setBoolean(5, usuario.isEstado());
+                pst.setString(6, usuario.getPaciente().getDni());
+                pst.execute();
+                JOptionPane.showMessageDialog(this,
+                        "Usuario modificado con Exito"
+                );
             } catch (Exception e) {
-                System.out.println(e.toString());
+                System.out.println(e.getMessage());
+            } finally {
+                try {
+                    con.close();
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
             }
         }
         return false;
     }
-
 }

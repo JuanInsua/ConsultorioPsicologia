@@ -9,10 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 
-/**
- * The SistemaPrincipal class represents the main system dialog in the application.
- * It extends the JDialog class and provides functionality for user interaction.
- */
 public class SistemaPrincipal extends JDialog {
     private JButton INGRESARButton;
     private JButton REGISTRARButton;
@@ -20,8 +16,8 @@ public class SistemaPrincipal extends JDialog {
     private JPanel sistemaPrincipal;
 
     /**
-     * Constructs a new SistemaPrincipal object with the specified parent JFrame.
-     * @param parent The parent JFrame for this dialog.
+     * Construye un nuevo objeto SistemaPrincipal con el JFrame padre especificado.
+     * @param parent El JFrame padre para este diálogo.
      */
     public SistemaPrincipal(JFrame parent) {
         super(parent);
@@ -34,14 +30,14 @@ public class SistemaPrincipal extends JDialog {
         REGISTRARButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                deployRegisterMenu();
+                desplegarMenuRegistro();
             }
         });
 
         INGRESARButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                deployLoginMenu();
+                desplegarMenuIngreso();
             }
         });
 
@@ -54,16 +50,19 @@ public class SistemaPrincipal extends JDialog {
 
         setVisible(true);
     }
+
     /**
-     * Deploys the login menu by creating a new IngresoSistema object.
+     * Despliega el menú de ingreso creando un nuevo objeto IngresoSistema.
      */
-    private void deployLoginMenu() {
+    private void desplegarMenuIngreso() {
         IngresoSistema ingresoSistema = new IngresoSistema(null);
     }
+
     /**
-     * Deploys the register menu by creating a new RegistroForm object.
+     * Despliega el menú de registro creando un nuevo objeto RegistroForm.
      */
-    private void deployRegisterMenu() {
+    private void desplegarMenuRegistro() {
         RegistroForm registroForm = new RegistroForm(null);
     }
 }
+

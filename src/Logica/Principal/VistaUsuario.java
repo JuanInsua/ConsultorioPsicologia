@@ -1,6 +1,10 @@
 package Logica.Principal;
 
+import Exeption.CampoVacioExeption;
+import Exeption.CaracteresMotivoInvalidosException;
+import Interfaz.I_ValidacionCampo;
 import Modelo.Consultorio;
+import Modelo.Estado;
 import Modelo.Turno;
 import Modelo.Usuario;
 import Persistencia.TurnoSQL;
@@ -8,21 +12,23 @@ import Persistencia.TurnoSQL;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
+
+
 /**
- * Represents a user interface dialog for the user view.
+
+ Esta clase representa la vista del usuario en la aplicación.
+
+ Extiende de JDialog e implementa la interfaz I_ValidacionCampo.
  */
-public class VistaUsuario extends JDialog {
+public class VistaUsuario extends JDialog implements I_ValidacionCampo {
     private JPanel vistaUsuario;
     private JLabel nombreUsuario;
     private JButton SALIRButton;
-    private JPanel Turnos;
     private JButton misTurnosButton;
     private JTable table1;
     private JButton button1;
@@ -35,167 +41,138 @@ public class VistaUsuario extends JDialog {
     private JButton button8;
     private JButton button9;
     private JButton button10;
+    JPanel Turnos;
     private JButton agregarTurnoButton;
     private JTextField textField1;
     private JLabel emailLabel;
-    private JButton noDisponibleButton;
+    private JButton modificarPerfilButton;
     private String fecha;
     private String horario;
-    TurnoSQL turnoSQL = new TurnoSQL();
-    Consultorio consultorio = new Consultorio();
-    Color colorBackGroundButton=new Color(154, 34, 209);
-    Color colorForeGroundButton=new Color(207, 34, 209);
+    private TurnoSQL turnoSQL = new TurnoSQL();
+    private Consultorio consultorio = new Consultorio();
+    private Color colorBackGroundButtonDia = new Color(154, 34, 209);
+    private Color colorForeGroundButton = new Color(207, 34, 209);
+    private Color colorBackgroundNoDispobibleHorario = new Color(208, 33, 61);
+    private Color backGroundDefault = new Color(187, 182, 183);
+
     /**
-     * Constructs a new VistaUsuario dialog.
-     *
-     * @param parent             the parent frame
-     * @param usuario the active user's name &  the user's identification number
+
+     Constructor de la clase VistaUsuario.
+
+     @param parent El frame padre de la ventana.
+
+     @param usuario El objeto Usuario que representa al usuario actual.
      */
     public VistaUsuario(Frame parent, Usuario usuario) {
         super(parent);
         setTitle("Usuario");
         setContentPane(vistaUsuario);
-        setMinimumSize(new Dimension(980, 620));
+        setMinimumSize(new Dimension(1280, 720));
         setModal(true);
         setLocationRelativeTo(parent);
         nombreUsuario.setText("Bienvenido " + usuario.getPaciente().getNombre().toUpperCase(Locale.ROOT) + "!");
-        emailLabel.setText("Email: "+ usuario.getPaciente().getEmail());
+        emailLabel.setText("Email: " + usuario.getPaciente().getEmail());
         table1.setBorder(new LineBorder(Color.black));
         resetbuttonVisibleHorario(false);
 
-        SALIRButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
-        button1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setFechaInput(0);
-                resetbuttonHorario();
-                resetbuttonDia();
-                resetbuttonVisibleHorario(true);
-                setHorario("");
-                turnosDisponibles(0);
-                setBackgroundDia(button1);
-            }
-        });
-        button2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setFechaInput(1);
-                resetbuttonHorario();
-                resetbuttonDia();
-                resetbuttonVisibleHorario(true);
-                setHorario("");
-                turnosDisponibles(1);
-                setBackgroundDia(button2);
-            }
-        });
-        button3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setFechaInput(2);
-                resetbuttonHorario();
-                resetbuttonDia();
-                resetbuttonVisibleHorario(true);
-                setHorario("");
-                turnosDisponibles(2);
-                setBackgroundDia(button3);
-            }
-        });
-        button4.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setFechaInput(3);
-                resetbuttonHorario();
-                resetbuttonDia();
-                resetbuttonVisibleHorario(true);
-                setHorario("");
-                turnosDisponibles(3);
-                setBackgroundDia(button4);
-            }
-        });
-        button5.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setFechaInput(4);
-                resetbuttonHorario();
-                resetbuttonDia();
-                resetbuttonVisibleHorario(true);
-                setHorario("");
-                turnosDisponibles(4);
-                setBackgroundDia(button5);
-            }
-        });
-        button6.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setHorario("8a9");
-                resetForegroundHorario();
-                setForegroundHorario(button6);
-            }
-        });
-        button7.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setHorario("9a10");
-                resetForegroundHorario();
-                setForegroundHorario(button7);
-            }
-        });
-        button8.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setHorario("10a11");
-                resetForegroundHorario();
-                setForegroundHorario(button8);
-            }
+        SALIRButton.addActionListener(e -> dispose());
+
+        button1.addActionListener(e -> {
+            setFechaInput(0);
+            resetbuttonHorario();
+            resetbuttonDia();
+            resetbuttonVisibleHorario(true);
+            setHorario("");
+            turnosDisponibles(0);
+            setBackgroundDia(button1);
         });
 
-        button9.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setHorario("11a12");
-                resetForegroundHorario();
-                setForegroundHorario(button9);
-            }
+        button2.addActionListener(e -> {
+            setFechaInput(1);
+            resetbuttonHorario();
+            resetbuttonDia();
+            resetbuttonVisibleHorario(true);
+            setHorario("");
+            turnosDisponibles(1);
+            setBackgroundDia(button2);
         });
 
-        button10.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setHorario("12a13");
-                resetForegroundHorario();
-                setForegroundHorario(button10);
-            }
+        button3.addActionListener(e -> {
+            setFechaInput(2);
+            resetbuttonHorario();
+            resetbuttonDia();
+            resetbuttonVisibleHorario(true);
+            setHorario("");
+            turnosDisponibles(2);
+            setBackgroundDia(button3);
         });
 
-        agregarTurnoButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                generarTurno(usuario.getPaciente().getDni());
-            }
+        button4.addActionListener(e -> {
+            setFechaInput(3);
+            resetbuttonHorario();
+            resetbuttonDia();
+            resetbuttonVisibleHorario(true);
+            setHorario("");
+            turnosDisponibles(3);
+            setBackgroundDia(button4);
         });
 
-        misTurnosButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                table1.setModel(setModelTabla(usuario.getPaciente().getDni()));
-            }
+        button5.addActionListener(e -> {
+            setFechaInput(4);
+            resetbuttonHorario();
+            resetbuttonDia();
+            resetbuttonVisibleHorario(true);
+            setHorario("");
+            turnosDisponibles(4);
+            setBackgroundDia(button5);
         });
+
+        button6.addActionListener(e -> {
+            setHorario("8a9");
+            resetForegroundHorario();
+            setForegroundHorario(button6);
+        });
+
+        button7.addActionListener(e -> {
+            setHorario("9a10");
+            resetForegroundHorario();
+            setForegroundHorario(button7);
+        });
+
+        button8.addActionListener(e -> {
+            setHorario("10a11");
+            resetForegroundHorario();
+            setForegroundHorario(button8);
+        });
+
+        button9.addActionListener(e -> {
+            setHorario("11a12");
+            resetForegroundHorario();
+            setForegroundHorario(button9);
+        });
+
+        button10.addActionListener(e -> {
+            setHorario("12a13");
+            resetForegroundHorario();
+            setForegroundHorario(button10);
+        });
+
+        agregarTurnoButton.addActionListener(e -> generarTurno(usuario.getPaciente().getDni()));
+
+        misTurnosButton.addActionListener(e -> table1.setModel(setModelTabla(usuario.getPaciente().getDni())));
+
+        modificarPerfilButton.addActionListener(e -> {
+            PasswordModificar passwordModificar = new PasswordModificar(null, usuario);
+            passwordModificar.setVisible(true);
+        });
+
         setVisible(true);
     }
     /**
-     * Sets the selected date.
-     *
-     * @param fecha the selected date
-     */
-    public void setFecha(String fecha) {
-        this.fecha = fecha;
-    }
 
+     Obtiene los turnos disponibles para el día seleccionado.
+     @param indexDia El índice del día seleccionado.
+     */
     private void turnosDisponibles(int indexDia) {
         ArrayList<Turno> turnos = consultorio.buscarDia(indexDia);
         resetForegroundHorario();
@@ -203,22 +180,33 @@ public class VistaUsuario extends JDialog {
             resetbuttonHorario();
         } else {
             int i = 0;
-            while ( i < turnos.size()) {
+            while (i < turnos.size()) {
                 setbuttonHorario(turnos.get(i));
                 i++;
             }
         }
     }
     /**
-     * Resets the foreground color of the time slots.
+
+     Establece el color de primer plano del botón de horario seleccionado.
+     @param button El botón de horario seleccionado.
      */
-    public void setForegroundHorario(JButton button){
+    public void setForegroundHorario(JButton button) {
         button.setForeground(colorForeGroundButton);
     }
-    public void setBackgroundDia(JButton button){
-        button.setBackground(colorBackGroundButton);
+    /**
+
+     Establece el color de fondo del botón de día seleccionado.
+     @param button El botón de día seleccionado.
+     */
+    public void setBackgroundDia(JButton button) {
+        button.setBackground(colorBackGroundButtonDia);
     }
-    public void resetForegroundHorario(){
+    /**
+
+     Restablece el color de primer plano de todos los botones de horario.
+     */
+    public void resetForegroundHorario() {
         button6.setForeground(Color.black);
         button7.setForeground(Color.black);
         button8.setForeground(Color.black);
@@ -226,31 +214,38 @@ public class VistaUsuario extends JDialog {
         button10.setForeground(Color.black);
     }
     /**
-     * Resets the background color and enables all date buttons.
+
+     Restablece el estado y color de fondo de todos los botones de horario.
      */
-    public void resetbuttonHorario(){
-        button6.setBackground(new Color(187,182,183));
+    public void resetbuttonHorario() {
+        button6.setBackground(backGroundDefault);
         button6.setEnabled(true);
-        button7.setBackground(new Color(187,182,183));
+        button7.setBackground(backGroundDefault);
         button7.setEnabled(true);
-        button8.setBackground(new Color(187,182,183));
+        button8.setBackground(backGroundDefault);
         button8.setEnabled(true);
-        button9.setBackground(new Color(187,182,183));
+        button9.setBackground(backGroundDefault);
         button9.setEnabled(true);
-        button10.setBackground(new Color(187,182,183));
+        button10.setBackground(backGroundDefault);
         button10.setEnabled(true);
     }
     /**
-     * Resets the background color of the day buttons.
+
+     Restablece el color de fondo de todos los botones de día.
      */
-    public void resetbuttonDia(){
-        button1.setBackground(new Color(187,182,183));
-        button2.setBackground(new Color(187,182,183));
-        button3.setBackground(new Color(187,182,183));
-        button4.setBackground(new Color(187,182,183));
-        button5.setBackground(new Color(187,182,183));
+    public void resetbuttonDia() {
+        button1.setBackground(backGroundDefault);
+        button2.setBackground(backGroundDefault);
+        button3.setBackground(backGroundDefault);
+        button4.setBackground(backGroundDefault);
+        button5.setBackground(backGroundDefault);
     }
-    public void resetbuttonVisibleHorario(boolean rta){
+    /**
+
+     Establece la visibilidad de los botones de horario.
+     @param rta El valor booleano para establecer la visibilidad.
+     */
+    public void resetbuttonVisibleHorario(boolean rta) {
         button6.setVisible(rta);
         button7.setVisible(rta);
         button8.setVisible(rta);
@@ -258,110 +253,154 @@ public class VistaUsuario extends JDialog {
         button10.setVisible(rta);
     }
     /**
-     * Sets the background color and disables the time slot button for the given Turno.
-     *
-     * @param turno the Turno object
+
+     Establece el estado y color de fondo del botón de horario según el turno.
+     @param turno El turno a establecer.
      */
-    public void setbuttonHorario(Turno turno){
-        if (turno!=null) {
+    public void setbuttonHorario(Turno turno) {
+        if (turno != null && turno.getEstado().name().equalsIgnoreCase("activado")) {
             int indexHorario = consultorio.horarioTurno(turno.getHorarioConsulta());
             switch (indexHorario) {
                 case 0:
-                    button6.setBackground(new Color(208, 33, 61));
+                    button6.setBackground(colorBackgroundNoDispobibleHorario);
                     button6.setEnabled(false);
                     break;
                 case 1:
-                    button7.setBackground(new Color(208, 33, 61));
+                    button7.setBackground(colorBackgroundNoDispobibleHorario);
                     button7.setEnabled(false);
                     break;
                 case 2:
-                    button8.setBackground(new Color(208, 33, 61));
+                    button8.setBackground(colorBackgroundNoDispobibleHorario);
                     button8.setEnabled(false);
                     break;
                 case 3:
-                    button9.setBackground(new Color(208, 33, 61));
+                    button9.setBackground(colorBackgroundNoDispobibleHorario);
                     button9.setEnabled(false);
                     break;
                 case 4:
-                    button10.setBackground(new Color(208, 33, 61));
+                    button10.setBackground(colorBackgroundNoDispobibleHorario);
                     button10.setEnabled(false);
                     break;
             }
         }
     }
     /**
-     * Sets the selected date based on the index of the day button clicked.
-     *
-     * @param indexDia the index of the day button
-     * @return the selected date
-     */
-    private String setFechaInput(int indexDia) {
-        if (indexDia == 0) {
-            setFecha("lunes");
-        }
-        if (indexDia == 1) {
-            setFecha("martes");
-        }
-        if (indexDia == 2) {
-            setFecha("miercoles");
-        }
-        if (indexDia == 3) {
-            setFecha("jueves");
-        }
-        if (indexDia == 4) {
-            setFecha("viernes");
-        }
-        return fecha;
-    }
-    /**
-     * Sets the selected time slot.
-     *
-     * @param horario the selected time slot
+
+     Establece el horario actual seleccionado.
+     @param horario El horario actual seleccionado.
      */
     public void setHorario(String horario) {
         this.horario = horario;
     }
     /**
-     * Generates a new Turno with the provided information and registers it.
-     *
-     * @param dniUsuario the user's identification number
+
+     Limpia los campos de usuario.
+     */
+    private void limpiarCamposUsuario() {
+        textField1.setText("");
+        fecha = "";
+        horario = "";
+    }
+    /**
+
+     Genera un nuevo turno para el usuario.
+     @param dniUsuario El DNI del usuario.
      */
     private void generarTurno(String dniUsuario) {
-        if (!textField1.getText().isEmpty() && !fecha.isEmpty() && !horario.isEmpty()) {
-            Turno turnoAgregar = new Turno(dniUsuario, textField1.getText(), fecha, horario, true);
-            turnoSQL.registrarTurno(turnoAgregar);
-        } else {
+        try {
+            if (validacionCampo()) {
+                validacionCaracteresMotivo();
+                Turno turnoAgregar = new Turno(dniUsuario, textField1.getText(), fecha, horario);
+                turnoAgregar.setEstado(Estado.ACTIVADO);
+                turnoSQL.registrar(turnoAgregar);
+                limpiarCamposUsuario();
+                resetbuttonDia();
+                resetbuttonHorario();
+                resetForegroundHorario();
+                resetbuttonVisibleHorario(false);
+            }
+        } catch (CampoVacioExeption ce) {
             JOptionPane.showMessageDialog(this,
-                    "Por favor completar todos los campos para agregar su turno",
+                    ce.getMessage(),
+                    "Intente otra vez",
+                    JOptionPane.ERROR_MESSAGE);
+        } catch (CaracteresMotivoInvalidosException cmi) {
+            JOptionPane.showMessageDialog(this,
+                    cmi.getMessage(),
                     "Intente otra vez",
                     JOptionPane.ERROR_MESSAGE);
         }
     }
     /**
-     * Creates and returns a TableModel for displaying the user's turnos.
-     *
-     * @param dniUsuario the user's identification number
-     * @return the TableModel for the turnos
+
+     Establece el modelo de tabla para los turnos del usuario.
+     @param dniUsuario El DNI del usuario.
+     @return El modelo de tabla con los turnos del usuario.
      */
-    public TableModel setModelTabla(String dniUsuario){
-        List<Turno> turnosUsuario=consultorio.listarTurnosUsuario(dniUsuario);
-        DefaultTableModel model=new DefaultTableModel(0,0);
-        String[] columnName={"Fecha","Horario","Motivo","Dni","Estado"};
-        model.setColumnIdentifiers(columnName);
-        model.addRow(columnName);
-        Object[] objects=new Object[8];
-        for (int i=0;i<turnosUsuario.size();i++){
-            objects[0]=turnosUsuario.get(i).getFechaConsulta();
-            objects[1]=turnosUsuario.get(i).getHorarioConsulta();
-            objects[2]="Privado";
-            objects[3]=turnosUsuario.get(i).getDniUsuario();
-            if (turnosUsuario.get(i).isEstado()){
-                objects[4]="activo";
-            }else {
-                objects[4]="cancelado";
+    private DefaultTableModel setModelTabla(String dniUsuario) {
+        ArrayList<Turno> turnos = consultorio.listarTurnosUsuario(dniUsuario);
+        String[] titulos = {"Fecha", "Horario"};
+        DefaultTableModel model = new DefaultTableModel(null, titulos);
+        String[] fila1 = {"Fecha","Horario"};
+        model.addRow(fila1);
+        for (Turno t : turnos) {
+            if (t.getEstado().name().equalsIgnoreCase("activado")) {
+                String[] fila2 = {
+                        t.getFechaConsulta(), t.getHorarioConsulta()
+                };
+                model.addRow(fila2);
             }
-            model.addRow(objects);
         }
         return model;
+    }
+    /**
+     Establece la fecha seleccionada en el input de texto.
+     @param index El índice del día seleccionado.
+     */
+    private void setFechaInput(int index) {
+        switch (index) {
+            case 0:
+                textField1.setText("Lunes");
+                break;
+            case 1:
+                textField1.setText("Martes");
+                break;
+            case 2:
+                textField1.setText("Miércoles");
+                break;
+            case 3:
+                textField1.setText("Jueves");
+                break;
+            case 4:
+                textField1.setText("Viernes");
+                break;
+        }
+    }
+    /**
+
+     Valida que los campos de usuario estén completos.
+     @return true si los campos están completos, false de lo contrario.
+     @throws CampoVacioExeption Si algún campo está vacío.
+     */
+    @Override
+    public boolean validacionCampo() throws CampoVacioExeption {
+        if (textField1.getText().isEmpty() || fecha.isEmpty() || horario.isEmpty()) {
+            throw new CampoVacioExeption();
+        }
+        return true;
+    }
+    /**
+
+     Valida que los caracteres del motivo sean válidos.
+     @throws CaracteresMotivoInvalidosException Si el motivo contiene caracteres inválidos.
+     */
+    public void validacionCaracteresMotivo() throws CaracteresMotivoInvalidosException {
+        String motivo = textField1.getText();
+        String[] caracteresInvalidos = {"<", ">", "&", "|", ""};
+        for (String c : caracteresInvalidos) {
+            if (motivo.contains(c)) {
+            throw new CaracteresMotivoInvalidosException("El motivo contiene caracteres inválidos");
+            }
+        }
     }
 }
