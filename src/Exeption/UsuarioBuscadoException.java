@@ -1,11 +1,16 @@
 package Exeption;
 
+import Archivo.ControladoraArchivo;
+
+import java.util.Date;
+
 /**
  * Esta clase representa una excepción personalizada lanzada cuando un usuario no es encontrado.
  */
 public class UsuarioBuscadoException extends RuntimeException {
 
     private String message;
+    private Date fechaError;
 
     /**
      * Crea una nueva instancia de UsuarioBuscadoException con el mensaje especificado.
@@ -14,6 +19,8 @@ public class UsuarioBuscadoException extends RuntimeException {
      */
     public UsuarioBuscadoException(String message) {
         setMessage(message);
+        this.fechaError=new Date();
+        ControladoraArchivo.grabar(this.getFechaError(),this.getMessage());
     }
 
     /**
@@ -30,6 +37,10 @@ public class UsuarioBuscadoException extends RuntimeException {
         this.message = message;
     }
 
+    public Date getFechaError() {
+        return fechaError;
+    }
+
     /**
      * Devuelve una representación en cadena de la excepción.
      *
@@ -39,6 +50,7 @@ public class UsuarioBuscadoException extends RuntimeException {
     public String toString() {
         return "UsuarioBuscadoException{" +
                 "message='" + message + '\'' +
+                ", fechaError=" + fechaError +
                 '}';
     }
 }

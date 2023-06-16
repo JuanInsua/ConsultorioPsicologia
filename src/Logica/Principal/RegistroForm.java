@@ -46,26 +46,11 @@ public class RegistroForm extends JDialog implements I_ValidacionCampo {
         setModal(true);
         setLocationRelativeTo(parent);
 
-        SALIRButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
+        SALIRButton.addActionListener(e -> dispose());
 
-        REGISTRARButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                registroConValidacionCampos();
-            }
-        });
+        REGISTRARButton.addActionListener(e -> registroConValidacionCampos());
 
-        verButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                pwlabel.setText(passwordField1.getText());
-            }
-        });
+        verButton.addActionListener(e -> pwlabel.setText(passwordField1.getText()));
         setVisible(true);
     }
 
@@ -151,7 +136,6 @@ public class RegistroForm extends JDialog implements I_ValidacionCampo {
     }
 
     /**
-
      Valida si el usuario ya existe en la base de datos.
      @param usuarioIngreso El usuario a validar.
      @return true si el usuario no se encuentra en la base de datos, false en caso contrario.
@@ -159,16 +143,16 @@ public class RegistroForm extends JDialog implements I_ValidacionCampo {
      */
     private boolean validacionUsuarioEnBD(Usuario usuarioIngreso) throws UsuarioBuscadoException {
         UsuarioSQL usuarioBuscar = new UsuarioSQL();
-        Usuario compararDni = usuarioBuscar.buscarUsuarioDni(usuarioIngreso.getPaciente().getDni());
-        if (compararDni != null && compararDni.getPaciente().getDni().equalsIgnoreCase(usuarioIngreso.getPaciente().getDni())) {
+        Usuario compararDni = usuarioBuscar.buscarUsuarioDni(usuarioIngreso.getDni());
+        if (compararDni != null && compararDni.getDni().equalsIgnoreCase(usuarioIngreso.getDni())) {
             throw new UsuarioBuscadoException("El DNI ya fue registrado");
         }
-        Usuario compararNombreUser = usuarioBuscar.buscarUsuarioNombreUser(usuarioIngreso.getPaciente().getNombre());
-        if (compararNombreUser != null && compararNombreUser.getPaciente().getNombre().equalsIgnoreCase(usuarioIngreso.getPaciente().getNombre())) {
+        Usuario compararNombreUser = usuarioBuscar.buscarUsuarioNombreUser(usuarioIngreso.getNombre());
+        if (compararNombreUser != null && compararNombreUser.getNombre().equalsIgnoreCase(usuarioIngreso.getNombre())) {
             throw new UsuarioBuscadoException("El Nombre de Usuario ya fue registrado");
         }
-        Usuario compararEmail = usuarioBuscar.buscarUsuarioEmail(usuarioIngreso.getPaciente().getEmail());
-        if (compararEmail != null && compararEmail.getPaciente().getEmail().equalsIgnoreCase(usuarioIngreso.getPaciente().getEmail())) {
+        Usuario compararEmail = usuarioBuscar.buscarUsuarioEmail(usuarioIngreso.getEmail());
+        if (compararEmail != null && compararEmail.getEmail().equalsIgnoreCase(usuarioIngreso.getEmail())) {
             throw new UsuarioBuscadoException("El Email ya fue registrado");
         }
         return true;

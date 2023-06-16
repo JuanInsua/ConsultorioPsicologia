@@ -1,6 +1,7 @@
 package Logica.Principal;
 
 
+import Logica.CRUD.CrudSesion;
 import Logica.CRUD.CrudTurno;
 import Logica.CRUD.CrudUsuario;
 
@@ -32,27 +33,18 @@ public class VistaAdmin extends JDialog {
         setModal(true);
         setLocationRelativeTo(parent);
 
-        SALIRButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
+        SALIRButton.addActionListener(e -> dispose());
+
+        USUARIOSButton.addActionListener(e -> {
+            CrudUsuario crudUsuario = new CrudUsuario(null);
         });
 
-        USUARIOSButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                CrudUsuario crudUsuario = new CrudUsuario(null);
-            }
+        TURNOSButton.addActionListener(e -> {
+            CrudTurno crudTurno = new CrudTurno(null);
         });
 
-        TURNOSButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                CrudTurno crudTurno = new CrudTurno(null);
-            }
+        SESIONESButton.addActionListener(e -> {
+            CrudSesion crudSesion=new CrudSesion(null);
         });
-
-        setVisible(true);
     }
 }

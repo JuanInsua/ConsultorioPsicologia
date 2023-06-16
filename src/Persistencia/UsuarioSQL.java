@@ -13,21 +13,23 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeMap;
+
 /**
  * Clase que representa una ventana de diálogo para interactuar con la base de datos de usuarios.
  */
-public class UsuarioSQL extends JDialog implements I_PersistenciaSQL {
+public class UsuarioSQL extends JDialog implements I_PersistenciaSQL{
     private ConexionBBDD conexionBBDD=new ConexionBBDD();
     private Connection con;
     private PreparedStatement pst;
     private ResultSet rs;
-
 
     /**
      * Registra un nuevo usuario en la base de datos.
      *
      * @param elemento El objeto Usuario a registrar.
      */
+
     @Override
     public void registrar(Object elemento) {
         String sql="INSERT INTO usuario (nombreUser,dni,email,contrasenia,palabreRec,estado)"+"VALUES(?,?,?,?,?,?)";
@@ -35,9 +37,9 @@ public class UsuarioSQL extends JDialog implements I_PersistenciaSQL {
             con=conexionBBDD.getConexion();
             pst=con.prepareStatement(sql);
             Usuario usuario=(Usuario)elemento;
-            pst.setString(1,usuario.getPaciente().getNombre().toLowerCase());
-            pst.setString(2,usuario.getPaciente().getDni().toLowerCase());
-            pst.setString(3,usuario.getPaciente().getEmail().toLowerCase());
+            pst.setString(1,usuario.getNombre().toLowerCase());
+            pst.setString(2,usuario.getDni().toLowerCase());
+            pst.setString(3,usuario.getEmail().toLowerCase());
             pst.setString(4,usuario.getPassword());
             pst.setString(5,usuario.getPalabraRecuperacion().toLowerCase());
             pst.setBoolean(6,true);
@@ -55,6 +57,7 @@ public class UsuarioSQL extends JDialog implements I_PersistenciaSQL {
             }
         }
     }
+
     /**
      * Busca y devuelve un usuario en la base de datos según el número de documento.
      *
@@ -150,74 +153,12 @@ public class UsuarioSQL extends JDialog implements I_PersistenciaSQL {
         return usuario;
     }
     /**
-     * Busca y devuelve un usuario en la base de datos según el email y la contraseña especificados.
-     *
-     * @param input    El email del usuario a buscar.
-     * @param password La contraseña del usuario a buscar.
-     * @return El objeto Usuario correspondiente al email y contraseña especificados, o null si no se encuentra.
-     */
-    public Usuario buscarUsuarioPasswordEmail (String input,String password) throws UsuarioBuscadoException {
-        Usuario usuario=null;
-        ArrayList <Usuario>usuarios=listar();
-        int flag=0;
-        int i=0;
-        if(usuarios!=null){
-            while (!usuarios.isEmpty() && flag==0 && i<usuarios.size()){
-                if((usuarios.get(i).getPaciente().getEmail().equalsIgnoreCase(input) || usuarios.get(i).getPaciente().getDni().equalsIgnoreCase(input))
-                        && usuarios.get(i).getPassword().equalsIgnoreCase(password)){
-                    usuario=usuarios.get(i);
-                    flag=1;
-                }
-                i++;
-            }
-            if (flag==0){
-                throw new UsuarioBuscadoException("Usuario no registrado");
-            }
-        }
-
-        return usuario;
-    }
-    /**
-     * Busca y devuelve la contraseña de un usuario en la base de datos según la palabra de recuperación
-     * y el email especificados.
-     *
-     * @param palabraRec La palabra de recuperación del usuario.
-     * @param input      El email del usuario.
-     * @return La contraseña del usuario correspondiente a la palabra de recuperación y email especificados,
-     * o null si no se encuentra.
-     */
-    public String buscarRetornarPw(String palabraRec,String input){
-        String passwordBuscada=null;
-        ArrayList <Usuario>usuarios=listar();
-        int flag=0;
-        int i=0;
-        if(usuarios!=null){
-            while (!usuarios.isEmpty() && flag==0 && i<usuarios.size()){
-                if( (usuarios.get(i).getPaciente().getEmail().equalsIgnoreCase(input) || usuarios.get(i).getPaciente().getDni().equalsIgnoreCase(input)) && usuarios.get(i).getPalabraRecuperacion().equalsIgnoreCase(palabraRec) ){
-                    if (usuarios.get(i).isEstado()){
-                        passwordBuscada="PASSWORD: "+usuarios.get(i).getPassword();
-
-                    }else {
-                        passwordBuscada="Usuario esta de baja";
-                    }
-                    flag=1;
-                }else{
-                    passwordBuscada="Usuario no existe";
-                }
-                i++;
-            }
-        }
-        return passwordBuscada;
-    }
-
-    /**
      * Devuelve una lista de todos los usuarios registrados en la base de datos.
      *
      * @return Una lista de objetos Usuario que representa todos los usuarios registrados.
      */
-    @Override
-    public ArrayList listar() {
-        ArrayList<Usuario>listaUsuarios=new ArrayList<>();
+    public TreeMap listar() {
+        TreeMap<String,Usuario> treeMapUsuarios=new TreeMap<>();
         String SQL = "SELECT * FROM usuario";
         try {
             con = conexionBBDD.getConexion();
@@ -225,7 +166,7 @@ public class UsuarioSQL extends JDialog implements I_PersistenciaSQL {
             rs = pst.executeQuery();
             while (rs.next()) {
                 Usuario usuario=generarUsuario(rs);
-                listaUsuarios.add(usuario);
+                treeMapUsuarios.put(usuario.getDni(),usuario);
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -236,7 +177,7 @@ public class UsuarioSQL extends JDialog implements I_PersistenciaSQL {
                 System.out.println(e.getMessage());
             }
         }
-        return listaUsuarios;
+        return treeMapUsuarios;
     }
     /**
      * Genera un objeto Usuario a partir de un ResultSet.
@@ -270,12 +211,12 @@ public class UsuarioSQL extends JDialog implements I_PersistenciaSQL {
                 con = conexionBBDD.getConexion();
                 pst = con.prepareStatement(SQL);
                 Usuario usuario=(Usuario)elemento;
-                pst.setString(1, usuario.getPaciente().getNombre());
-                pst.setString(2, usuario.getPaciente().getEmail());
+                pst.setString(1, usuario.getNombre());
+                pst.setString(2, usuario.getEmail());
                 pst.setString(3, usuario.getPassword());
                 pst.setString(4, usuario.getPalabraRecuperacion());
                 pst.setBoolean(5, usuario.isEstado());
-                pst.setString(6, usuario.getPaciente().getDni());
+                pst.setString(6, usuario.getDni());
                 pst.execute();
                 JOptionPane.showMessageDialog(this,
                         "Usuario modificado con Exito"

@@ -1,7 +1,9 @@
 package Logica.CRUD;
 
 import Exeption.CampoVacioExeption;
+import Interfaz.I_ListarEnTabla;
 import Interfaz.I_ValidacionCampo;
+import Modelo.Consultorio;
 import Modelo.Usuario;
 import Persistencia.UsuarioSQL;
 
@@ -10,15 +12,16 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
+
 /**
 
  Esta clase representa una ventana de administración de usuarios.
 
  Se extiende de JDialog, convirtiéndola en una ventana de diálogo.
  */
-public class CrudUsuario extends JDialog implements I_ValidacionCampo {
+public class CrudUsuario extends JDialog implements I_ValidacionCampo, I_ListarEnTabla {
     // Componentes de la interfaz de usuario
     private JTable table1;
     private JPanel crudUsuario;
@@ -26,7 +29,6 @@ public class CrudUsuario extends JDialog implements I_ValidacionCampo {
     private JButton VOLVERButton;
     private JButton modificarButton;
     private JButton limpiarButton;
-    private JPasswordField passwordField1;
     private JTextField textField1;
     private JTextField textField2;
     private JTextField textField3;
@@ -39,6 +41,7 @@ public class CrudUsuario extends JDialog implements I_ValidacionCampo {
     private JTextField textField9;
 
     private UsuarioSQL usuarioSQL = new UsuarioSQL();
+    private Consultorio consultorio=new Consultorio();
 
     /**
      * Constructor de la clase CrudUsuario.
@@ -53,40 +56,12 @@ public class CrudUsuario extends JDialog implements I_ValidacionCampo {
         setModal(true);
         setLocationRelativeTo(parent);
 
-        VOLVERButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
+        VOLVERButton.addActionListener(e -> dispose());
+        listarUsuariosButton.addActionListener(e -> table1.setModel(listarEnTabla()));
+        limpiarButton.addActionListener(e -> limpiarCamposUsuario());
+        buscarButton.addActionListener(e -> getBuscarPorDni());
+        modificarButton.addActionListener(e -> usuarioSQL.modificar(setUsuarioModificar()));
 
-        listarUsuariosButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                table1.setModel(listarEnTabla());
-            }
-        });
-
-        limpiarButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                limpiarCamposUsuario();
-            }
-        });
-
-        buscarButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                getBuscarPorDni();
-            }
-        });
-
-        modificarButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                usuarioSQL.modificar(setUsuarioModificar());
-            }
-        });
         setVisible(true);
     }
 
@@ -94,13 +69,18 @@ public class CrudUsuario extends JDialog implements I_ValidacionCampo {
      * Limpia los campos de usuario en la interfaz de usuario.
      */
     private void limpiarCamposUsuario() {
-        textField1.setText("");
-        textField2.setText("");
-        textField3.setText("");
-        textField4.setText("");
-        textField5.setText("");
-        textField6.setText("");
-        textField7.setText("");
+        try {
+            if (validacionCampo()){
+                textField1.setText("");
+                textField3.setText("");
+                textField4.setText("");
+                textField5.setText("");
+                textField6.setText("");
+                textField7.setText("");
+            }
+        }catch (CampoVacioExeption ce){
+            JOptionPane.showMessageDialog(this,ce.getMessage(),"Intente otra vez",JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -108,23 +88,28 @@ public class CrudUsuario extends JDialog implements I_ValidacionCampo {
      *
      * @return Un TableModel con los datos de los usuarios.
      */
+    @Override
     public TableModel listarEnTabla() {
-        ArrayList<Usuario> usuarios = usuarioSQL.listar();
-        DefaultTableModel model = new DefaultTableModel(0, 0);
-        String[] columnName = {"Nombre", "Dni", "Email", "Contraseña", "Palabra de recuperación", "Estado"};
-        model.setColumnIdentifiers(columnName);
-        model.addRow(columnName);
-        Object[] objects = new Object[6];
-        for (int i = 0; i < usuarios.size(); i++) {
-            objects[0] = usuarios.get(i).getPaciente().getNombre();
-            objects[1] = usuarios.get(i).getPaciente().getDni();
-            objects[2] = usuarios.get(i).getPaciente().getEmail();
-            objects[3] = usuarios.get(i).getPassword();
-            objects[4] = usuarios.get(i).getPalabraRecuperacion();
-            objects[5] = usuarios.get(i).isEstado();
-            model.addRow(objects);
-        }
-        return model;
+            TreeMap<String,Usuario> usuarios = consultorio.listarUsuarios();
+            DefaultTableModel model = new DefaultTableModel(0, 0);
+            String[] columnName = {"Nombre", "Dni", "Email", "Contraseña", "Palabra de recuperación", "Estado"};
+            model.setColumnIdentifiers(columnName);
+            model.addRow(columnName);
+            Object[] objects = new Object[6];
+            Iterator it=(Iterator) usuarios.entrySet().iterator();
+            while (it.hasNext())
+             {
+                 Map.Entry entry=(Map.Entry) it.next();
+                 Usuario usuario=(Usuario)entry.getValue();
+                objects[0] = usuario.getNombre();
+                objects[1] = usuario.getDni();
+                objects[2] = usuario.getEmail();
+                objects[3] = usuario.getPassword();
+                objects[4] = usuario.getPalabraRecuperacion();
+                objects[5] = usuario.isEstado();
+                model.addRow(objects);
+            }
+            return model;
     }
 
     /**
@@ -177,8 +162,8 @@ public class CrudUsuario extends JDialog implements I_ValidacionCampo {
         try {
             if (!textField7.getText().isEmpty()) {
                 Usuario usuarioBuscado = usuarioSQL.buscarUsuarioDni(textField7.getText());
-                textField1.setText(usuarioBuscado.getPaciente().getNombre());
-                textField3.setText(usuarioBuscado.getPaciente().getEmail());
+                textField1.setText(usuarioBuscado.getNombre());
+                textField3.setText(usuarioBuscado.getEmail());
                 textField4.setText(usuarioBuscado.getPassword());
                 textField5.setText(usuarioBuscado.getPalabraRecuperacion());
                 String estado;

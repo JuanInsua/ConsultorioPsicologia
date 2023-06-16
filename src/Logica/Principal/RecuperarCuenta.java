@@ -2,6 +2,7 @@ package Logica.Principal;
 
 import Exeption.CampoVacioExeption;
 import Interfaz.I_ValidacionCampo;
+import Modelo.Consultorio;
 import Persistencia.UsuarioSQL;
 
 import javax.swing.*;
@@ -22,6 +23,7 @@ public class RecuperarCuenta extends JDialog implements I_ValidacionCampo {
     private JButton SALIRButton;
     private JButton recuperarButton;
     private JTextField textField2;
+    private Consultorio consultorio=new Consultorio();
 
     /**
      * Crea una nueva instancia de RecuperarCuenta.
@@ -36,18 +38,8 @@ public class RecuperarCuenta extends JDialog implements I_ValidacionCampo {
         setModal(true);
         setLocationRelativeTo(parent);
 
-        SALIRButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
-        recuperarButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                buscarPWRetornoConValidacion();
-            }
-        });
+        SALIRButton.addActionListener(e -> dispose());
+        recuperarButton.addActionListener(e -> buscarPWRetornoConValidacion());
         setVisible(true);
     }
 
@@ -60,7 +52,7 @@ public class RecuperarCuenta extends JDialog implements I_ValidacionCampo {
         try{
             if (validacionCampo()) {
                 UsuarioSQL usuarioSQL = new UsuarioSQL();
-                String passwordRecuperada = usuarioSQL.buscarRetornarPw(textField1.getText(), textField2.getText());
+                String passwordRecuperada = consultorio.buscarRetornarPw(textField1.getText(), textField2.getText());
                 JOptionPane.showMessageDialog(this, passwordRecuperada);
             }
         }catch (CampoVacioExeption ce) {

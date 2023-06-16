@@ -1,6 +1,8 @@
 package Logica.CRUD;
 
 import Exeption.CampoVacioExeption;
+import Interfaz.I_LimpiarCampo;
+import Interfaz.I_ListarEnTabla;
 import Interfaz.I_ValidacionCampo;
 import Modelo.Consultorio;
 import Modelo.Estado;
@@ -21,7 +23,7 @@ import java.util.ArrayList;
 
  Extiende JDialog e implementa I_ValidacionCampo.
  */
-public class CrudTurno extends JDialog implements I_ValidacionCampo {
+public class CrudTurno extends JDialog implements I_ValidacionCampo, I_LimpiarCampo, I_ListarEnTabla {
     private JButton buscarButton;
     private JTextField textField6;
     private JTextField textField1;
@@ -52,36 +54,11 @@ public class CrudTurno extends JDialog implements I_ValidacionCampo {
         setModal(true);
         setLocationRelativeTo(parent);
 
-        listarTurnosButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                table1.setModel(listarEnTabla());
-            }
-        });
-        buscarButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                getBuscarPorDni();
-            }
-        });
-        modificarButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                turnoSQL.modificar(setTurnoModificar());
-            }
-        });
-        limpiarButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                limpiarCampos();
-            }
-        });
-        VOLVERButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
+        listarTurnosButton.addActionListener(e -> table1.setModel(listarEnTabla()));
+        buscarButton.addActionListener(e -> getBuscarPorDni());
+        modificarButton.addActionListener(e -> turnoSQL.modificar(setTurnoModificar()));
+        limpiarButton.addActionListener(e -> limpiarCampos());
+        VOLVERButton.addActionListener(e -> dispose());
         setVisible(true);
     }
 
@@ -90,37 +67,48 @@ public class CrudTurno extends JDialog implements I_ValidacionCampo {
      Obtiene un TableModel que contiene la lista de objetos Turno para mostrar en una tabla.
      @return El TableModel con la lista de objetos Turno.
      */
+    @Override
     public TableModel listarEnTabla() {
-        ArrayList<Turno> turnos = turnoSQL.listar();
-        DefaultTableModel model = new DefaultTableModel(0, 0);
-        String[] columnName = { "Fecha", "Horario", "Motivo", "Dni", "Estado" };
-        model.setColumnIdentifiers(columnName);
-        model.addRow(columnName);
-        Object[] objects = new Object[5];
-        for (int i = 0; i < turnos.size(); i++) {
-            objects[0] = turnos.get(i).getFechaConsulta();
-            objects[1] = turnos.get(i).getHorarioConsulta();
-            objects[2] = turnos.get(i).getMotivoConsulta();
-            objects[3] = turnos.get(i).getDniUsuario();
-            objects[4] = turnos.get(i).getEstado().name();
-            model.addRow(objects);
-        }
-        return model;
+            ArrayList<Turno> turnos = turnoSQL.listar();
+            DefaultTableModel model = new DefaultTableModel(0, 0);
+            String[] columnName = { "Fecha", "Horario", "Motivo", "Dni", "Estado" };
+            model.setColumnIdentifiers(columnName);
+            model.addRow(columnName);
+            Object[] objects = new Object[5];
+            for (int i = 0; i < turnos.size(); i++) {
+                objects[0] = turnos.get(i).getFechaConsulta();
+                objects[1] = turnos.get(i).getHorarioConsulta();
+                objects[2] = turnos.get(i).getMotivoConsulta();
+                objects[3] = turnos.get(i).getDniUsuario();
+                objects[4] = turnos.get(i).getEstado().name();
+                model.addRow(objects);
+            }
+            return model;
     }
+
     /**
 
      Limpia los campos de texto en el diálogo.
      */
-    private void limpiarCampos() {
-        textField1.setText("");
-        textField2.setText("");
-        textField2.setText("");
-        textField3.setText("");
-        textField4.setText("");
-        textField5.setText("");
-        textField6.setText("");
-        textField7.setText("");
+    @Override
+    public void limpiarCampos() {
+        try {
+            if (validacionCampo()){
+                textField1.setText("");
+                textField2.setText("");
+                textField2.setText("");
+                textField3.setText("");
+                textField4.setText("");
+                textField5.setText("");
+                textField6.setText("");
+                textField7.setText("");
+            }
+        }catch (CampoVacioExeption ce){
+            JOptionPane.showMessageDialog(this, ce.getMessage(), "Intente otra vez",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }
+
     /**
 
      Crea un objeto Turno con los datos de los campos de texto para modificarlo.

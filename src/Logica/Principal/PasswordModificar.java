@@ -42,30 +42,13 @@ public class PasswordModificar extends JDialog implements I_ValidacionCampo {
         setModal(true);
         setLocationRelativeTo(parent);
 
-        verButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                pwlabel.setText(String.valueOf(passwordField1.getPassword()));
-            }
-        });
+        verButton.addActionListener(e -> pwlabel.setText(String.valueOf(passwordField1.getPassword())));
 
-        modificarButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                modificarPerfil(usuario);
-            }
-        });
+        modificarButton.addActionListener(e -> modificarPerfil(usuario));
 
-        salirButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
+        salirButton.addActionListener(e -> dispose());
     }
-
     /**
-
      Modifica el perfil de usuario.
      @param usuario El objeto de usuario a modificar.
      */

@@ -5,7 +5,7 @@ import java.util.Objects;
 
  La clase Usuario representa un usuario en el sistema.
  */
-public class Usuario {
+public class Usuario extends Paciente{
     private Paciente paciente;
     private String password;
     private String palabraRecuperacion;
@@ -27,29 +27,13 @@ public class Usuario {
      @param palabraRecuperacion la palabra de recuperación del Usuario
      */
     public Usuario(String nombreUsuario, String email, String dni, String password, String palabraRecuperacion, boolean estado) {
-        this.paciente = new Paciente(nombreUsuario, email, dni);
+        super(nombreUsuario,email,dni);
         this.password = password;
         this.palabraRecuperacion = palabraRecuperacion;
         this.estado = estado;
     }
-    /**
 
-     Devuelve el objeto Paciente asociado a este Usuario.
-     @return el objeto Paciente
-     */
-    public Paciente getPaciente() {
-        return paciente;
-    }
     /**
-
-     Establece el objeto Paciente asociado a este Usuario.
-     @param paciente el objeto Paciente
-     */
-    public void setPaciente(Paciente paciente) {
-        this.paciente = paciente;
-    }
-    /**
-
      Devuelve la contraseña de este Usuario.
      @return la contraseña
      */

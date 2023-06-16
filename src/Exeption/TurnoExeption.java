@@ -1,5 +1,8 @@
 package Exeption;
 
+import Archivo.ControladoraArchivo;
+
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -8,6 +11,8 @@ import java.util.Objects;
 public class TurnoExeption extends Exception {
 
     private String mensaje;
+    private Date fechaError;
+
 
     /**
      * Construye una nueva instancia de la clase TurnoExeption con el mensaje de error especificado.
@@ -16,6 +21,8 @@ public class TurnoExeption extends Exception {
      */
     public TurnoExeption(String mensaje) {
         this.mensaje = mensaje;
+        this.fechaError=new Date();
+        ControladoraArchivo.grabar(this.getFechaError(),this.getMessage());
     }
 
     /**
@@ -27,28 +34,8 @@ public class TurnoExeption extends Exception {
         return mensaje;
     }
 
-    /**
-     * Compara esta excepción con otro objeto para determinar si son iguales.
-     *
-     * @param o el objeto a comparar
-     * @return true si el objeto dado es igual a esta excepción, false en caso contrario
-     */
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        TurnoExeption that = (TurnoExeption) o;
-        return Objects.equals(mensaje, that.mensaje);
-    }
-
-    /**
-     * Devuelve el valor hash de esta excepción.
-     *
-     * @return el valor hash de la excepción
-     */
-    @Override
-    public int hashCode() {
-        return Objects.hash(mensaje);
+    public Date getFechaError() {
+        return fechaError;
     }
 
     /**
@@ -58,8 +45,9 @@ public class TurnoExeption extends Exception {
      */
     @Override
     public String toString() {
-        return "TurnosExeption{" +
+        return "TurnoExeption{" +
                 "mensaje='" + mensaje + '\'' +
+                ", fechaError=" + fechaError +
                 '}';
     }
 }

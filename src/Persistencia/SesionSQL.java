@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * Esta clase representa una sesión de SQL.
@@ -59,9 +60,8 @@ public class SesionSQL extends JDialog implements I_PersistenciaSQL {
      *
      * @return La lista de sesiones.
      */
-    @Override
-    public ArrayList<Sesion> listar() {
-        ArrayList<Sesion> listaSesiones = new ArrayList<>();
+    public HashSet listar() {
+        HashSet listaSesiones = new HashSet();
         String SQL = "SELECT * FROM sesion";
         try {
             con = conexionBBDD.getConexion();

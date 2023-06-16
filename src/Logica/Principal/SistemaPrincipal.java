@@ -27,26 +27,11 @@ public class SistemaPrincipal extends JDialog {
         setModal(true);
         setLocationRelativeTo(parent);
 
-        REGISTRARButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                desplegarMenuRegistro();
-            }
-        });
+        REGISTRARButton.addActionListener(e -> desplegarMenuRegistro());
 
-        INGRESARButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                desplegarMenuIngreso();
-            }
-        });
+        INGRESARButton.addActionListener(e -> desplegarMenuIngreso());
 
-        SALIRButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
+        SALIRButton.addActionListener(e -> dispose());
 
         setVisible(true);
     }

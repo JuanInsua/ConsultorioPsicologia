@@ -1,5 +1,8 @@
 package Exeption;
 
+import Archivo.ControladoraArchivo;
+
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -8,6 +11,7 @@ import java.util.Objects;
 public class DiaExeption extends Exception {
 
     private String mensaje;
+    private Date fechaError;
 
     /**
      * Construye una nueva instancia de la clase DiaExeption con el mensaje de error especificado.
@@ -16,6 +20,8 @@ public class DiaExeption extends Exception {
      */
     public DiaExeption(String mensaje) {
         this.mensaje = mensaje;
+        fechaError=new Date();
+        ControladoraArchivo.grabar(this.getFechaError(),this.getMessage());
     }
 
     /**
@@ -27,6 +33,10 @@ public class DiaExeption extends Exception {
         return mensaje;
     }
 
+    public Date getFechaError() {
+        return fechaError;
+    }
+
     /**
      * Devuelve una representación en cadena del objeto DiaExeption.
      *
@@ -36,30 +46,7 @@ public class DiaExeption extends Exception {
     public String toString() {
         return "DiaExeption{" +
                 "mensaje='" + mensaje + '\'' +
+                ", fechaError=" + fechaError +
                 '}';
-    }
-
-    /**
-     * Comprueba si este objeto DiaExeption es igual a otro objeto.
-     *
-     * @param o El objeto a comparar.
-     * @return True si los objetos son iguales; false en caso contrario.
-     */
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        DiaExeption that = (DiaExeption) o;
-        return Objects.equals(mensaje, that.mensaje);
-    }
-
-    /**
-     * Devuelve el valor de código hash para el objeto DiaExeption.
-     *
-     * @return El valor de código hash.
-     */
-    @Override
-    public int hashCode() {
-        return Objects.hash(mensaje);
     }
 }

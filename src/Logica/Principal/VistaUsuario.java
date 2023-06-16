@@ -2,6 +2,7 @@ package Logica.Principal;
 
 import Exeption.CampoVacioExeption;
 import Exeption.CaracteresMotivoInvalidosException;
+import Interfaz.I_ListarEnTabla;
 import Interfaz.I_ValidacionCampo;
 import Modelo.Consultorio;
 import Modelo.Estado;
@@ -70,15 +71,14 @@ public class VistaUsuario extends JDialog implements I_ValidacionCampo {
         setMinimumSize(new Dimension(1280, 720));
         setModal(true);
         setLocationRelativeTo(parent);
-        nombreUsuario.setText("Bienvenido " + usuario.getPaciente().getNombre().toUpperCase(Locale.ROOT) + "!");
-        emailLabel.setText("Email: " + usuario.getPaciente().getEmail());
+        nombreUsuario.setText("Bienvenido " + usuario.getNombre().toUpperCase(Locale.ROOT) + "!");
+        emailLabel.setText("Email: " + usuario.getEmail());
         table1.setBorder(new LineBorder(Color.black));
         resetbuttonVisibleHorario(false);
 
         SALIRButton.addActionListener(e -> dispose());
 
         button1.addActionListener(e -> {
-            setFechaInput(0);
             resetbuttonHorario();
             resetbuttonDia();
             resetbuttonVisibleHorario(true);
@@ -88,7 +88,6 @@ public class VistaUsuario extends JDialog implements I_ValidacionCampo {
         });
 
         button2.addActionListener(e -> {
-            setFechaInput(1);
             resetbuttonHorario();
             resetbuttonDia();
             resetbuttonVisibleHorario(true);
@@ -98,7 +97,6 @@ public class VistaUsuario extends JDialog implements I_ValidacionCampo {
         });
 
         button3.addActionListener(e -> {
-            setFechaInput(2);
             resetbuttonHorario();
             resetbuttonDia();
             resetbuttonVisibleHorario(true);
@@ -108,7 +106,6 @@ public class VistaUsuario extends JDialog implements I_ValidacionCampo {
         });
 
         button4.addActionListener(e -> {
-            setFechaInput(3);
             resetbuttonHorario();
             resetbuttonDia();
             resetbuttonVisibleHorario(true);
@@ -118,7 +115,6 @@ public class VistaUsuario extends JDialog implements I_ValidacionCampo {
         });
 
         button5.addActionListener(e -> {
-            setFechaInput(4);
             resetbuttonHorario();
             resetbuttonDia();
             resetbuttonVisibleHorario(true);
@@ -157,9 +153,9 @@ public class VistaUsuario extends JDialog implements I_ValidacionCampo {
             setForegroundHorario(button10);
         });
 
-        agregarTurnoButton.addActionListener(e -> generarTurno(usuario.getPaciente().getDni()));
+        agregarTurnoButton.addActionListener(e -> generarTurno(usuario.getDni()));
 
-        misTurnosButton.addActionListener(e -> table1.setModel(setModelTabla(usuario.getPaciente().getDni())));
+        misTurnosButton.addActionListener(e -> table1.setModel(setModelTabla(usuario.getDni())));
 
         modificarPerfilButton.addActionListener(e -> {
             PasswordModificar passwordModificar = new PasswordModificar(null, usuario);
@@ -187,7 +183,6 @@ public class VistaUsuario extends JDialog implements I_ValidacionCampo {
         }
     }
     /**
-
      Establece el color de primer plano del botón de horario seleccionado.
      @param button El botón de horario seleccionado.
      */
@@ -195,7 +190,6 @@ public class VistaUsuario extends JDialog implements I_ValidacionCampo {
         button.setForeground(colorForeGroundButton);
     }
     /**
-
      Establece el color de fondo del botón de día seleccionado.
      @param button El botón de día seleccionado.
      */
@@ -285,7 +279,6 @@ public class VistaUsuario extends JDialog implements I_ValidacionCampo {
         }
     }
     /**
-
      Establece el horario actual seleccionado.
      @param horario El horario actual seleccionado.
      */
@@ -293,7 +286,6 @@ public class VistaUsuario extends JDialog implements I_ValidacionCampo {
         this.horario = horario;
     }
     /**
-
      Limpia los campos de usuario.
      */
     private void limpiarCamposUsuario() {
@@ -302,7 +294,6 @@ public class VistaUsuario extends JDialog implements I_ValidacionCampo {
         horario = "";
     }
     /**
-
      Genera un nuevo turno para el usuario.
      @param dniUsuario El DNI del usuario.
      */
@@ -353,29 +344,7 @@ public class VistaUsuario extends JDialog implements I_ValidacionCampo {
         }
         return model;
     }
-    /**
-     Establece la fecha seleccionada en el input de texto.
-     @param index El índice del día seleccionado.
-     */
-    private void setFechaInput(int index) {
-        switch (index) {
-            case 0:
-                textField1.setText("Lunes");
-                break;
-            case 1:
-                textField1.setText("Martes");
-                break;
-            case 2:
-                textField1.setText("Miércoles");
-                break;
-            case 3:
-                textField1.setText("Jueves");
-                break;
-            case 4:
-                textField1.setText("Viernes");
-                break;
-        }
-    }
+
     /**
 
      Valida que los campos de usuario estén completos.

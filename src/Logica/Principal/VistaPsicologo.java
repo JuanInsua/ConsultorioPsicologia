@@ -3,6 +3,7 @@ package Logica.Principal;
 import Exeption.CampoVacioExeption;
 import Exeption.DiaExeption;
 import Exeption.DniExeption;
+import Interfaz.I_ListarEnTabla;
 import Interfaz.I_ValidacionCampo;
 import Modelo.Consultorio;
 import Modelo.Sesion;
@@ -18,13 +19,15 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 /**
  * Clase que representa la vista del psicólogo en el sistema.
  * Esta clase extiende de JDialog e implementa la interfaz I_ValidacionCampo.
  */
-public class VistaPsicologo extends JDialog implements I_ValidacionCampo {
+public class VistaPsicologo extends JDialog implements I_ValidacionCampo, I_ListarEnTabla {
     private JLabel nombreUsuario;
     private JButton SALIRButton;
     private JPanel vistaPsicologo;
@@ -57,38 +60,16 @@ public class VistaPsicologo extends JDialog implements I_ValidacionCampo {
         setLocationRelativeTo(parent);
 
         // Acción del botón SALIR
-        SALIRButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
+        SALIRButton.addActionListener(e -> dispose());
 
         // Acción del botón informes
-        informesButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                table2.setModel(generarListaSesiones());
-            }
-        });
+        informesButton.addActionListener(e -> table2.setModel(generarListaSesiones()));
 
         // Acción del botón atenderTurno
-        atenderTurnoButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                atenderTurno();
-            }
-        });
+        atenderTurnoButton.addActionListener(e -> atenderTurno());
 
         // Acción del botón listarTurnos
-        listarTurnosButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                table1.setModel(listarEnTabla());
-            }
-        });
-
-        setVisible(true);
+        listarTurnosButton.addActionListener(e -> table1.setModel(listarEnTabla()));
     }
 
     /**
@@ -96,24 +77,25 @@ public class VistaPsicologo extends JDialog implements I_ValidacionCampo {
      *
      * @return El modelo de tabla con los turnos listados.
      */
-    private TableModel listarEnTabla() {
-        ArrayList<Turno> turnos = turnoSQL.listar();
-        DefaultTableModel model = new DefaultTableModel(0, 0);
-        String[] columnName = {"Fecha", "Horario", "Motivo", "Dni", "Estado"};
-        model.setColumnIdentifiers(columnName);
-        model.addRow(columnName);
-        Object[] objects = new Object[5];
-        for (int i = 0; i < turnos.size(); i++) {
-            if (turnos.get(i).getEstado().name().equalsIgnoreCase("activado")) {
-                objects[0] = turnos.get(i).getFechaConsulta();
-                objects[1] = turnos.get(i).getHorarioConsulta();
-                objects[2] = turnos.get(i).getMotivoConsulta();
-                objects[3] = turnos.get(i).getDniUsuario();
-                objects[4] = turnos.get(i).getEstado().name();
-                model.addRow(objects);
+    @Override
+    public TableModel listarEnTabla() {
+            ArrayList<Turno> turnos = turnoSQL.listar();
+            DefaultTableModel model = new DefaultTableModel(0, 0);
+            String[] columnName = {"Fecha", "Horario", "Motivo", "Dni", "Estado"};
+            model.setColumnIdentifiers(columnName);
+            model.addRow(columnName);
+            Object[] objects = new Object[5];
+            for (int i = 0; i < turnos.size(); i++) {
+                if (turnos.get(i).getEstado().name().equalsIgnoreCase("activado")) {
+                    objects[0] = turnos.get(i).getFechaConsulta();
+                    objects[1] = turnos.get(i).getHorarioConsulta();
+                    objects[2] = turnos.get(i).getMotivoConsulta();
+                    objects[3] = turnos.get(i).getDniUsuario();
+                    objects[4] = turnos.get(i).getEstado().name();
+                    model.addRow(objects);
+                }
             }
-        }
-        return model;
+            return model;
     }
 
     /**
@@ -125,17 +107,19 @@ public class VistaPsicologo extends JDialog implements I_ValidacionCampo {
         DefaultTableModel model = new DefaultTableModel();
         try {
             if (validarDni()) {
-                ArrayList<Sesion> sesionesDni = consultorio.listarSesionesPorDNI(textField3.getText());
-                String[] columnName = {"Dni", "Horario", "Motivo", "Resumen", "Motivo"};
+                HashSet sesionesDni = consultorio.listarSesionesPorDNI(textField3.getText());
+                String[] columnName = {"Dni", "Horario", "Motivo", "Resumen", "Fecha"};
                 model.setColumnIdentifiers(columnName);
                 model.addRow(columnName);
                 Object[] objects = new Object[5];
-                for (int i = 0; i < sesionesDni.size(); i++) {
-                    objects[0] = sesionesDni.get(i).getTurno().getDniUsuario();
-                    objects[1] = sesionesDni.get(i).getTurno().getHorarioConsulta();
-                    objects[2] = sesionesDni.get(i).getTurno().getMotivoConsulta();
-                    objects[3] = sesionesDni.get(i).getResumenSesion();
-                    objects[4] = sesionesDni.get(i).getTurno().getFechaConsulta();
+                Iterator it=(Iterator) sesionesDni.iterator();
+                while (it.hasNext()){
+                    Sesion sesion=(Sesion) it.next();
+                    objects[0] = sesion.getTurno().getDniUsuario();
+                    objects[1] = sesion.getTurno().getHorarioConsulta();
+                    objects[2] = sesion.getTurno().getMotivoConsulta();
+                    objects[3] = sesion.getResumenSesion();
+                    objects[4] = sesion.getTurno().getFechaConsulta();
                     model.addRow(objects);
                 }
             }

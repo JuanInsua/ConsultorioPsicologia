@@ -3,6 +3,7 @@ package Logica.Principal;
 import Exeption.CampoVacioExeption;
 import Exeption.UsuarioBuscadoException;
 import Interfaz.I_ValidacionCampo;
+import Modelo.Consultorio;
 import Modelo.Usuario;
 import Persistencia.UsuarioSQL;
 
@@ -26,6 +27,7 @@ public class IngresoSistema extends JDialog implements I_ValidacionCampo {
     private JButton olvideMiContraseniaButton;
     private JLabel verpw;
     private JButton verButton;
+    private Consultorio consultorio=new Consultorio();
 
     /**
      * Construye una nueva ventana de diálogo IngresoSistema.
@@ -40,31 +42,13 @@ public class IngresoSistema extends JDialog implements I_ValidacionCampo {
         setModal(true);
         setLocationRelativeTo(parent);
 
-        volverButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
+        volverButton.addActionListener(e -> dispose());
+        ingresarButton.addActionListener(e -> logearUsuario());
+        olvideMiContraseniaButton.addActionListener(e -> {
+            dispose();
+            RecuperarCuenta recuperarCuenta = new RecuperarCuenta(parent);
         });
-        ingresarButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                logearUsuario();
-            }
-        });
-        olvideMiContraseniaButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-                RecuperarCuenta recuperarCuenta = new RecuperarCuenta(parent);
-            }
-        });
-        verButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                verpw.setText(passwordField1.getText());
-            }
-        });
+        verButton.addActionListener(e -> verpw.setText(passwordField1.getText()));
         setVisible(true);
     }
 
@@ -108,13 +92,15 @@ public class IngresoSistema extends JDialog implements I_ValidacionCampo {
         if (email.equalsIgnoreCase("admin") && password.equalsIgnoreCase("admin")) {
             dispose();
             VistaAdmin vistaAdmin = new VistaAdmin(null);
+            vistaAdmin.setVisible(true);
         } else if (email.equalsIgnoreCase("psico") && password.equalsIgnoreCase("psico")) {
             dispose();
             VistaPsicologo vistaPsicologo = new VistaPsicologo(null);
+            vistaPsicologo.setVisible(true);
         } else {
             try {
                 UsuarioSQL usuarioSQLIngreso = new UsuarioSQL();
-                Usuario usuarioBusqueda = usuarioSQLIngreso.buscarUsuarioPasswordEmail(email, password);
+                Usuario usuarioBusqueda = consultorio.buscarUsuarioPasswordEmail(email, password);
                 if (usuarioBusqueda.isEstado()) {
                     dispose();
                     VistaUsuario vistaUsuario = new VistaUsuario(null, usuarioBusqueda);
