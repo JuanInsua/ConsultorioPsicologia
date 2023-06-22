@@ -9,7 +9,7 @@ import java.util.Objects;
 
  La clase Usuario representa un usuario en el sistema.
  */
-public class Usuario extends Paciente implements I_ToJson {
+public class Usuario extends Persona implements I_ToJson {
     private String password;
     private String palabraRecuperacion;
     private boolean estado;
