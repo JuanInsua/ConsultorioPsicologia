@@ -15,19 +15,17 @@ public class ControladoraJson {
      *
      * @return El objeto JSONObject que representa el Consultorio en formato JSON.
      */
-    public static JSONObject toJson() {
+    public static void toJson() {
         Consultorio consultorio = new Consultorio();
         JSONObject jsonObject = new JSONObject();
-
         try {
             JSONArray jsonArrayUsuarios = consultorio.usuariosToJson();
+            jsonObject.put("nombreConsultorio","Consultorio Psycho");
             jsonObject.put("usuarios", jsonArrayUsuarios);
-            System.out.println(jsonObject);
+            JsonUtiles.grabar(jsonObject,"consultorio");
         } catch (JSONException je) {
             System.out.println(je.getMessage());
         }
-
-        return jsonObject;
     }
 }
 

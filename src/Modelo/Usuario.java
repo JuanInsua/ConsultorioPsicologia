@@ -1,12 +1,15 @@
 package Modelo;
 
+import Interfaz.I_ToJson;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Objects;
 /**
 
  La clase Usuario representa un usuario en el sistema.
  */
-public class Usuario extends Paciente{
-    private Paciente paciente;
+public class Usuario extends Paciente implements I_ToJson {
     private String password;
     private String palabraRecuperacion;
     private boolean estado;
@@ -91,7 +94,7 @@ public class Usuario extends Paciente{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Usuario usuario = (Usuario) o;
-        return estado == usuario.estado && Objects.equals(paciente, usuario.paciente) && Objects.equals(password, usuario.password) && Objects.equals(palabraRecuperacion, usuario.palabraRecuperacion);
+        return estado == usuario.estado  && Objects.equals(password, usuario.password) && Objects.equals(palabraRecuperacion, usuario.palabraRecuperacion);
     }
     /**
 
@@ -100,7 +103,7 @@ public class Usuario extends Paciente{
      */
     @Override
     public int hashCode() {
-        return Objects.hash(paciente, password, palabraRecuperacion, estado);
+        return 1;
     }
     /**
 
@@ -110,10 +113,27 @@ public class Usuario extends Paciente{
     @Override
     public String toString() {
         return super.toString() + "Usuario{" +
-                "paciente=" + paciente +
+                "paciente=" +
                 ", password='" + password + "" +
                 ", palabraRecuperacion='" + palabraRecuperacion + "" +
                 ", estado=" + estado +
                 '}';
+    }
+
+    @Override
+    public JSONObject toJson() {
+
+        JSONObject jsonObjectUsuario=new JSONObject();
+        try {
+            jsonObjectUsuario.put("palabraRecuperacion",this.palabraRecuperacion);
+            jsonObjectUsuario.put("estado",this.estado);
+            jsonObjectUsuario.put("password",this.password);
+            jsonObjectUsuario.put("email",this.getEmail());
+            jsonObjectUsuario.put("dniUsuario",this.getDni());
+            jsonObjectUsuario.put("nombreUsuario",this.getNombre());
+        }catch (JSONException je){
+            System.out.println(je.getMessage());
+        }
+        return jsonObjectUsuario;
     }
 }

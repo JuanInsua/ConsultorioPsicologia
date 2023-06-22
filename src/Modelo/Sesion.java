@@ -1,11 +1,15 @@
 package Modelo;
 
+import Interfaz.I_ToJson;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Objects;
 
 /**
  * La clase Sesion representa una sesión con un turno y un resumen.
  */
-public class Sesion {
+public class Sesion implements I_ToJson {
     private Turno turno;
     private String resumenSesion;
 
@@ -13,7 +17,6 @@ public class Sesion {
      * Crea una nueva instancia de Sesion sin argumentos.
      */
     public Sesion(){
-
     }
 
     /**
@@ -54,5 +57,18 @@ public class Sesion {
     @Override
     public int hashCode() {
         return Objects.hash(turno, resumenSesion);
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject jsonObjectSesion=new JSONObject();
+        try{
+            jsonObjectSesion.put("resumenSesion",this.resumenSesion);
+            JSONObject jsonObjectTurno=this.turno.toJson();
+            jsonObjectSesion.put("turnoSesion",jsonObjectTurno);
+        }catch (JSONException je){
+            System.out.println(je.getMessage());
+        }
+        return jsonObjectSesion;
     }
 }

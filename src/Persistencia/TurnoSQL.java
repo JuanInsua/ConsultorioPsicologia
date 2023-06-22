@@ -65,6 +65,7 @@ public class TurnoSQL <T> extends JDialog implements I_PersistenciaSQL {
      Retorna una lista de turnos almacenados en la tabla "turno".
      @return Una lista de objetos Turno.
      */
+    @Override
     public ArrayList<Turno> listar() {
         ArrayList<Turno> listaTurnos = new ArrayList<>();
         String SQL = "SELECT * FROM turno";

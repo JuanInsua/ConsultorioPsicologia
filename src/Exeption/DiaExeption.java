@@ -1,6 +1,7 @@
 package Exeption;
 
 import Archivo.ControladoraArchivo;
+import Interfaz.I_GrabarExeption;
 
 import java.util.Date;
 import java.util.Objects;
@@ -8,7 +9,7 @@ import java.util.Objects;
 /**
  * Representa una clase de excepción personalizada para manejar excepciones relacionadas con los días.
  */
-public class DiaExeption extends Exception {
+public class DiaExeption extends Exception implements I_GrabarExeption {
 
     private String mensaje;
     private Date fechaError;
@@ -20,7 +21,12 @@ public class DiaExeption extends Exception {
      */
     public DiaExeption(String mensaje) {
         this.mensaje = mensaje;
-        fechaError=new Date();
+        setFechaError(new Date());
+        grabarExeption();
+    }
+
+    @Override
+    public void grabarExeption() {
         ControladoraArchivo.grabar(this.getFechaError(),this.getMessage());
     }
 
@@ -35,6 +41,10 @@ public class DiaExeption extends Exception {
 
     public Date getFechaError() {
         return fechaError;
+    }
+
+    public void setFechaError(Date fechaError) {
+        this.fechaError = fechaError;
     }
 
     /**

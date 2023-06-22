@@ -1,16 +1,22 @@
 package Exeption;
 
 import Archivo.ControladoraArchivo;
+import Interfaz.I_GrabarExeption;
 
 import java.util.Date;
 
-public class DniExeption extends RuntimeException{
+public class DniExeption extends RuntimeException implements I_GrabarExeption {
     private String message;
     private Date fechaError;
 
     public DniExeption(String message){
         setMessage(message);
-        this.fechaError=new Date();
+        setFechaError(new Date());
+        grabarExeption();
+    }
+
+    @Override
+    public void grabarExeption() {
         ControladoraArchivo.grabar(this.getFechaError(),this.getMessage());
     }
 
@@ -25,6 +31,10 @@ public class DniExeption extends RuntimeException{
 
     public Date getFechaError() {
         return fechaError;
+    }
+
+    public void setFechaError(Date fechaError) {
+        this.fechaError = fechaError;
     }
 
     @Override

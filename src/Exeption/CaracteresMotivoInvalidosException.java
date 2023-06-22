@@ -1,19 +1,23 @@
 package Exeption;
 
 import Archivo.ControladoraArchivo;
+import Interfaz.I_GrabarExeption;
 
 import java.util.Date;
 
-public class CaracteresMotivoInvalidosException extends RuntimeException{
+public class CaracteresMotivoInvalidosException extends RuntimeException implements I_GrabarExeption {
     private String message;
     private Date fechaError;
 
     public CaracteresMotivoInvalidosException(String message){
         setMessage(message);
-        this.fechaError=new Date();
+        setFechaError(new Date());
+        grabarExeption();
+    }
+    @Override
+    public void grabarExeption() {
         ControladoraArchivo.grabar(this.getFechaError(),this.getMessage());
     }
-
     @Override
     public String getMessage() {
         return message;

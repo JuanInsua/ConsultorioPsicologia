@@ -157,6 +157,7 @@ public class UsuarioSQL extends JDialog implements I_PersistenciaSQL{
      *
      * @return Una lista de objetos Usuario que representa todos los usuarios registrados.
      */
+    @Override
     public TreeMap listar() {
         TreeMap<String,Usuario> treeMapUsuarios=new TreeMap<>();
         String SQL = "SELECT * FROM usuario";

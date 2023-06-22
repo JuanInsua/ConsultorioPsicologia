@@ -60,6 +60,7 @@ public class SesionSQL extends JDialog implements I_PersistenciaSQL {
      *
      * @return La lista de sesiones.
      */
+    @Override
     public HashSet listar() {
         HashSet listaSesiones = new HashSet();
         String SQL = "SELECT * FROM sesion";

@@ -1,6 +1,7 @@
 package Exeption;
 
 import Archivo.ControladoraArchivo;
+import Interfaz.I_GrabarExeption;
 
 import java.util.Date;
 
@@ -8,7 +9,7 @@ import java.util.Date;
  * La clase CampoVacioExeption representa una excepción personalizada que se lanza cuando se encuentra un campo vacío.
  * Extiende la clase RuntimeException, por lo que es una excepción no verificada.
  */
-public class CampoVacioExeption extends RuntimeException {
+public class CampoVacioExeption extends RuntimeException  {
     private Date fechaError;
     private String message;
 
@@ -18,8 +19,7 @@ public class CampoVacioExeption extends RuntimeException {
      */
     public CampoVacioExeption() {
         setMessage("Error campo vacio, completar todos los campos");
-        this.fechaError=new Date();
-        ControladoraArchivo.grabar(this.getFechaError(),this.getMessage());
+        setFechaError(new Date());
     }
 
     /**

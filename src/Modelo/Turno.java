@@ -1,11 +1,15 @@
 package Modelo;
 
+import Interfaz.I_ToJson;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Objects;
 
 /**
  * La clase Turno representa un turno de consulta médica.
  */
-public class Turno {
+public class Turno implements I_ToJson {
     private String motivoConsulta, fechaConsulta, horarioConsulta, dniUsuario;
     private Estado estado;
 
@@ -151,5 +155,19 @@ public class Turno {
     @Override
     public int hashCode() {
         return Objects.hash(motivoConsulta, fechaConsulta, horarioConsulta, dniUsuario);
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject jsonObjectTurno=new JSONObject();
+        try {
+            jsonObjectTurno.put("fechaConsulta",this.getFechaConsulta());
+            jsonObjectTurno.put("horarioConsulta",this.getHorarioConsulta());
+            jsonObjectTurno.put("motivoConsulta",this.getMotivoConsulta());
+            jsonObjectTurno.put("dniUsuario",this.getDniUsuario());
+        }catch (JSONException je){
+            System.out.println(je.getMessage());
+        }
+        return jsonObjectTurno;
     }
 }

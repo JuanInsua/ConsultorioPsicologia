@@ -1,6 +1,7 @@
 package Exeption;
 
 import Archivo.ControladoraArchivo;
+import Interfaz.I_GrabarExeption;
 
 import java.util.Date;
 import java.util.Objects;
@@ -8,7 +9,7 @@ import java.util.Objects;
 /**
  * Esta clase representa una excepción personalizada para el manejo de errores relacionados con turnos.
  */
-public class TurnoExeption extends Exception {
+public class TurnoExeption extends RuntimeException implements I_GrabarExeption {
 
     private String mensaje;
     private Date fechaError;
@@ -21,7 +22,12 @@ public class TurnoExeption extends Exception {
      */
     public TurnoExeption(String mensaje) {
         this.mensaje = mensaje;
-        this.fechaError=new Date();
+        setFechaError(new Date());
+        grabarExeption();
+    }
+
+    @Override
+    public void grabarExeption() {
         ControladoraArchivo.grabar(this.getFechaError(),this.getMessage());
     }
 
@@ -36,6 +42,10 @@ public class TurnoExeption extends Exception {
 
     public Date getFechaError() {
         return fechaError;
+    }
+
+    public void setFechaError(Date fechaError) {
+        this.fechaError = fechaError;
     }
 
     /**

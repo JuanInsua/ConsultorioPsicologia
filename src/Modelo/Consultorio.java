@@ -8,9 +8,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import java.util.*;
 
 import java.util.ArrayList;
@@ -20,7 +17,7 @@ import java.util.TreeMap;
 /**
  * La clase Consultorio representa un consultorio médico que maneja un calendario de turnos.
  */
-public class Consultorio {
+public class Consultorio  {
     ArrayList<Dia> calendario;
     TurnoSQL turnoSQL = new TurnoSQL();
     SesionSQL sesionSQL = new SesionSQL();
@@ -173,7 +170,6 @@ public class Consultorio {
                 cant++;
             }
         }
-
         return cant.toString();
     }
 
@@ -190,7 +186,6 @@ public class Consultorio {
                 cant++;
             }
         }
-
         return cant.toString();
     }
 
@@ -212,7 +207,6 @@ public class Consultorio {
                 sesionesDni.add(sesion);
             }
         }
-
         return sesionesDni;
     }
 
@@ -321,8 +315,7 @@ public class Consultorio {
             while (it.hasNext()) {
                 Map.Entry entry = (Map.Entry) it.next();
                 Usuario usuario = (Usuario) entry.getValue();
-                JSONObject jsonObjectUser = new JSONObject(usuario);
-
+                JSONObject jsonObjectUser = usuario.toJson();
                 JSONArray jsonArraySesiones = sesionesToJson(usuario.getDni());
                 jsonObjectUser.put("sesiones", jsonArraySesiones);
                 jsonArrayUsuarios.put(jsonObjectUser);
@@ -340,13 +333,13 @@ public class Consultorio {
      */
     public JSONArray sesionesToJson(String dni) {
         JSONArray jsonArraySesiones = new JSONArray();
-        HashSet hashSetSesiones = listarSesionesPorDNI(dni);
-        Iterator it = (Iterator) hashSetSesiones.iterator();
-        while (it.hasNext()) {
-            Sesion sesion = (Sesion) it.next();
-            JSONObject jsonObjectSesion = new JSONObject(sesion);
-            jsonArraySesiones.put(jsonObjectSesion);
-        }
+            HashSet hashSetSesiones = listarSesionesPorDNI(dni);
+            Iterator it = (Iterator) hashSetSesiones.iterator();
+            while (it.hasNext()) {
+                Sesion sesion = (Sesion) it.next();
+                JSONObject jsonObjectSesion = sesion.toJson();
+                jsonArraySesiones.put(jsonObjectSesion);
+            }
         return jsonArraySesiones;
     }
 

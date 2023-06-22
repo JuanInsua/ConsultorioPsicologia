@@ -1,9 +1,12 @@
 package Modelo;
 
+import Interfaz.I_ToJson;
+import org.json.JSONObject;
+
 import java.util.Objects;
 
 
-public abstract class Paciente extends Persona {
+public abstract class Paciente extends Persona  {
 
     public Paciente() {
     }
