@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"Archivo"},{"l":"Exeption"},{"l":"Interfaz"},{"l":"JSON"},{"l":"Logica.CRUD"},{"l":"Logica.Principal"},{"l":"Modelo"},{"l":"Persistencia"}]
