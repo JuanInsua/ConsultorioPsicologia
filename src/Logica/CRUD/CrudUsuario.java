@@ -1,6 +1,7 @@
 package Logica.CRUD;
 
 import Exeption.CampoVacioExeption;
+import Interfaz.I_LimpiarCampo;
 import Interfaz.I_ListarEnTabla;
 import Interfaz.I_ValidacionCampo;
 import Modelo.Consultorio;
@@ -21,7 +22,7 @@ import java.util.List;
 
  Se extiende de JDialog, convirtiéndola en una ventana de diálogo.
  */
-public class CrudUsuario extends JDialog implements I_ValidacionCampo, I_ListarEnTabla {
+public class CrudUsuario extends JDialog implements I_ValidacionCampo, I_ListarEnTabla, I_LimpiarCampo {
     // Componentes de la interfaz de usuario
     private JTable table1;
     private JPanel crudUsuario;
@@ -58,7 +59,7 @@ public class CrudUsuario extends JDialog implements I_ValidacionCampo, I_ListarE
 
         VOLVERButton.addActionListener(e -> dispose());
         listarUsuariosButton.addActionListener(e -> table1.setModel(listarEnTabla()));
-        limpiarButton.addActionListener(e -> limpiarCamposUsuario());
+        limpiarButton.addActionListener(e -> limpiarCampos());
         buscarButton.addActionListener(e -> getBuscarPorDni());
         modificarButton.addActionListener(e -> usuarioSQL.modificar(setUsuarioModificar()));
 
@@ -68,7 +69,8 @@ public class CrudUsuario extends JDialog implements I_ValidacionCampo, I_ListarE
     /**
      * Limpia los campos de usuario en la interfaz de usuario.
      */
-    private void limpiarCamposUsuario() {
+    @Override
+    public void limpiarCampos() {
         try {
             if (validacionCampo()){
                 textField1.setText("");
@@ -82,6 +84,7 @@ public class CrudUsuario extends JDialog implements I_ValidacionCampo, I_ListarE
             JOptionPane.showMessageDialog(this,ce.getMessage(),"Intente otra vez",JOptionPane.ERROR_MESSAGE);
         }
     }
+
 
     /**
      * Devuelve un TableModel con los datos de todos los usuarios registrados en la base de datos, para ser utilizado en una tabla.

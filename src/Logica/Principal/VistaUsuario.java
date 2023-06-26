@@ -2,6 +2,7 @@ package Logica.Principal;
 
 import Exeption.CampoVacioExeption;
 import Exeption.CaracteresMotivoInvalidosException;
+import Interfaz.I_LimpiarCampo;
 import Interfaz.I_ListarEnTabla;
 import Interfaz.I_ValidacionCampo;
 import Modelo.Consultorio;
@@ -26,7 +27,7 @@ import java.util.Locale;
 
  Extiende de JDialog e implementa la interfaz I_ValidacionCampo.
  */
-public class VistaUsuario extends JDialog implements I_ValidacionCampo {
+public class VistaUsuario extends JDialog implements I_ValidacionCampo, I_LimpiarCampo {
     private JPanel vistaUsuario;
     private JLabel nombreUsuario;
     private JButton SALIRButton;
@@ -285,14 +286,17 @@ public class VistaUsuario extends JDialog implements I_ValidacionCampo {
     public void setHorario(String horario) {
         this.horario = horario;
     }
+
     /**
      Limpia los campos de usuario.
      */
-    private void limpiarCamposUsuario() {
+    @Override
+    public void limpiarCampos() {
         textField1.setText("");
         fecha = "";
         horario = "";
     }
+
     /**
      Genera un nuevo turno para el usuario.
      @param dniUsuario El DNI del usuario.
@@ -304,7 +308,7 @@ public class VistaUsuario extends JDialog implements I_ValidacionCampo {
                 Turno turnoAgregar = new Turno(dniUsuario, textField1.getText(), fecha, horario);
                 turnoAgregar.setEstado(Estado.ACTIVADO);
                 turnoSQL.registrar(turnoAgregar);
-                limpiarCamposUsuario();
+                limpiarCampos();
                 resetbuttonDia();
                 resetbuttonHorario();
                 resetForegroundHorario();

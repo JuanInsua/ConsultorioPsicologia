@@ -23,7 +23,7 @@ import java.util.List;
 
  Extiende la clase JDialog para proporcionar una ventana de diálogo y utiliza un tipo genérico T.
  */
-public class TurnoSQL <T> extends JDialog implements I_PersistenciaSQL {
+public class TurnoSQL extends JDialog implements I_PersistenciaSQL {
 
     private final ConexionBBDD conexionBBDD = new ConexionBBDD();
     private Connection con;
