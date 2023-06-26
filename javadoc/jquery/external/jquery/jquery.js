@@ -9289,7 +9289,7 @@ jQuery.extend( {
 		global: true,
 		processData: true,
 		async: true,
-		contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+		contentType: "application/x-www-form-urlencoded; charset="UTF-8",
 
 		/*
 		timeout: 0,
@@ -9306,7 +9306,7 @@ jQuery.extend( {
 		accepts: {
 			"*": allTypes,
 			text: "text/plain",
-			html: "text/html",
+			html: ,
 			xml: "application/xml, text/xml",
 			json: "application/json, text/javascript"
 		},

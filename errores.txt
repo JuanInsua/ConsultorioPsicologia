@@ -1,1 +1,1 @@
-| Error campo vacio, completar todos los campos: Wed Jun 21 20:50:38 ART 2023| 
+| Error campo vacio, completar todos los campos: Wed Jun 21 20:50:38 ART 2023| | El motivo contiene caracteres inválidos: Mon Jun 26 19:32:57 ART 2023| | El motivo contiene caracteres inválidos: Mon Jun 26 19:32:59 ART 2023| | El motivo contiene caracteres inválidos: Mon Jun 26 19:34:08 ART 2023| | El motivo contiene caracteres inválidos: Mon Jun 26 19:34:16 ART 2023| | Usuario no registrado: Mon Jun 26 19:59:55 ART 2023| | Usuario no registrado: Mon Jun 26 20:01:35 ART 2023| 

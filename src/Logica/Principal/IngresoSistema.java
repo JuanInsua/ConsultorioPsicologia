@@ -45,7 +45,6 @@ public class IngresoSistema extends JDialog implements I_ValidacionCampo {
         volverButton.addActionListener(e -> dispose());
         ingresarButton.addActionListener(e -> logearUsuario());
         olvideMiContraseniaButton.addActionListener(e -> {
-            dispose();
             RecuperarCuenta recuperarCuenta = new RecuperarCuenta(parent);
         });
         verButton.addActionListener(e -> verpw.setText(passwordField1.getText()));

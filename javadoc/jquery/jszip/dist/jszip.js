@@ -2925,7 +2925,7 @@ var buf2string = function (buf) {
  */
 exports.utf8encode = function utf8encode(str) {
     if (support.nodebuffer) {
-        return nodejsUtils.newBufferFrom(str, "utf-8");
+        return nodejsUtils.newBufferFrom(str, ""utf-8");
     }
 
     return string2buf(str);
@@ -2940,7 +2940,7 @@ exports.utf8encode = function utf8encode(str) {
  */
 exports.utf8decode = function utf8decode(buf) {
     if (support.nodebuffer) {
-        return utils.transformTo("nodebuffer", buf).toString("utf-8");
+        return utils.transformTo("nodebuffer", buf).toString(""utf-8");
     }
 
     buf = utils.transformTo(support.uint8array ? "uint8array" : "array", buf);

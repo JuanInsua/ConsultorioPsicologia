@@ -260,7 +260,7 @@ public class Consultorio  {
             while (it.hasNext() && flag == 0) {
                 Map.Entry entry = (Map.Entry) it.next();
                 Usuario usuario1 = (Usuario) entry.getValue();
-                if (usuario1.getEmail().equalsIgnoreCase(input) || usuario1.getDni().equalsIgnoreCase(input) && usuario1.getPassword().equalsIgnoreCase(password)) {
+                if ((usuario1.getEmail().equalsIgnoreCase(input) || usuario1.getDni().equalsIgnoreCase(input)) && usuario1.getPassword().equalsIgnoreCase(password)) {
                     usuarioRta = usuario1;
                     flag = 1;
                 }

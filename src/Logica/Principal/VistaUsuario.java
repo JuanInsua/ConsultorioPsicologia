@@ -48,8 +48,8 @@ public class VistaUsuario extends JDialog implements I_ValidacionCampo, I_Limpia
     private JTextField textField1;
     private JLabel emailLabel;
     private JButton modificarPerfilButton;
-    private String fecha;
-    private String horario;
+    private String fecha="";
+    private String horario="";
     private TurnoSQL turnoSQL = new TurnoSQL();
     private Consultorio consultorio = new Consultorio();
     private Color colorBackGroundButtonDia = new Color(154, 34, 209);
@@ -80,6 +80,7 @@ public class VistaUsuario extends JDialog implements I_ValidacionCampo, I_Limpia
         SALIRButton.addActionListener(e -> dispose());
 
         button1.addActionListener(e -> {
+            fecha="Lunes";
             resetbuttonHorario();
             resetbuttonDia();
             resetbuttonVisibleHorario(true);
@@ -89,6 +90,7 @@ public class VistaUsuario extends JDialog implements I_ValidacionCampo, I_Limpia
         });
 
         button2.addActionListener(e -> {
+            fecha="Martes";
             resetbuttonHorario();
             resetbuttonDia();
             resetbuttonVisibleHorario(true);
@@ -98,6 +100,7 @@ public class VistaUsuario extends JDialog implements I_ValidacionCampo, I_Limpia
         });
 
         button3.addActionListener(e -> {
+            fecha="Miercoles";
             resetbuttonHorario();
             resetbuttonDia();
             resetbuttonVisibleHorario(true);
@@ -107,6 +110,7 @@ public class VistaUsuario extends JDialog implements I_ValidacionCampo, I_Limpia
         });
 
         button4.addActionListener(e -> {
+            fecha="Jueves";
             resetbuttonHorario();
             resetbuttonDia();
             resetbuttonVisibleHorario(true);
@@ -116,6 +120,7 @@ public class VistaUsuario extends JDialog implements I_ValidacionCampo, I_Limpia
         });
 
         button5.addActionListener(e -> {
+            fecha="Viernes";
             resetbuttonHorario();
             resetbuttonDia();
             resetbuttonVisibleHorario(true);
@@ -369,7 +374,7 @@ public class VistaUsuario extends JDialog implements I_ValidacionCampo, I_Limpia
      */
     public void validacionCaracteresMotivo() throws CaracteresMotivoInvalidosException {
         String motivo = textField1.getText();
-        String[] caracteresInvalidos = {"<", ">", "&", "|", ""};
+        String[] caracteresInvalidos = {"<", ">", "&", "|"};
         for (String c : caracteresInvalidos) {
             if (motivo.contains(c)) {
             throw new CaracteresMotivoInvalidosException("El motivo contiene caracteres inválidos");
