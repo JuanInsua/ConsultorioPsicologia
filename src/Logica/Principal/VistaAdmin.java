@@ -29,7 +29,7 @@ public class VistaAdmin extends JDialog {
         super(parent);
         setTitle("Administración");
         setContentPane(vistaAdmin);
-        setMinimumSize(new Dimension(920, 820));
+        setSize(new Dimension(920, 820));
         setModal(true);
         setLocationRelativeTo(parent);
 

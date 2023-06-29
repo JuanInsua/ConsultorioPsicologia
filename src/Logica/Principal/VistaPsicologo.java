@@ -13,11 +13,12 @@ import Persistencia.TurnoSQL;
 import Persistencia.UsuarioSQL;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
+import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -36,10 +37,10 @@ public class VistaPsicologo extends JDialog implements I_ValidacionCampo, I_List
     private JTextField textField1;
     private JTextField textField2;
     private JTable table1;
-    private JButton listarTurnosButton;
     private JTextField textField3;
     private JTextField textField4;
     private JTable table2;
+    private JTextArea textArea1;
     private TurnoSQL turnoSQL = new TurnoSQL();
     private SesionSQL sesionSQL = new SesionSQL();
     private Consultorio consultorio = new Consultorio();
@@ -55,9 +56,10 @@ public class VistaPsicologo extends JDialog implements I_ValidacionCampo, I_List
         super(parent);
         setTitle("Psicologo");
         setContentPane(vistaPsicologo);
-        setMinimumSize(new Dimension(1280, 1020));
+        setSize(new Dimension(1280, 1020));
         setModal(true);
         setLocationRelativeTo(parent);
+        table1.setModel(listarEnTabla());
 
         // Acción del botón SALIR
         SALIRButton.addActionListener(e -> dispose());
@@ -66,10 +68,44 @@ public class VistaPsicologo extends JDialog implements I_ValidacionCampo, I_List
         informesButton.addActionListener(e -> table2.setModel(generarListaSesiones()));
 
         // Acción del botón atenderTurno
-        atenderTurnoButton.addActionListener(e -> atenderTurno());
+        atenderTurnoButton.addActionListener(e -> {atenderTurno();table1.setModel(listarEnTabla());});
 
-        // Acción del botón listarTurnos
-        listarTurnosButton.addActionListener(e -> table1.setModel(listarEnTabla()));
+        table1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                    super.mouseClicked(e);
+                    try {
+                        seleccionar(e);
+                    }catch (RuntimeException re){
+                        re.getMessage();
+                    }
+            }
+        });
+        table2.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                try {
+                    selecionarSesion(e);
+                }catch (RuntimeException re){
+                    re.getMessage();
+                }
+            }
+        });
+    }
+
+    public void seleccionar(MouseEvent e) throws RuntimeException{
+        int selection=table1.rowAtPoint(e.getPoint());
+        if (selection!=0){
+            textField1.setText(String.valueOf(table1.getValueAt(selection,0)));
+            textField2.setText(String.valueOf(table1.getValueAt(selection,1)));
+        }else throw new RuntimeException();
+    }
+    public void selecionarSesion(MouseEvent e) throws RuntimeException{
+        int selection=table2.rowAtPoint(e.getPoint());
+        if (selection!=0) {
+            textArea1.setText(String.valueOf(table2.getValueAt(selection, 3)));
+        }else throw new RuntimeException();
     }
 
     /**
@@ -81,7 +117,7 @@ public class VistaPsicologo extends JDialog implements I_ValidacionCampo, I_List
     public TableModel listarEnTabla() {
             ArrayList<Turno> turnos = turnoSQL.listar();
             DefaultTableModel model = new DefaultTableModel(0, 0);
-            String[] columnName = {"Fecha", "Horario", "Motivo", "Dni", "Estado"};
+            String[] columnName =new String[]{"Fecha", "Horario", "Motivo", "Dni", "Estado"};
             model.setColumnIdentifiers(columnName);
             model.addRow(columnName);
             Object[] objects = new Object[5];
@@ -106,23 +142,26 @@ public class VistaPsicologo extends JDialog implements I_ValidacionCampo, I_List
     private TableModel generarListaSesiones() {
         DefaultTableModel model = new DefaultTableModel();
         try {
-            if (validarDni()) {
-                HashSet sesionesDni = consultorio.listarSesionesPorDNI(textField3.getText());
-                String[] columnName = {"Dni", "Horario", "Motivo", "Resumen", "Fecha"};
-                model.setColumnIdentifiers(columnName);
-                model.addRow(columnName);
-                Object[] objects = new Object[5];
-                Iterator it=(Iterator) sesionesDni.iterator();
-                while (it.hasNext()){
-                    Sesion sesion=(Sesion) it.next();
-                    objects[0] = sesion.getTurno().getDniUsuario();
-                    objects[1] = sesion.getTurno().getHorarioConsulta();
-                    objects[2] = sesion.getTurno().getMotivoConsulta();
-                    objects[3] = sesion.getResumenSesion();
-                    objects[4] = sesion.getTurno().getFechaConsulta();
-                    model.addRow(objects);
+            if (!textField3.getText().isEmpty()){
+                if (validarDni()){
+                    HashSet sesionesDni = consultorio.listarSesionesPorDNI(textField3.getText());
+                    String[] columnName = {"Dni", "Horario", "Motivo", "Resumen", "Fecha"};
+                    model.setColumnIdentifiers(columnName);
+                    model.addRow(columnName);
+                    Object[] objects = new Object[5];
+                    Iterator it= sesionesDni.iterator();
+                    while (it.hasNext()){
+                        Sesion sesion=(Sesion) it.next();
+                        objects[0] = sesion.getTurno().getDniUsuario();
+                        objects[1] = sesion.getTurno().getHorarioConsulta();
+                        objects[2] = sesion.getTurno().getMotivoConsulta();
+                        objects[3] = sesion.getResumenSesion();
+                        objects[4] = sesion.getTurno().getFechaConsulta();
+                        model.addRow(objects);
+                    }
                 }
-            }
+            }JOptionPane.showMessageDialog(this, "Error campo vacio de busqueda", "Intentar otra vez", JOptionPane.ERROR_MESSAGE);
+
         } catch (DniExeption de) {
             JOptionPane.showMessageDialog(this, de.getMessage(), "Intentar otra vez", JOptionPane.ERROR_MESSAGE);
         }
@@ -160,9 +199,9 @@ public class VistaPsicologo extends JDialog implements I_ValidacionCampo, I_List
     private void atenderTurno() {
         try {
             if (validacionCampo()) {
-                Turno turnoBuscado = turnoSQL.buscarTurno(textField1.getText(), textField2.getText());
+                Turno turnoBuscado = turnoSQL.buscarTurno(textField1.getText().toLowerCase(), textField2.getText().toLowerCase());
                 if (turnoBuscado != null && turnoBuscado.getEstado().name().equalsIgnoreCase("activado")) {
-                    Sesion sesionNueva = new Sesion(turnoBuscado, textField4.getText());
+                    Sesion sesionNueva = new Sesion(turnoBuscado, textField4.getText().toLowerCase());
                     sesionSQL.registrar(sesionNueva);
                     turnoSQL.modificarEstado(turnoBuscado, "atendido".toUpperCase());
                     limpiarCampos();

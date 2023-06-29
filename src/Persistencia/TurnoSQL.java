@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
 
@@ -23,7 +24,7 @@ import java.util.List;
 
  Extiende la clase JDialog para proporcionar una ventana de diálogo y utiliza un tipo genérico T.
  */
-public class TurnoSQL extends JDialog implements I_PersistenciaSQL {
+public class TurnoSQL extends JDialog implements I_PersistenciaSQL<Turno,List> {
 
     private final ConexionBBDD conexionBBDD = new ConexionBBDD();
     private Connection con;
@@ -36,13 +37,13 @@ public class TurnoSQL extends JDialog implements I_PersistenciaSQL {
      @param elemento El elemento a registrar.
      */
     @Override
-    public void registrar(Object elemento) {
+    public void registrar(Turno elemento) {
         String sql = "INSERT INTO turno (dniUsuario, motivoConsulta, fechaConsulta, horarioConsulta, estado)"
                 + " VALUES(?, ?, ?, ?, ?)";
         try {
             con = conexionBBDD.getConexion();
             pst = con.prepareStatement(sql);
-            Turno turno = (Turno) elemento;
+            Turno turno =  elemento;
             pst.setString(1, turno.getDniUsuario());
             pst.setString(2, turno.getMotivoConsulta());
             pst.setString(3, turno.getFechaConsulta());
@@ -66,7 +67,7 @@ public class TurnoSQL extends JDialog implements I_PersistenciaSQL {
      @return Una lista de objetos Turno.
      */
     @Override
-    public ArrayList<Turno> listar() {
+    public ArrayList listar() {
         ArrayList<Turno> listaTurnos = new ArrayList<>();
         String SQL = "SELECT * FROM turno";
         try {
@@ -116,13 +117,13 @@ public class TurnoSQL extends JDialog implements I_PersistenciaSQL {
      @return true si la modificación fue exitosa, false en caso contrario.
      */
     @Override
-    public boolean modificar(Object elemento) {
+    public boolean modificar(Turno elemento) {
         String SQL = "UPDATE turno SET dniUsuario = ?, motivoConsulta = ?, fechaConsulta = ?, horarioConsulta = ?, estado = ? WHERE fechaConsulta = ? AND horarioConsulta = ?";
         if (elemento != null) {
             try {
                 con = conexionBBDD.getConexion();
                 pst = con.prepareStatement(SQL);
-                Turno turno = (Turno) elemento;
+                Turno turno = elemento;
                 pst.setString(1, turno.getDniUsuario());
                 pst.setString(2, turno.getMotivoConsulta());
                 pst.setString(3, turno.getFechaConsulta());

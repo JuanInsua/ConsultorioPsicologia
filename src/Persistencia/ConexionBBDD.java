@@ -9,10 +9,12 @@ import java.sql.SQLException;
  */
 public class ConexionBBDD {
 
-    private Connection conn;
     private String DB_URL = "jdbc:mysql://uekoylgwrdq2igzq:UBSHnTrnCgHOZIt7abQW@bty7sho5dbjw5zqxm5yn-mysql.services.clever-cloud.com:3306/bty7sho5dbjw5zqxm5yn";
     private String USERNAME = "uekoylgwrdq2igzq";
     private String PASSWORD = "UBSHnTrnCgHOZIt7abQW";
+    //private String DB_URL = "jdbc:mysql://localhost/consultorio";
+    //private String USERNAME = "root";
+    //private String PASSWORD = "";
 
     /**
      * Obtiene una conexión a la base de datos.

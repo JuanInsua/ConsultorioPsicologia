@@ -5,43 +5,23 @@ import Interfaz.I_GrabarExeption;
 
 import java.util.Date;
 
-public class DniExeption extends RuntimeException implements I_GrabarExeption {
-    private String message;
-    private Date fechaError;
+public class DniExeption extends Personalizada implements I_GrabarExeption {
 
     public DniExeption(String message){
-        setMessage(message);
-        setFechaError(new Date());
+        super(message);
         grabarExeption();
     }
 
     @Override
     public void grabarExeption() {
-        ControladoraArchivo.grabar(this.getFechaError(),this.getMessage());
-    }
-
-    @Override
-    public String getMessage() {
-        return message;
-    }
-
-    private void setMessage(String message) {
-        this.message = message;
-    }
-
-    public Date getFechaError() {
-        return fechaError;
-    }
-
-    public void setFechaError(Date fechaError) {
-        this.fechaError = fechaError;
+        ControladoraArchivo.grabar(super.getFechaError(),super.getMessage());
     }
 
     @Override
     public String toString() {
         return "DniExeption{" +
-                "message='" + message + '\'' +
-                ", fechaError=" + fechaError +
+                "message='"  + super.getMessage()+ '\'' +
+                ", fechaError="  +super.getFechaError()+
                 '}';
     }
 }

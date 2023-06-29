@@ -18,19 +18,25 @@ import java.util.TreeMap;
  * La clase Consultorio representa un consultorio médico que maneja un calendario de turnos.
  */
 public class Consultorio  {
-    ArrayList<Dia> calendario;
-    TurnoSQL turnoSQL = new TurnoSQL();
-    SesionSQL sesionSQL = new SesionSQL();
-    UsuarioSQL usuarioSQL = new UsuarioSQL();
-    HashSet sesiones = sesionSQL.listar();
-    ArrayList<Turno> turnos = turnoSQL.listar();
-    TreeMap<String, Usuario> usuarioTreeMap = usuarioSQL.listar();
+    private ArrayList<Dia> calendario;
+    private TurnoSQL turnoSQL;
+    private SesionSQL sesionSQL;
+    private UsuarioSQL usuarioSQL;
+    private HashSet sesiones;
+    private ArrayList<Turno> turnos;
+    private TreeMap<String, Usuario> usuarioTreeMap;
 
     /**
      * Constructor de la clase Consultorio. Inicializa el calendario y lo carga con los días de la semana.
      */
     public Consultorio() {
         this.calendario = new ArrayList<>();
+        turnoSQL= new TurnoSQL();
+        sesionSQL = new SesionSQL();
+        usuarioSQL = new UsuarioSQL();
+        sesiones= sesionSQL.listar();
+        turnos = turnoSQL.listar();
+        usuarioTreeMap= usuarioSQL.listar();
         setCalendario();
     }
 
@@ -127,7 +133,7 @@ public class Consultorio  {
      */
     public ArrayList<Turno> buscarDia(int indexDia) {
         cargarCalendario();
-        return calendario.get(indexDia).turnos;
+        return calendario.get(indexDia).getTurnos();
     }
     /**
      * Devuelve una lista de turnos asociados a un usuario específico.
@@ -162,11 +168,11 @@ public class Consultorio  {
      *
      * @return La cantidad de turnos atendidos como una cadena de texto.
      */
-    public String cantidadTurnosAtendidos() {
+    public String cantidadTurnosActivos() {
         Integer cant = 0;
 
         for (int i = 0; i < turnos.size(); i++) {
-            if (turnos.get(i).getEstado().name().equalsIgnoreCase("atendido")) {
+            if (turnos.get(i).getEstado().name().equalsIgnoreCase("activado")) {
                 cant++;
             }
         }

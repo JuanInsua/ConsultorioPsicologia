@@ -42,7 +42,7 @@ public class RegistroForm extends JDialog implements I_ValidacionCampo {
         super(parent);
         setTitle("Crear nuevo usuario");
         setContentPane(registroForm);
-        setMinimumSize(new Dimension(680, 620));
+        setSize(new Dimension(680, 620));
         setModal(true);
         setLocationRelativeTo(parent);
 

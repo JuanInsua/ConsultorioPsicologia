@@ -13,12 +13,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 
 /**
  * Clase que representa una ventana de diálogo para interactuar con la base de datos de usuarios.
  */
-public class UsuarioSQL extends JDialog implements I_PersistenciaSQL{
+public class UsuarioSQL extends JDialog implements I_PersistenciaSQL<Usuario, Map>{
     private ConexionBBDD conexionBBDD=new ConexionBBDD();
     private Connection con;
     private PreparedStatement pst;
@@ -31,12 +32,12 @@ public class UsuarioSQL extends JDialog implements I_PersistenciaSQL{
      */
 
     @Override
-    public void registrar(Object elemento) {
+    public void registrar(Usuario elemento) {
         String sql="INSERT INTO usuario (nombreUser,dni,email,contrasenia,palabreRec,estado)"+"VALUES(?,?,?,?,?,?)";
         try {
             con=conexionBBDD.getConexion();
             pst=con.prepareStatement(sql);
-            Usuario usuario=(Usuario)elemento;
+            Usuario usuario=elemento;
             pst.setString(1,usuario.getNombre().toLowerCase());
             pst.setString(2,usuario.getDni().toLowerCase());
             pst.setString(3,usuario.getEmail().toLowerCase());
@@ -205,19 +206,20 @@ public class UsuarioSQL extends JDialog implements I_PersistenciaSQL{
      * @return true si la modificación se realiza correctamente, false en caso contrario.
      */
     @Override
-    public boolean modificar(Object elemento) {
-        String SQL = "UPDATE usuario SET nombreUser = ?, email = ?, contrasenia = ?,palabreRec = ?,estado =? where dni = ?";
+    public boolean modificar(Usuario elemento) {
+        String SQL = "UPDATE usuario SET nombreUser = ?, email = ?, contrasenia = ?,palabreRec = ?,estado =?, dni=? WHERE dni = ?";
         if (elemento!=null){
             try {
                 con = conexionBBDD.getConexion();
                 pst = con.prepareStatement(SQL);
-                Usuario usuario=(Usuario)elemento;
+                Usuario usuario=elemento;
                 pst.setString(1, usuario.getNombre());
                 pst.setString(2, usuario.getEmail());
                 pst.setString(3, usuario.getPassword());
                 pst.setString(4, usuario.getPalabraRecuperacion());
                 pst.setBoolean(5, usuario.isEstado());
                 pst.setString(6, usuario.getDni());
+                pst.setString(7, usuario.getDni());
                 pst.execute();
                 JOptionPane.showMessageDialog(this,
                         "Usuario modificado con Exito"

@@ -38,7 +38,7 @@ public class PasswordModificar extends JDialog implements I_ValidacionCampo {
         super(parent);
         setTitle("Usuario");
         setContentPane(panel1);
-        setMinimumSize(new Dimension(680, 620));
+        setSize(new Dimension(680, 620));
         setModal(true);
         setLocationRelativeTo(parent);
 

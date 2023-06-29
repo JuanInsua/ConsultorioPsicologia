@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * Contiene una lista de turnos y un nombre para el día.
  */
 public class Dia {
-    ArrayList<Turno> turnos;
+    private ArrayList<Turno> turnos;
     private String nombreDia;
 
     /**
@@ -27,6 +27,10 @@ public class Dia {
      */
     public String getNombreDia() {
         return nombreDia;
+    }
+
+    public ArrayList<Turno> getTurnos() {
+        return turnos;
     }
 
     /**

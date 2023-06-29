@@ -34,7 +34,7 @@ public class RecuperarCuenta extends JDialog implements I_ValidacionCampo {
         super(parent);
         setTitle("Iniciar sesión en el sistema");
         setContentPane(recuperarCuenta);
-        setMinimumSize(new Dimension(980, 520));
+        setSize(new Dimension(980, 520));
         setModal(true);
         setLocationRelativeTo(parent);
 

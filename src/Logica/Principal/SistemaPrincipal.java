@@ -1,7 +1,9 @@
 package Logica.Principal;
 
+import JSON.ControladoraJson;
 import Logica.Principal.IngresoSistema;
 import Logica.Principal.RegistroForm;
+import Modelo.Consultorio;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,6 +16,8 @@ public class SistemaPrincipal extends JDialog {
     private JButton REGISTRARButton;
     private JButton SALIRButton;
     private JPanel sistemaPrincipal;
+    Consultorio consultorio=new Consultorio();
+
 
     /**
      * Construye un nuevo objeto SistemaPrincipal con el JFrame padre especificado.
@@ -23,7 +27,7 @@ public class SistemaPrincipal extends JDialog {
         super(parent);
         setTitle("Sistema Principal");
         setContentPane(sistemaPrincipal);
-        setMinimumSize(new Dimension(780, 920));
+        setSize(new Dimension(780, 920));
         setModal(true);
         setLocationRelativeTo(parent);
 
@@ -32,8 +36,8 @@ public class SistemaPrincipal extends JDialog {
         INGRESARButton.addActionListener(e -> desplegarMenuIngreso());
 
         SALIRButton.addActionListener(e -> dispose());
-
         setVisible(true);
+        ControladoraJson.toJson(consultorio);
     }
 
     /**

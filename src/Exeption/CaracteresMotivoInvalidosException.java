@@ -5,41 +5,23 @@ import Interfaz.I_GrabarExeption;
 
 import java.util.Date;
 
-public class CaracteresMotivoInvalidosException extends RuntimeException implements I_GrabarExeption {
-    private String message;
-    private Date fechaError;
+public class CaracteresMotivoInvalidosException extends Personalizada implements I_GrabarExeption {
 
     public CaracteresMotivoInvalidosException(String message){
-        setMessage(message);
-        setFechaError(new Date());
+        super(message);
         grabarExeption();
     }
     @Override
     public void grabarExeption() {
-        ControladoraArchivo.grabar(this.getFechaError(),this.getMessage());
-    }
-    @Override
-    public String getMessage() {
-        return message;
+        ControladoraArchivo.grabar(super.getFechaError(),super.getMessage());
     }
 
-    public Date getFechaError() {
-        return fechaError;
-    }
-
-    private void setFechaError(Date fechaError) {
-        this.fechaError = fechaError;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
 
     @Override
     public String toString() {
         return "CaracteresMotivoInvalidosException{" +
-                "message='" + message + '\'' +
-                ", fechaError=" + fechaError +
+                "message='" + super.getMessage() + '\'' +
+                ", fechaError=" + super.getFechaError() +
                 '}';
     }
 }

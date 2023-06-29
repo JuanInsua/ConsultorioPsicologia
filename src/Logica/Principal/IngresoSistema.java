@@ -3,6 +3,7 @@ package Logica.Principal;
 import Exeption.CampoVacioExeption;
 import Exeption.UsuarioBuscadoException;
 import Interfaz.I_ValidacionCampo;
+import JSON.ControladoraJson;
 import Modelo.Consultorio;
 import Modelo.Usuario;
 import Persistencia.UsuarioSQL;
@@ -38,7 +39,7 @@ public class IngresoSistema extends JDialog implements I_ValidacionCampo {
         super(parent);
         setTitle("Ingreso Usuario");
         setContentPane(ingresoSistema);
-        setMinimumSize(new Dimension(680, 620));
+        setSize(new Dimension(680, 620));
         setModal(true);
         setLocationRelativeTo(parent);
 

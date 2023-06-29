@@ -8,10 +8,7 @@ import java.util.Date;
 /**
  * Esta clase representa una excepción personalizada lanzada cuando un usuario no es encontrado.
  */
-public class UsuarioBuscadoException extends RuntimeException implements I_GrabarExeption {
-
-    private String message;
-    private Date fechaError;
+public class UsuarioBuscadoException extends Personalizada implements I_GrabarExeption {
 
     /**
      * Crea una nueva instancia de UsuarioBuscadoException con el mensaje especificado.
@@ -19,36 +16,13 @@ public class UsuarioBuscadoException extends RuntimeException implements I_Graba
      * @param message el mensaje de la excepción
      */
     public UsuarioBuscadoException(String message) {
-        setMessage(message);
-        setFechaError(new Date());
+        super(message);
         grabarExeption();
     }
 
     @Override
     public void grabarExeption() {
-        ControladoraArchivo.grabar(this.getFechaError(),this.getMessage());
-    }
-
-    /**
-     * Obtiene el mensaje asociado con esta excepción.
-     *
-     * @return el mensaje de la excepción
-     */
-    @Override
-    public String getMessage() {
-        return message;
-    }
-
-    private void setMessage(String message) {
-        this.message = message;
-    }
-
-    public Date getFechaError() {
-        return fechaError;
-    }
-
-    public void setFechaError(Date fechaError) {
-        this.fechaError = fechaError;
+        ControladoraArchivo.grabar(super.getFechaError(),super.getMessage());
     }
 
     /**
@@ -59,8 +33,8 @@ public class UsuarioBuscadoException extends RuntimeException implements I_Graba
     @Override
     public String toString() {
         return "UsuarioBuscadoException{" +
-                "message='" + message + '\'' +
-                ", fechaError=" + fechaError +
+                "message='" + super.getMessage() + '\'' +
+                ", fechaError=" + super.getFechaError() +
                 '}';
     }
 }

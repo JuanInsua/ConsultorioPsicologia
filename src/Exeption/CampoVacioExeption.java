@@ -9,39 +9,14 @@ import java.util.Date;
  * La clase CampoVacioExeption representa una excepción personalizada que se lanza cuando se encuentra un campo vacío.
  * Extiende la clase RuntimeException, por lo que es una excepción no verificada.
  */
-public class CampoVacioExeption extends RuntimeException  {
-    private Date fechaError;
-    private String message;
+public class CampoVacioExeption extends Personalizada  {
 
     /**
      * Crea una nueva instancia de CampoVacioExeption con un mensaje predeterminado.
      * El mensaje predeterminado es "Error campo vacio, completar todos los campos".
      */
     public CampoVacioExeption() {
-        setMessage("Error campo vacio, completar todos los campos");
-        setFechaError(new Date());
-    }
-
-    /**
-     * Obtiene el mensaje de la excepción.
-     *
-     * @return El mensaje de la excepción.
-     */
-    @Override
-    public String getMessage() {
-        return message;
-    }
-
-    private void setMessage(String message) {
-        this.message = message;
-    }
-
-    public Date getFechaError() {
-        return fechaError;
-    }
-
-    private void setFechaError(Date fechaError) {
-        this.fechaError = fechaError;
+        super("Error campo vacio, completar todos los campos");
     }
 
     /**
@@ -53,8 +28,8 @@ public class CampoVacioExeption extends RuntimeException  {
     @Override
     public String toString() {
         return "CampoVacioExeption{" +
-                "fechaError=" + fechaError +
-                ", message='" + message + '\'' +
+                "fechaError="  + super.getFechaError()+
+                ", message='"  + super.getMessage()+'\'' +
                 '}';
     }
 }

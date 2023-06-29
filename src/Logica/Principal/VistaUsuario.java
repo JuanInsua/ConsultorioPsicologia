@@ -69,7 +69,7 @@ public class VistaUsuario extends JDialog implements I_ValidacionCampo, I_Limpia
         super(parent);
         setTitle("Usuario");
         setContentPane(vistaUsuario);
-        setMinimumSize(new Dimension(1280, 720));
+        setSize(new Dimension(1280, 720));
         setModal(true);
         setLocationRelativeTo(parent);
         nombreUsuario.setText("Bienvenido " + usuario.getNombre().toUpperCase(Locale.ROOT) + "!");

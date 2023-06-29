@@ -3,6 +3,7 @@ package Logica.CRUD;
 import Exeption.CampoVacioExeption;
 import Interfaz.I_LimpiarCampo;
 import Interfaz.I_ListarEnTabla;
+import Interfaz.I_Seleccionar;
 import Interfaz.I_ValidacionCampo;
 import Modelo.Consultorio;
 import Modelo.Usuario;
@@ -22,24 +23,20 @@ import java.util.List;
 
  Se extiende de JDialog, convirtiéndola en una ventana de diálogo.
  */
-public class CrudUsuario extends JDialog implements I_ValidacionCampo, I_ListarEnTabla, I_LimpiarCampo {
+public class CrudUsuario extends JDialog implements I_ValidacionCampo, I_ListarEnTabla, I_LimpiarCampo, I_Seleccionar {
     // Componentes de la interfaz de usuario
     private JTable table1;
     private JPanel crudUsuario;
-    private JButton listarUsuariosButton;
     private JButton VOLVERButton;
     private JButton modificarButton;
     private JButton limpiarButton;
     private JTextField textField1;
-    private JTextField textField2;
     private JTextField textField3;
     private JTextField textField4;
     private JTextField textField5;
-    private JTextField textField6;
-    private JTextField textField7;
-    private JButton buscarButton;
-    private JTextField textField8;
-    private JTextField textField9;
+    private JComboBox comboBox1;
+    private JLabel labelDni;
+
 
     private UsuarioSQL usuarioSQL = new UsuarioSQL();
     private Consultorio consultorio=new Consultorio();
@@ -53,19 +50,45 @@ public class CrudUsuario extends JDialog implements I_ValidacionCampo, I_ListarE
         super(parent);
         setTitle("Administración");
         setContentPane(crudUsuario);
-        setMinimumSize(new Dimension(1420, 820));
+        setSize(new Dimension(1420, 820));
         setModal(true);
         setLocationRelativeTo(parent);
+        table1.setModel(listarEnTabla());
 
         VOLVERButton.addActionListener(e -> dispose());
-        listarUsuariosButton.addActionListener(e -> table1.setModel(listarEnTabla()));
         limpiarButton.addActionListener(e -> limpiarCampos());
-        buscarButton.addActionListener(e -> getBuscarPorDni());
-        modificarButton.addActionListener(e -> usuarioSQL.modificar(setUsuarioModificar()));
-
+        modificarButton.addActionListener(e -> {
+            usuarioSQL.modificar(setUsuarioModificar());table1.setModel(listarEnTabla());}
+        );
+        table1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                try {
+                    seleccionar(e);
+                }catch (RuntimeException re){
+                    re.getCause();
+                }
+            }
+        });
         setVisible(true);
     }
-
+    @Override
+    public void seleccionar(MouseEvent e) throws RuntimeException {
+        int selection=table1.rowAtPoint(e.getPoint());
+        if (selection!=0){
+            textField1.setText(String.valueOf(table1.getValueAt(selection,0)));
+            textField3.setText(String.valueOf(table1.getValueAt(selection,2)));
+            textField4.setText(String.valueOf(table1.getValueAt(selection,3)));
+            textField5.setText(String.valueOf(table1.getValueAt(selection,4)));
+            labelDni.setText(table1.getValueAt(selection,1).toString());
+            if(String.valueOf(table1.getValueAt(selection,5)).toString().equalsIgnoreCase("true")){
+                comboBox1.setSelectedIndex(0);
+            }else if (String.valueOf(table1.getValueAt(selection,5)).toString().equalsIgnoreCase("false")){
+                comboBox1.setSelectedIndex(1);
+            }
+        }else throw new  RuntimeException();
+    }
     /**
      * Limpia los campos de usuario en la interfaz de usuario.
      */
@@ -77,8 +100,7 @@ public class CrudUsuario extends JDialog implements I_ValidacionCampo, I_ListarE
                 textField3.setText("");
                 textField4.setText("");
                 textField5.setText("");
-                textField6.setText("");
-                textField7.setText("");
+                labelDni.setText("DNI Usuario:");
             }
         }catch (CampoVacioExeption ce){
             JOptionPane.showMessageDialog(this,ce.getMessage(),"Intente otra vez",JOptionPane.ERROR_MESSAGE);
@@ -125,15 +147,15 @@ public class CrudUsuario extends JDialog implements I_ValidacionCampo, I_ListarE
         try {
             if (validacionCampo()) {
                 Boolean estado;
-                if (textField6.getText().equalsIgnoreCase("true")) {
+                if (comboBox1.getSelectedIndex()==0) {
                     estado = true;
-                } else {
+                } else{
                     estado = false;
                 }
                 usuarioBuscado = new Usuario(
                         textField1.getText(),
                         textField3.getText(),
-                        textField7.getText(),
+                        labelDni.getText(),
                         textField4.getText(),
                         textField5.getText(),
                         estado);
@@ -153,35 +175,9 @@ public class CrudUsuario extends JDialog implements I_ValidacionCampo, I_ListarE
     public boolean validacionCampo() throws CampoVacioExeption {
 
         if (!textField1.getText().isEmpty() && !textField3.getText().isEmpty()
-                && !textField4.getText().isEmpty() && !textField5.getText().isEmpty() && !textField6.getText().isEmpty() && !textField7.getText().isEmpty()) {
+                && !textField4.getText().isEmpty() && !textField5.getText().isEmpty() && !labelDni.getText().isEmpty()) {
             return true;
         } else throw new CampoVacioExeption();
-    }
-
-    /**
-     * Busca un usuario por número de identificación y muestra los datos en los campos de la interfaz de usuario.
-     */
-    public void getBuscarPorDni() {
-        try {
-            if (!textField7.getText().isEmpty()) {
-                Usuario usuarioBuscado = usuarioSQL.buscarUsuarioDni(textField7.getText());
-                textField1.setText(usuarioBuscado.getNombre());
-                textField3.setText(usuarioBuscado.getEmail());
-                textField4.setText(usuarioBuscado.getPassword());
-                textField5.setText(usuarioBuscado.getPalabraRecuperacion());
-                String estado;
-                if (usuarioBuscado.isEstado()) {
-                    estado = "true";
-                } else {
-                    estado = "false";
-                }
-                textField6.setText(estado);
-            } else {
-                JOptionPane.showMessageDialog(this, "Campos para búsqueda vacíos", "Intente otra vez", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (RuntimeException r) {
-            JOptionPane.showMessageDialog(this, "Error en la búsqueda", "Intente otra vez", JOptionPane.ERROR_MESSAGE);
-        }
     }
 }
 

@@ -12,12 +12,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Esta clase representa una sesión de SQL.
  * Extiende la clase JDialog e implementa la interfaz I_PersistenciaSQL.
  */
-public class SesionSQL extends JDialog implements I_PersistenciaSQL {
+public class SesionSQL extends JDialog implements I_PersistenciaSQL<Sesion, Set> {
 
     private final ConexionBBDD conexionBBDD = new ConexionBBDD();
     private Connection con;
@@ -30,13 +32,13 @@ public class SesionSQL extends JDialog implements I_PersistenciaSQL {
      * @param elemento El objeto a registrar.
      */
     @Override
-    public void registrar(Object elemento) {
+    public void registrar(Sesion elemento) {
         String sql = "INSERT INTO sesion (dniUsuario, motivoConsulta, fechaConsulta, horarioConsulta, descripcionPsicologo)"
                 + " VALUES (?, ?, ?, ?, ?)";
         try {
             con = conexionBBDD.getConexion();
             pst = con.prepareStatement(sql);
-            Sesion sesion = (Sesion) elemento;
+            Sesion sesion = elemento;
             pst.setString(1, sesion.getTurno().getDniUsuario());
             pst.setString(2, sesion.getTurno().getMotivoConsulta());
             pst.setString(3, sesion.getTurno().getFechaConsulta());
@@ -107,7 +109,7 @@ public class SesionSQL extends JDialog implements I_PersistenciaSQL {
      * @return true si la modificación se realizó con éxito, false en caso contrario.
      */
     @Override
-    public boolean modificar(Object elemento) {
+    public boolean modificar(Sesion elemento) {
         String SQL = "UPDATE turno SET dniUsuario = ?, fechaConsulta = ?, horarioConsulta = ?, descripcionPsicologo = ? WHERE fechaConsulta = ? AND horarioConsulta = ?";
         try {
             con = conexionBBDD.getConexion();

@@ -15,8 +15,7 @@ public class ControladoraJson {
      *
      * @return El objeto JSONObject que representa el Consultorio en formato JSON.
      */
-    public static void toJson() {
-        Consultorio consultorio = new Consultorio();
+    public static void toJson(Consultorio consultorio) {
         JSONObject jsonObject = new JSONObject();
         try {
             JSONArray jsonArrayUsuarios = consultorio.usuariosToJson();
