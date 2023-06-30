@@ -50,12 +50,12 @@ public class VistaUsuario extends JDialog implements I_ValidacionCampo, I_Limpia
     private JButton modificarPerfilButton;
     private String fecha="";
     private String horario="";
-    private TurnoSQL turnoSQL = new TurnoSQL();
-    private Consultorio consultorio = new Consultorio();
-    private Color colorBackGroundButtonDia = new Color(154, 34, 209);
-    private Color colorForeGroundButton = new Color(207, 34, 209);
-    private Color colorBackgroundNoDispobibleHorario = new Color(208, 33, 61);
-    private Color backGroundDefault = new Color(187, 182, 183);
+    private TurnoSQL turnoSQL;
+    private Consultorio consultorio;
+    private Color colorBackGroundButtonDia;
+    private Color colorForeGroundButton;
+    private Color colorBackgroundNoDispobibleHorario;
+    private Color backGroundDefault;
 
     /**
 
@@ -76,6 +76,12 @@ public class VistaUsuario extends JDialog implements I_ValidacionCampo, I_Limpia
         emailLabel.setText("Email: " + usuario.getEmail());
         table1.setBorder(new LineBorder(Color.black));
         resetbuttonVisibleHorario(false);
+        turnoSQL = new TurnoSQL();
+        consultorio = new Consultorio();
+        colorBackGroundButtonDia = new Color(154, 34, 209);
+        colorForeGroundButton = new Color(207, 34, 209);
+        colorBackgroundNoDispobibleHorario = new Color(208, 33, 61);
+        backGroundDefault = new Color(187, 182, 183);
 
         SALIRButton.addActionListener(e -> dispose());
 

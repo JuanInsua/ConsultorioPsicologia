@@ -116,7 +116,12 @@ public class CrudUsuario extends JDialog implements I_ValidacionCampo, I_ListarE
     @Override
     public TableModel listarEnTabla() {
             TreeMap<String,Usuario> usuarios = consultorio.listarUsuarios();
-            DefaultTableModel model = new DefaultTableModel(0, 0);
+            DefaultTableModel model = new DefaultTableModel(0, 0){
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false;
+                }
+            };
             String[] columnName = {"Nombre", "Dni", "Email", "Contraseña", "Palabra de recuperación", "Estado"};
             model.setColumnIdentifiers(columnName);
             model.addRow(columnName);

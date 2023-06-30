@@ -83,7 +83,12 @@ public class CrudSesion extends JDialog implements I_ListarEnTabla, I_Selecciona
     @Override
     public TableModel listarEnTabla() {
         HashSet<Sesion> sesiones = consultorio.listarSesiones();
-        DefaultTableModel model = new DefaultTableModel(0, 0);
+        DefaultTableModel model = new DefaultTableModel(0, 0){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         String[] columnName = {"Fecha", "Horario", "DNI", "Motivo", "Resumen"};
         model.setColumnIdentifiers(columnName);
         model.addRow(columnName);

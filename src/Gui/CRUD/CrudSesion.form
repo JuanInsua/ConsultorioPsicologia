@@ -50,11 +50,13 @@
           <autoCreateRowSorter value="true"/>
           <autoResizeMode value="1"/>
           <background color="-10657651"/>
-          <enabled value="false"/>
+          <enabled value="true"/>
           <fillsViewportHeight value="true"/>
+          <focusable value="false"/>
           <font name="Courier New" size="16" style="1"/>
           <foreground color="-15526891"/>
           <gridColor color="-15526891"/>
+          <selectionForeground color="-15526891"/>
         </properties>
       </component>
       <component id="5e19d" class="javax.swing.JTextArea" binding="textArea1" default-binding="true">

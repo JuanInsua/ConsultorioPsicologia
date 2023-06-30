@@ -94,7 +94,12 @@ public class CrudTurno extends JDialog implements I_ValidacionCampo, I_LimpiarCa
     @Override
     public TableModel listarEnTabla() {
             ArrayList<Turno> turnos = turnoSQL.listar();
-            DefaultTableModel model = new DefaultTableModel(0, 0);
+            DefaultTableModel model = new DefaultTableModel(0, 0){
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false;
+                }
+            };
             String[] columnName = { "Fecha", "Horario", "Motivo", "Dni", "Estado" };
             model.setColumnIdentifiers(columnName);
             model.addRow(columnName);

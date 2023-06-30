@@ -16,7 +16,7 @@ public class SistemaPrincipal extends JDialog {
     private JButton REGISTRARButton;
     private JButton SALIRButton;
     private JPanel sistemaPrincipal;
-    Consultorio consultorio=new Consultorio();
+    private Consultorio consultorio;
 
 
     /**
@@ -30,6 +30,7 @@ public class SistemaPrincipal extends JDialog {
         setSize(new Dimension(780, 920));
         setModal(true);
         setLocationRelativeTo(parent);
+        consultorio=new Consultorio();
 
         REGISTRARButton.addActionListener(e -> desplegarMenuRegistro());
 

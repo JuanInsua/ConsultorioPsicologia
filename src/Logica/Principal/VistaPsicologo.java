@@ -15,10 +15,8 @@ import Persistencia.UsuarioSQL;
 import javax.swing.*;
 import javax.swing.table.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.color.ColorSpace;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -29,7 +27,6 @@ import java.util.List;
  * Esta clase extiende de JDialog e implementa la interfaz I_ValidacionCampo.
  */
 public class VistaPsicologo extends JDialog implements I_ValidacionCampo, I_ListarEnTabla {
-    private JLabel nombreUsuario;
     private JButton SALIRButton;
     private JPanel vistaPsicologo;
     private JButton atenderTurnoButton;
@@ -41,8 +38,8 @@ public class VistaPsicologo extends JDialog implements I_ValidacionCampo, I_List
     private JTextField textField4;
     private JTable table2;
     private JTextArea textArea1;
-    private TurnoSQL turnoSQL = new TurnoSQL();
-    private SesionSQL sesionSQL = new SesionSQL();
+    private TurnoSQL turnoSQL=new TurnoSQL();
+    private SesionSQL sesionSQL=new SesionSQL();;
     private Consultorio consultorio = new Consultorio();
     private UsuarioSQL usuarioSQL = new UsuarioSQL();
 
@@ -74,6 +71,7 @@ public class VistaPsicologo extends JDialog implements I_ValidacionCampo, I_List
             @Override
             public void mouseClicked(MouseEvent e) {
                     super.mouseClicked(e);
+                    table1.removeEditor();
                     try {
                         seleccionar(e);
                     }catch (RuntimeException re){
@@ -85,6 +83,7 @@ public class VistaPsicologo extends JDialog implements I_ValidacionCampo, I_List
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
+                table2.removeEditor();
                 try {
                     selecionarSesion(e);
                 }catch (RuntimeException re){
@@ -93,7 +92,6 @@ public class VistaPsicologo extends JDialog implements I_ValidacionCampo, I_List
             }
         });
     }
-
     public void seleccionar(MouseEvent e) throws RuntimeException{
         int selection=table1.rowAtPoint(e.getPoint());
         if (selection!=0){
@@ -103,6 +101,7 @@ public class VistaPsicologo extends JDialog implements I_ValidacionCampo, I_List
     }
     public void selecionarSesion(MouseEvent e) throws RuntimeException{
         int selection=table2.rowAtPoint(e.getPoint());
+        table2.isRowSelected(selection);
         if (selection!=0) {
             textArea1.setText(String.valueOf(table2.getValueAt(selection, 3)));
         }else throw new RuntimeException();
@@ -116,7 +115,12 @@ public class VistaPsicologo extends JDialog implements I_ValidacionCampo, I_List
     @Override
     public TableModel listarEnTabla() {
             ArrayList<Turno> turnos = turnoSQL.listar();
-            DefaultTableModel model = new DefaultTableModel(0, 0);
+            DefaultTableModel model = new DefaultTableModel(0, 0){
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false;
+                }
+            };
             String[] columnName =new String[]{"Fecha", "Horario", "Motivo", "Dni", "Estado"};
             model.setColumnIdentifiers(columnName);
             model.addRow(columnName);
@@ -140,7 +144,12 @@ public class VistaPsicologo extends JDialog implements I_ValidacionCampo, I_List
      * @return El modelo de tabla con las sesiones listadas.
      */
     private TableModel generarListaSesiones() {
-        DefaultTableModel model = new DefaultTableModel();
+        DefaultTableModel model = new DefaultTableModel(){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         try {
             if (!textField3.getText().isEmpty()){
                 if (validarDni()){
@@ -160,7 +169,9 @@ public class VistaPsicologo extends JDialog implements I_ValidacionCampo, I_List
                         model.addRow(objects);
                     }
                 }
-            }JOptionPane.showMessageDialog(this, "Error campo vacio de busqueda", "Intentar otra vez", JOptionPane.ERROR_MESSAGE);
+            }else {
+                JOptionPane.showMessageDialog(this, "Error campo vacio de busqueda", "Intentar otra vez", JOptionPane.ERROR_MESSAGE);
+            }
 
         } catch (DniExeption de) {
             JOptionPane.showMessageDialog(this, de.getMessage(), "Intentar otra vez", JOptionPane.ERROR_MESSAGE);

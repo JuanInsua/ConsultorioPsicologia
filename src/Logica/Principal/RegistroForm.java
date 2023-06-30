@@ -30,7 +30,7 @@ public class RegistroForm extends JDialog implements I_ValidacionCampo {
     private JTextField textField4;
     private JButton verButton;
     private JLabel pwlabel;
-    UsuarioSQL usuarioSQL = new UsuarioSQL();
+    private UsuarioSQL usuarioSQL ;
 
     /**
 
@@ -45,6 +45,7 @@ public class RegistroForm extends JDialog implements I_ValidacionCampo {
         setSize(new Dimension(680, 620));
         setModal(true);
         setLocationRelativeTo(parent);
+        usuarioSQL= new UsuarioSQL();
 
         SALIRButton.addActionListener(e -> dispose());
 
